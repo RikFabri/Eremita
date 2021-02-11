@@ -54,7 +54,7 @@
     <ClInclude Include="Font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Minigin.h">
+    <ClInclude Include="Eremita.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,7 +95,7 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Minigin.cpp">
+    <ClCompile Include="Eremita.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

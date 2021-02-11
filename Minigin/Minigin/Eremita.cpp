@@ -1,5 +1,5 @@
 #include "MiniginPCH.h"
-#include "Minigin.h"
+#include "Eremita.h"
 #include <chrono>
 #include <thread>
 #include "InputManager.h"
@@ -14,7 +14,7 @@
 using namespace std;
 using namespace std::chrono;
 
-void dae::Minigin::Initialize()
+void dae::Eremita::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
@@ -40,7 +40,7 @@ void dae::Minigin::Initialize()
 /**
  * Code constructing the scene world starts here
  */
-void dae::Minigin::LoadGame() const
+void dae::Eremita::LoadGame() const
 {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
@@ -59,7 +59,7 @@ void dae::Minigin::LoadGame() const
 	scene.Add(to);
 }
 
-void dae::Minigin::Cleanup()
+void dae::Eremita::Cleanup()
 {
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_Window);
@@ -67,7 +67,7 @@ void dae::Minigin::Cleanup()
 	SDL_Quit();
 }
 
-void dae::Minigin::Run()
+void dae::Eremita::Run()
 {
 	Initialize();
 
@@ -81,17 +81,25 @@ void dae::Minigin::Run()
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
 
-		bool doContinue = true;
+		auto doContinue = true;
+		
+		auto previousTime = high_resolution_clock::now();
+		auto lag = duration<double>::zero();
+		
 		while (doContinue)
 		{
 			const auto currentTime = high_resolution_clock::now();
-			
-			doContinue = input.ProcessInput();
-			sceneManager.Update();
+			const auto elapsedTime = currentTime - previousTime;
+			previousTime = currentTime;
+			lag += elapsedTime;
+
+			while(lag >= milliseconds(MsPerFrame))
+			{
+				doContinue = input.ProcessInput();
+				sceneManager.Update();
+				lag -= milliseconds(MsPerFrame);
+			}
 			renderer.Render();
-			
-			auto sleepTime = duration_cast<duration<float>>(currentTime + milliseconds(MsPerFrame) - high_resolution_clock::now());
-			this_thread::sleep_for(sleepTime);
 		}
 	}
 
