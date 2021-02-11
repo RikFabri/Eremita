@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "Eremita.h"
 #include <chrono>
+#include <fstream>
 #include <thread>
 #include "InputManager.h"
 #include "SceneManager.h"
@@ -83,16 +84,16 @@ void dae::Eremita::Run()
 
 		auto doContinue = true;
 		
-		auto previousTime = high_resolution_clock::now();
-		auto lag = duration<double>::zero();
-		
+		auto previousTime = steady_clock::now();
+		auto lag = duration<float>::zero();
+				
 		while (doContinue)
 		{
-			const auto currentTime = high_resolution_clock::now();
+			const auto currentTime = steady_clock::now();
 			const auto elapsedTime = currentTime - previousTime;
 			previousTime = currentTime;
 			lag += elapsedTime;
-
+			
 			while(lag >= milliseconds(MsPerFrame))
 			{
 				doContinue = input.ProcessInput();
