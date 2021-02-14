@@ -8,15 +8,13 @@ namespace dae
 	class FPSComponent final : public BaseComponent
 	{
 	public:
-		FPSComponent(TextComponent* pTextComponent);
+		void Init(SceneObject& object) override;
 		
-		void Receive(int message) override;
-		void FixedUpdate() override;
-		void Update() override;
+		void Update(SceneObject& object) override;
 
 	private:
 		//No ownership
-		TextComponent* m_pTextComponentRef;
+		TextComponent* m_pTextComponentRef = nullptr;
 	};
 }
 

@@ -2,14 +2,19 @@
 
 namespace dae
 {
+	class SceneObject;
+	
 	class BaseComponent
 	{
 	public:
 		virtual ~BaseComponent() = default;
 		
-		virtual void Receive(int message) = 0;
-		virtual void FixedUpdate() = 0;
-		virtual void Update() = 0;
+		virtual void Init(SceneObject&){}
+		
+		virtual void Update(SceneObject&){}
+		virtual void FixedUpdate(SceneObject&){}
+
+		virtual void Receive(int){}
 
 	protected:
 		BaseComponent() = default;

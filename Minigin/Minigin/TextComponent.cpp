@@ -7,12 +7,13 @@
 #include "Font.h"
 #include "RenderComponent.h"
 #include "Texture2D.h"
+#include "GameTime.h"
+#include "SceneObject.h"
 
-dae::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font, RenderComponent* pRenderComponent) 
+dae::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font) 
 	: BaseComponent()
 	, m_Text(text)
 	, m_Font(font)
-	, m_pRenderComponentRef(pRenderComponent)
 { }
 
 //To-Do: remove comments
@@ -67,16 +68,14 @@ void dae::TextComponent::SetText(const std::string& text)
 	
 }
 
+void dae::TextComponent::Init(SceneObject& object)
+{
+	m_pRenderComponentRef = object.GetFirstComponentOfType<RenderComponent>();
+	if (!m_pRenderComponentRef)
+		throw std::exception("TextComponents require a renderComponent to work, please add one to the corresponding SceneObject");
+}
+
 void dae::TextComponent::Receive(int message)
 {
 	std::cout << "received message: " << message << std::endl;
-}
-
-void dae::TextComponent::FixedUpdate()
-{
-	m_pRenderComponentRef->m_LocalPosition.x += 0.1f;
-}
-
-void dae::TextComponent::Update()
-{
 }

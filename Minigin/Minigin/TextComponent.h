@@ -9,13 +9,12 @@ namespace dae
 	class TextComponent final : public BaseComponent
 	{
 	public:
+		void Init(SceneObject& object) override;
 		void SetText(const std::string& text);
 
 		void Receive(int message) override;
-		void FixedUpdate() override;
-		void Update() override;
 
-		explicit TextComponent(const std::string& text, const std::shared_ptr<Font>& font, RenderComponent* pRenderComponent);
+		explicit TextComponent(const std::string& text, const std::shared_ptr<Font>& font);
 		~TextComponent() = default;
 		TextComponent(const TextComponent& other) = default;
 		TextComponent(TextComponent&& other) = default;

@@ -49,11 +49,11 @@ void dae::Eremita::LoadGame() const
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
 	const auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	
-	const auto pRenderComponent = new RenderComponent("logo.png", { 0,0,0 });
-	const auto pTextComponent = new TextComponent("Test", font, pRenderComponent);
-	const auto pFPSComponent = new FPSComponent(pTextComponent);
-	auto fpsObject = std::make_shared<SceneObject>(std::vector<BaseComponent*>{pFPSComponent, pTextComponent});
+
+	auto* const pRenderComponent = new RenderComponent("logo.png", { 0,0,0 });
+	auto* const pTextComponent = new TextComponent("Test", font);
+	auto* const pFPSComponent = new FPSComponent();
+	const auto fpsObject = std::make_shared<SceneObject>(std::vector<BaseComponent*>{pFPSComponent, pTextComponent});
 	fpsObject->AddComponent(pRenderComponent, true);
 
 	scene.Add(fpsObject);
@@ -70,7 +70,7 @@ void dae::Eremita::LoadGame() const
 	//to->SetPosition(80, 20);
 	//scene.Add(to);
 
-	
+	scene.Init();
 }
 
 void dae::Eremita::Cleanup()
@@ -107,16 +107,22 @@ void dae::Eremita::Run()
 			const auto elapsedTime = currentTime - previousTime;
 			previousTime = currentTime;
 			lag += elapsedTime;
-			
+
+			gameTime.SetDeltaTime(elapsedTime);
 			doContinue = input.ProcessInput();
 			
-			while(lag >= milliseconds(GameTime::MsPerFrame))
+			while(lag >= milliseconds(GameTime::TimeStep))
 			{
-				sceneManager.Update();
-				lag -= milliseconds(GameTime::MsPerFrame);
+				sceneManager.FixedUpdate();
+				lag -= milliseconds(GameTime::TimeStep);
 			}
+
+			sceneManager.Update();
+			
 			renderer.Render();
-			gameTime.SetDeltaTime(lag);
+
+			const auto sleepTime = previousTime + milliseconds(GameTime::MsPerFrame) - steady_clock::now();
+			this_thread::sleep_for(sleepTime);
 		}
 	}
 

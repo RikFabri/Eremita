@@ -3,23 +3,16 @@
 
 #include "TextComponent.h"
 #include "GameTime.h"
+#include "SceneObject.h"
 
-void dae::FPSComponent::Receive(int message)
+void dae::FPSComponent::Init(SceneObject& object)
 {
-	std::cout << "message received: " << message << std::endl;
+	m_pTextComponentRef = object.GetFirstComponentOfType<TextComponent>();
+	if (!m_pTextComponentRef)
+		throw std::exception("FPSComponents require a TextComponent, please add one to the corresponding gameObject");
 }
 
-void dae::FPSComponent::FixedUpdate()
+void dae::FPSComponent::Update(SceneObject&)
 {
-	m_pTextComponentRef->SetText(std::to_string(int(GameTime::GetInstance().GetElapsedSec())) + " FPS");
-}
-
-void dae::FPSComponent::Update()
-{
-	
-}
-
-dae::FPSComponent::FPSComponent(TextComponent* pTextComponent)
-	: m_pTextComponentRef(pTextComponent)
-{
+	m_pTextComponentRef->SetText(std::to_string(int(GameTime::GetInstance().GetFPS())) + " FPS");
 }

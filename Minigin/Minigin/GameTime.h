@@ -9,9 +9,11 @@ namespace dae
     public:
         void SetDeltaTime(const std::chrono::duration<float>& dt);
 
-        double GetElapsedSec() const;
+        double GetFPS() const;
+        double GetDeltaTime() const;
     
         static const int MsPerFrame = 16; //16 for 60 fps, 33 for 30 fps
+        static const int TimeStep = 8;
     private:
         std::chrono::duration<float> m_Dt{};
     };

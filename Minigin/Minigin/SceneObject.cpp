@@ -6,7 +6,6 @@
 dae::SceneObject::SceneObject(const std::vector<BaseComponent*> components)
 	: m_Components(components)
 {
-	
 }
 
 dae::SceneObject::~SceneObject()
@@ -21,14 +20,28 @@ dae::SceneObject::~SceneObject()
 
 void dae::SceneObject::Update()
 {
-	for(auto* pComponent : m_Components)
-		pComponent->FixedUpdate();
+	for (auto* pComponent : m_Components)
+		pComponent->Update(*this);
 }
 
-void dae::SceneObject::Render() const
+void dae::SceneObject::FixedUpdate()
+{
+	for (auto* pComponent : m_Components)
+		pComponent->FixedUpdate(*this);
+}
+
+void dae::SceneObject::Render()
 {
 	for (auto* pComponent : m_GraphicalComponents)
-		pComponent->FixedUpdate();
+		pComponent->Update(*this);
+}
+
+void dae::SceneObject::Init()
+{
+	for (auto* pComponent : m_Components)
+		pComponent->Init(*this);
+	for (auto* pComponent : m_GraphicalComponents)
+		pComponent->Init(*this);
 }
 
 void dae::SceneObject::AddComponent(BaseComponent* component, bool isGraphical)
