@@ -8,9 +8,12 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <SDL.h>
-#include "TextObject.h"
-#include "GameObject.h"
+#include "TextComponent.h"
 #include "Scene.h"
+#include "SceneObject.h"
+#include "RenderComponent.h"
+#include "FPSComponent.h"
+#include "GameTime.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -45,19 +48,29 @@ void dae::Eremita::LoadGame() const
 {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
-	auto go = std::make_shared<GameObject>();
-	go->SetTexture("background.jpg");
-	scene.Add(go);
+	const auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+	
+	const auto pRenderComponent = new RenderComponent("logo.png", { 0,0,0 });
+	const auto pTextComponent = new TextComponent("Test", font, pRenderComponent);
+	const auto pFPSComponent = new FPSComponent(pTextComponent);
+	auto fpsObject = std::make_shared<SceneObject>(std::vector<BaseComponent*>{pFPSComponent, pTextComponent});
+	fpsObject->AddComponent(pRenderComponent, true);
 
-	go = std::make_shared<GameObject>();
-	go->SetTexture("logo.png");
-	go->SetPosition(216, 180);
-	scene.Add(go);
+	scene.Add(fpsObject);
+	
+	//go->SetTexture("background.jpg");
+	//scene.Add(go);
 
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto to = std::make_shared<TextObject>("Programming 4 Assignment", font);
-	to->SetPosition(80, 20);
-	scene.Add(to);
+	//go = std::make_shared<GameObject>();
+	//go->SetTexture("logo.png");
+	//go->SetPosition(216, 180);
+	//scene.Add(go);
+
+	//auto to = std::make_shared<TextComponent>("Programming 4 Assignment", font);
+	//to->SetPosition(80, 20);
+	//scene.Add(to);
+
+	
 }
 
 void dae::Eremita::Cleanup()
@@ -81,7 +94,8 @@ void dae::Eremita::Run()
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
-
+		auto& gameTime = GameTime::GetInstance();
+		
 		auto doContinue = true;
 		
 		auto previousTime = steady_clock::now();
@@ -94,13 +108,15 @@ void dae::Eremita::Run()
 			previousTime = currentTime;
 			lag += elapsedTime;
 			
-			while(lag >= milliseconds(MsPerFrame))
+			doContinue = input.ProcessInput();
+			
+			while(lag >= milliseconds(GameTime::MsPerFrame))
 			{
-				doContinue = input.ProcessInput();
 				sceneManager.Update();
-				lag -= milliseconds(MsPerFrame);
+				lag -= milliseconds(GameTime::MsPerFrame);
 			}
 			renderer.Render();
+			gameTime.SetDeltaTime(lag);
 		}
 	}
 

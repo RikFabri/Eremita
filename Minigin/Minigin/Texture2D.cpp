@@ -4,15 +4,15 @@
 
 dae::Texture2D::~Texture2D()
 {
-	SDL_DestroyTexture(m_Texture);
+	SDL_DestroyTexture(m_pTexture);
 }
 
 SDL_Texture* dae::Texture2D::GetSDLTexture() const
 {
-	return m_Texture;
+	return m_pTexture;
 }
 
 dae::Texture2D::Texture2D(SDL_Texture* texture)
 {
-	m_Texture = texture;
+	m_pTexture = texture;
 }

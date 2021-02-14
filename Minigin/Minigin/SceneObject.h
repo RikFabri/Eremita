@@ -1,17 +1,26 @@
 #pragma once
 namespace dae
 {
+	class BaseComponent;
+	
 	class SceneObject
 	{
 	public:
-		virtual void Update() = 0;
-		virtual void Render() const = 0;
+		virtual void Update();
+		virtual void Render() const;
 
-		SceneObject() = default;
-		virtual ~SceneObject() = default;
+		void AddComponent(BaseComponent* component, bool isGraphical = false);
+		
+		SceneObject(const std::vector<BaseComponent*> components);
+		virtual ~SceneObject();
 		SceneObject(const SceneObject& other) = delete;
 		SceneObject(SceneObject&& other) = delete;
 		SceneObject& operator=(const SceneObject& other) = delete;
 		SceneObject& operator=(SceneObject&& other) = delete;
+
+	private:
+		std::vector<BaseComponent*> m_Components;
+		std::vector<BaseComponent*> m_GraphicalComponents;
+
 	};
 }
