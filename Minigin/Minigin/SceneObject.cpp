@@ -3,9 +3,10 @@
 
 #include "BaseComponent.h"
 
-dae::SceneObject::SceneObject(const std::vector<BaseComponent*> components)
+dae::SceneObject::SceneObject(const std::vector<BaseComponent*> components, const glm::vec3& position)
 	: m_Components(components)
 {
+	m_Components.push_back(new Transform(position));
 }
 
 dae::SceneObject::~SceneObject()
@@ -44,7 +45,7 @@ void dae::SceneObject::Init()
 		pComponent->Init(*this);
 }
 
-void dae::SceneObject::AddComponent(BaseComponent* component, bool isGraphical)
+void dae::SceneObject::AddComponent(BaseComponent* component, const bool isGraphical)
 {
 	if (!isGraphical)
 	{

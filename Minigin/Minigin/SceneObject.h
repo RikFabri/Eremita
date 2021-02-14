@@ -1,4 +1,6 @@
 #pragma once
+#include "Transform.h"
+
 namespace dae
 {
 	class BaseComponent;
@@ -16,15 +18,15 @@ namespace dae
 		template<typename ComponentType>
 		ComponentType* GetFirstComponentOfType();
 		
-		SceneObject(const std::vector<BaseComponent*> components);
+		SceneObject(const std::vector<BaseComponent*> components, const glm::vec3& position = {0,0,0});
 		~SceneObject();
 		SceneObject(const SceneObject& other) = delete;
 		SceneObject(SceneObject&& other) = delete;
 		SceneObject& operator=(const SceneObject& other) = delete;
 		SceneObject& operator=(SceneObject&& other) = delete;
 
-	private:
-		std::vector<BaseComponent*> m_Components; //To-Do: find better solution 
+	private:		
+		std::vector<BaseComponent*> m_Components; //To-Do: find better solution
 		std::vector<BaseComponent*> m_GraphicalComponents;
 
 	};

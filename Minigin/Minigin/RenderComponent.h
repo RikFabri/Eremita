@@ -10,20 +10,24 @@ struct SDL_Texture;
 namespace dae
 {
 	class Texture2D;
+	class Transform;
 	
 	class RenderComponent final : public BaseComponent
 	{
 	public:
-		RenderComponent(const std::string& texturePath, const glm::fvec3& localPosition);
-		RenderComponent(const glm::fvec3& localPosition);
+		RenderComponent(const std::string& texturePath);
+		RenderComponent();
 
 		void Update(SceneObject& object) override;
 
+		void Init(SceneObject& object) override;
 		void Receive(int message) override;
 		void SetTexture(SDL_Texture* texture);
 
 	private:
-		glm::fvec3 m_LocalPosition; //Vec-3 since we'll probably want to take z-values into account later on
 		std::shared_ptr<Texture2D> m_pTexture;
+
+		//No ownership
+		Transform* m_pTransformRef = nullptr;
 	};
 }

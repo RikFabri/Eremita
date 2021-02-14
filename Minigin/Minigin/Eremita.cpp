@@ -50,9 +50,10 @@ void dae::Eremita::LoadGame() const
 
 	const auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 
-	auto* const pRenderComponent = new RenderComponent("logo.png", { 0,0,0 });
-	auto* const pTextComponent = new TextComponent("Test", font);
+	auto* const pRenderComponent = new RenderComponent();
+	auto* const pTextComponent = new TextComponent("60", font);
 	auto* const pFPSComponent = new FPSComponent();
+	
 	const auto fpsObject = std::make_shared<SceneObject>(std::vector<BaseComponent*>{pFPSComponent, pTextComponent});
 	fpsObject->AddComponent(pRenderComponent, true);
 
