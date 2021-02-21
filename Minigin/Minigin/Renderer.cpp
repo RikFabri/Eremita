@@ -3,6 +3,9 @@
 #include <SDL.h>
 #include "SceneManager.h"
 #include "Texture2D.h"
+#include "imgui.h"
+#include "backends/imgui_impl_opengl2.h"
+#include "backends/imgui_impl_sdl.h"
 
 int GetOpenGLDriverIndex()
 {
@@ -20,24 +23,44 @@ int GetOpenGLDriverIndex()
 
 void dae::Renderer::Init(SDL_Window * window)
 {
+	m_pWindow = window;
+	m_ShowImGuiDemo = true;
+	
 	m_Renderer = SDL_CreateRenderer(window, GetOpenGLDriverIndex(), SDL_RENDERER_ACCELERATED);
 	if (m_Renderer == nullptr) 
 	{
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui_ImplSDL2_InitForOpenGL(window, SDL_GL_GetCurrentContext());
+	ImGui_ImplOpenGL2_Init();
 }
 
-void dae::Renderer::Render() const
+void dae::Renderer::Render()
 {
 	SDL_RenderClear(m_Renderer);
 
 	SceneManager::GetInstance().Render();
+
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplSDL2_NewFrame(m_pWindow);
+	ImGui::NewFrame();
+	if(m_ShowImGuiDemo)
+		ImGui::ShowDemoWindow(&m_ShowImGuiDemo);
+	ImGui::Render();
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 	
 	SDL_RenderPresent(m_Renderer);
 }
 
 void dae::Renderer::Destroy()
 {
+	ImGui_ImplOpenGL2_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+	
 	if (m_Renderer != nullptr)
 	{
 		SDL_DestroyRenderer(m_Renderer);

@@ -3,7 +3,7 @@
 
 #include "BaseComponent.h"
 
-dae::SceneObject::SceneObject(const std::vector<BaseComponent*> components, const glm::vec3& position)
+dae::SceneObject::SceneObject(const std::vector<BaseComponent*>& components, const glm::vec3& position)
 	: m_Components(components)
 {
 	m_Components.push_back(new Transform(position));

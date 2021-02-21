@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseComponent.h"
+#include "SDL.h"
 
 namespace dae
 {
@@ -14,7 +15,7 @@ namespace dae
 
 		void Receive(int message) override;
 
-		explicit TextComponent(const std::string& text, const std::shared_ptr<Font>& font);
+		explicit TextComponent(const std::string& text, const std::shared_ptr<Font>& font, const SDL_Color& color = {255,255,255});
 		~TextComponent() = default;
 		TextComponent(const TextComponent& other) = default;
 		TextComponent(TextComponent&& other) = default;
@@ -22,10 +23,11 @@ namespace dae
 		TextComponent& operator=(TextComponent&& other) = default;
 
 	private:
+		SDL_Color m_Color;
 		std::string m_Text;
 		std::shared_ptr<Font> m_Font;
 
 		//Not owned
-		RenderComponent* m_pRenderComponentRef;
+		RenderComponent* m_pRenderComponentRef = nullptr;
 	};
 }

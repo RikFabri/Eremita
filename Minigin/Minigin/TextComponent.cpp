@@ -10,50 +10,19 @@
 #include "GameTime.h"
 #include "SceneObject.h"
 
-dae::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font) 
+dae::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font, const SDL_Color& color)
 	: BaseComponent()
 	, m_Text(text)
 	, m_Font(font)
-{ }
+	, m_Color(color)
+{
+}
 
-//To-Do: remove comments
-//void dae::TextComponent::FixedUpdate()
-//{
-//	if (m_NeedsUpdate)
-//	{
-//		const SDL_Color color = { 255,255,255 }; // only white text is supported now
-//		const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), color);
-//		if (surf == nullptr) 
-//		{
-//			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
-//		}
-//		auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
-//		if (texture == nullptr) 
-//		{
-//			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
-//		}
-//		SDL_FreeSurface(surf);
-//		m_pTexture = std::make_shared<Texture2D>(texture);
-//		m_NeedsUpdate = false;
-//	}
-//}
-//
-//void dae::TextComponent::Render() const
-//{
-//	if (m_pTexture != nullptr)
-//	{
-//		const auto pos = m_Transform.GetPosition();
-//		Renderer::GetInstance().RenderTexture(*m_pTexture, pos.x, pos.y);
-//	}
-//}
-//
-// This implementation uses the "dirty flag" pattern
 void dae::TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;
-
-	const auto color = SDL_Color{ 255,255,0 };
-	const auto surface = TTF_RenderText_Blended(m_Font->GetFont(), text.c_str(), color);
+	
+	const auto surface = TTF_RenderText_Blended(m_Font->GetFont(), text.c_str(), m_Color);
 
 	if (surface == nullptr)
 		throw std::runtime_error(std::string("Rendering text failed: ") + SDL_GetError());
