@@ -1,9 +1,11 @@
 #include "Commands.h"
 
-dae::DoDamage::DoDamage()
+dae::ExecuteFunction::ExecuteFunction(const std::function<void()>& callback)
+	: m_Callback(callback)
 {
 }
 
-void dae::DoDamage::Execute()
+void dae::ExecuteFunction::Execute()
 {
+	m_Callback();
 }

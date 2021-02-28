@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include <memory>
 
 namespace dae
@@ -28,12 +29,14 @@ namespace dae
 
 
 	// ---- Concrete Commands ----
-	class DoDamage final : public Command
+	class ExecuteFunction final : public Command
 	{
 	public:
-		DoDamage();
+		ExecuteFunction(const std::function<void()>& callback);
+		
 		void Execute() override;
 
 	private:
+		std::function<void()> m_Callback;
 	};
 }

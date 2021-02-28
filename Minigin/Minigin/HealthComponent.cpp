@@ -3,6 +3,8 @@
 
 #include "SceneObject.h"
 #include "GameTime.h"
+#include "InputManager.h"
+#include <Xinput.h>
 
 dae::HealthComponent::HealthComponent(int nrOfLives)
 	: m_Lives(nrOfLives)
@@ -14,6 +16,9 @@ dae::HealthComponent::HealthComponent(int nrOfLives)
 void dae::HealthComponent::Init(SceneObject& sceneObject)
 {
 	m_pBroadcasterRef = sceneObject.GetFirstComponentOfType<SubjectComponent>();
+
+	
+	InputManager::GetInstance().AddInputAction(ControllerButton{ XINPUT_GAMEPAD_A, 0 }, new ExecuteFunction([this]() {DoDamage(1); }), EventType::released);
 }
 
 void dae::HealthComponent::DoDamage(int amount)
@@ -35,13 +40,4 @@ void dae::HealthComponent::Die()
 int dae::HealthComponent::GetLives() const
 {
 	return m_Lives;
-}
-
-void dae::HealthComponent::Update(SceneObject&)
-{
-	auto dt = GameTime::GetInstance().GetDeltaTime();
-	m_ElapsedSec += float(dt);
-
-	if (m_ElapsedSec >= 6)
-		DoDamage(1);
 }

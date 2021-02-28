@@ -16,7 +16,7 @@ namespace dae
 		void Die();
 
 		int GetLives() const;
-		void Update(SceneObject&) override;
+	
 	private:
 		int m_Lives;
 		float m_ElapsedSec = 0;
