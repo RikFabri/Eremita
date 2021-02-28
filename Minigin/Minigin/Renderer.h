@@ -22,9 +22,11 @@ namespace dae
 
 		SDL_Renderer* GetSDLRenderer() const { return m_Renderer; }
 	private:
+		void RenderImGUI();
+		
 		SDL_Renderer* m_Renderer{};
 		SDL_Window* m_pWindow{};
-		bool m_ShowImGuiDemo{ true };
+		//bool m_ShowImGuiDemo{ true };
 	};
 }
 

@@ -24,7 +24,7 @@ int GetOpenGLDriverIndex()
 void dae::Renderer::Init(SDL_Window * window)
 {
 	m_pWindow = window;
-	m_ShowImGuiDemo = true;
+	//m_ShowImGuiDemo = true;
 	
 	m_Renderer = SDL_CreateRenderer(window, GetOpenGLDriverIndex(), SDL_RENDERER_ACCELERATED);
 	if (m_Renderer == nullptr) 
@@ -43,12 +43,15 @@ void dae::Renderer::Render()
 	SDL_RenderClear(m_Renderer);
 
 	SceneManager::GetInstance().Render();
-
+	
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplSDL2_NewFrame(m_pWindow);
 	ImGui::NewFrame();
-	if(m_ShowImGuiDemo)
-		ImGui::ShowDemoWindow(&m_ShowImGuiDemo);
+	//if (m_ShowImGuiDemo)
+	//	ImGui::ShowDemoWindow(&m_ShowImGuiDemo);
+	
+	RenderImGUI();
+	
 	ImGui::Render();
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 	
@@ -85,4 +88,14 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	dst.w = static_cast<int>(width);
 	dst.h = static_cast<int>(height);
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+}
+
+void dae::Renderer::RenderImGUI()
+{
+	ImGui::Begin("Gamemode");
+	ImGui::Button("Single player", { 100,40 });
+	ImGui::Button("Co-op", { 100,40 });
+	ImGui::Button("Versus", { 100,40 });
+	ImGui::End();
+
 }
