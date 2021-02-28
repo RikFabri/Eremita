@@ -1,24 +1,21 @@
 #pragma once
+#include <unordered_map>
 #include <XInput.h>
+
+#include "Commands.h"
 #include "Singleton.h"
 
 namespace dae
 {
-	enum class ControllerButton
-	{
-		ButtonA,
-		ButtonB,
-		ButtonX,
-		ButtonY
-	};
-
 	class InputManager final : public Singleton<InputManager>
 	{
-	public:
+	public:		
 		bool ProcessInput();
-		bool IsPressed(ControllerButton button) const;
+
+		void AddInputAction(WORD keyBinding, Command* pCommand, EventType eventType);
 	private:
-		XINPUT_STATE m_CurrentState{};
+		std::unordered_map<WORD, InputAction> m_InputCommandMap;
+		std::unordered_map<WORD, bool> m_InputState;
 	};
 
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseComponent.h"
+#include <memory>
 #include "SDL.h"
 
 namespace dae

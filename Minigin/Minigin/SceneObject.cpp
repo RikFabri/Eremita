@@ -1,10 +1,22 @@
 #include "MiniginPCH.h"
 #include "SceneObject.h"
 
+#include "SubjectComponent.h"
 #include "BaseComponent.h"
 
-dae::SceneObject::SceneObject(const std::vector<BaseComponent*>& components, const glm::vec3& position)
+const std::string& dae::SceneObject::GetTag() const
+{
+	return m_Tag;
+}
+
+dae::Scene* dae::SceneObject::GetScene() const
+{
+	return m_pScene;
+}
+
+dae::SceneObject::SceneObject(const std::vector<BaseComponent*>& components, const glm::vec3& position, const std::string& tag)
 	: m_Components(components)
+	, m_Tag(tag)
 {
 	m_Components.push_back(new Transform(position));
 }
@@ -16,6 +28,28 @@ dae::SceneObject::~SceneObject()
 	
 	for (auto* pComponent : m_GraphicalComponents)
 		delete pComponent;
+}
+
+void dae::SceneObject::SetScene(Scene* pScene)
+{
+	m_pScene = pScene;
+}
+
+void dae::SceneObject::SetTag(const std::string& newTag)
+{
+	m_Tag = newTag;
+}
+
+bool dae::SceneObject::RegisterAsObserver(ObserverInterface* pObserver)
+{
+	auto subjectComponent = GetFirstComponentOfType<SubjectComponent>();
+
+	if (!subjectComponent)
+		return false;
+
+	subjectComponent->Subscribe(pObserver);
+
+	return true;
 }
 
 

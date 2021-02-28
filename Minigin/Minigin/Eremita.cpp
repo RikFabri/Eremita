@@ -12,6 +12,9 @@
 #include "Scene.h"
 #include "SceneObject.h"
 #include "RenderComponent.h"
+#include "HealthComponent.h"
+#include "HealthDisplayComponent.h"
+#include "SubjectComponent.h"
 #include "FPSComponent.h"
 #include "GameTime.h"
 
@@ -66,7 +69,7 @@ void dae::Eremita::LoadGame() const
 	const auto livesDisplay = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{0,30,0});
 	livesDisplay->AddComponent(new TextComponent("3 lives", font));
 	livesDisplay->AddComponent(new RenderComponent(), true);
-
+	livesDisplay->AddComponent(new HealthDisplayComponent());
 	scene.Add(livesDisplay);
 
 	// Score display
@@ -75,6 +78,13 @@ void dae::Eremita::LoadGame() const
 	scoreDisplay->AddComponent(new RenderComponent(), true);
 	
 	scene.Add(scoreDisplay);
+
+	// Qbert
+	const auto qBert = std::make_shared<SceneObject>();
+	qBert->AddComponent(new HealthComponent());
+	qBert->AddComponent(new SubjectComponent());
+	qBert->SetTag("player");
+	scene.Add(qBert);
 
 	scene.Init();
 }
