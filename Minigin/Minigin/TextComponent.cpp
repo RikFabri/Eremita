@@ -42,6 +42,8 @@ void dae::TextComponent::Init(SceneObject& object)
 	m_pRenderComponentRef = object.GetFirstComponentOfType<RenderComponent>();
 	if (!m_pRenderComponentRef)
 		throw std::exception("TextComponents require a renderComponent to work, please add one to the corresponding SceneObject");
+
+	SetText(m_Text);
 }
 
 void dae::TextComponent::Receive(int message)

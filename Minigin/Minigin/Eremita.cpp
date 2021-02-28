@@ -46,30 +46,35 @@ void dae::Eremita::Initialize()
  */
 void dae::Eremita::LoadGame() const
 {
+	using pComponentVec = std::vector<BaseComponent*>;
+	
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
-	const auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+	const auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 27);
 
+	// FPS display
 	auto* const pRenderComponent = new RenderComponent();
 	auto* const pTextComponent = new TextComponent("60", font);
 	auto* const pFPSComponent = new FPSComponent();
 	
-	const auto fpsObject = std::make_shared<SceneObject>(std::vector<BaseComponent*>{pFPSComponent, pTextComponent});
+	const auto fpsObject = std::make_shared<SceneObject>(pComponentVec{pFPSComponent, pTextComponent});
 	fpsObject->AddComponent(pRenderComponent, true);
 
 	scene.Add(fpsObject);
+
+	// Lives display
+	const auto livesDisplay = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{0,30,0});
+	livesDisplay->AddComponent(new TextComponent("3 lives", font));
+	livesDisplay->AddComponent(new RenderComponent(), true);
+
+	scene.Add(livesDisplay);
+
+	// Score display
+	const auto scoreDisplay = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 0, 60, 0 });
+	scoreDisplay->AddComponent(new TextComponent("Score: 0", font));
+	scoreDisplay->AddComponent(new RenderComponent(), true);
 	
-	//go->SetTexture("background.jpg");
-	//scene.Add(go);
-
-	//go = std::make_shared<GameObject>();
-	//go->SetTexture("logo.png");
-	//go->SetPosition(216, 180);
-	//scene.Add(go);
-
-	//auto to = std::make_shared<TextComponent>("Programming 4 Assignment", font);
-	//to->SetPosition(80, 20);
-	//scene.Add(to);
+	scene.Add(scoreDisplay);
 
 	scene.Init();
 }

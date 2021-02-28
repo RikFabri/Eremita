@@ -18,7 +18,7 @@ namespace dae
 		template<typename ComponentType>
 		ComponentType* GetFirstComponentOfType();
 		
-		SceneObject(const std::vector<BaseComponent*>& components, const glm::vec3& position = {0,0,0});
+		SceneObject(const std::vector<BaseComponent*>& components = {}, const glm::vec3& position = { 0,0,0 });
 		~SceneObject();
 		SceneObject(const SceneObject& other) = delete;
 		SceneObject(SceneObject&& other) = delete;
