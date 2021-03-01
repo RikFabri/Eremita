@@ -13,9 +13,6 @@ dae::ScoreComponent::ScoreComponent()
 void dae::ScoreComponent::Init(SceneObject& parent)
 {
 	m_SubjectComponentRef = parent.GetFirstComponentOfType<SubjectComponent>();
-
-	InputManager::GetInstance().AddInputAction(ControllerButton{ XINPUT_GAMEPAD_B, 0 }, new ExecuteFunction([this]() {IncreaseScore(1); }), EventType::released);
-
 }
 
 void dae::ScoreComponent::IncreaseScore(int amount)

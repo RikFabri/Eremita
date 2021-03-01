@@ -19,6 +19,7 @@
 #include "GameTime.h"
 #include "ScoreDisplayComponent.h"
 #include "ScoreComponent.h"
+#include "InputComponent.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -71,24 +72,49 @@ void dae::Eremita::LoadGame() const
 	const auto livesDisplay = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{0,30,0});
 	livesDisplay->AddComponent(new TextComponent("3 lives", font));
 	livesDisplay->AddComponent(new RenderComponent(), true);
-	livesDisplay->AddComponent(new HealthDisplayComponent());
+	livesDisplay->AddComponent(new HealthDisplayComponent(0));
 	scene.Add(livesDisplay);
 
-	// Score display
+	// Lives display right
+	const auto livesDisplayRight = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{200,30,0});
+	livesDisplayRight->AddComponent(new TextComponent("3 lives", font));
+	livesDisplayRight->AddComponent(new RenderComponent(), true);
+	livesDisplayRight->AddComponent(new HealthDisplayComponent(1));
+	scene.Add(livesDisplayRight);
+
+	// Score display left
 	const auto scoreDisplay = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 0, 60, 0 });
 	scoreDisplay->AddComponent(new TextComponent("Score: 0", font));
 	scoreDisplay->AddComponent(new RenderComponent(), true);
-	scoreDisplay->AddComponent(new ScoreDisplayComponent());
+	scoreDisplay->AddComponent(new ScoreDisplayComponent(0));
 	
 	scene.Add(scoreDisplay);
+
+	// Score display right
+	const auto scoreDisplayRight = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 200, 60, 0 });
+	scoreDisplayRight->AddComponent(new TextComponent("Score: 0", font));
+	scoreDisplayRight->AddComponent(new RenderComponent(), true);
+	scoreDisplayRight->AddComponent(new ScoreDisplayComponent(1));
+	
+	scene.Add(scoreDisplayRight);
 
 	// Qbert
 	const auto qBert = std::make_shared<SceneObject>();
 	qBert->AddComponent(new HealthComponent());
 	qBert->AddComponent(new SubjectComponent());
 	qBert->AddComponent(new ScoreComponent());
+	qBert->AddComponent(new InputComponent());
 	qBert->SetTag("player");
 	scene.Add(qBert);
+	
+	// Qbert 2 
+	const auto qBert2 = std::make_shared<SceneObject>();
+	qBert2->AddComponent(new HealthComponent());
+	qBert2->AddComponent(new SubjectComponent());
+	qBert2->AddComponent(new ScoreComponent());
+	qBert2->AddComponent(new InputComponent());
+	qBert2->SetTag("player");
+	scene.Add(qBert2);
 
 	scene.Init();
 }

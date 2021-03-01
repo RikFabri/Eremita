@@ -23,7 +23,7 @@ bool dae::InputManager::ProcessInput()
 		{
 			continue;
 		}
-
+		
 		for (auto& inputCommand : m_InputCommandMap)
 		{
 			if (inputCommand.first.ControllerId != i)
@@ -62,6 +62,36 @@ bool dae::InputManager::ProcessInput()
 	}
 
 	return true;
+}
+
+DWORD dae::InputManager::RegisterController()
+{
+	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i)
+	{
+		XINPUT_STATE state;
+		ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+		const auto dwResult = XInputGetState(i, &state);
+
+		if (dwResult != ERROR_SUCCESS)
+			continue;
+
+		if(!m_ControllerRegistered[i])
+		{
+			m_ControllerRegistered[i] = true;
+			return i;
+		}
+	}
+
+	return (DWORD)-1;
+}
+
+void dae::InputManager::UnregisterController(DWORD id)
+{
+	if (id >= XUSER_MAX_COUNT)
+		return;
+	
+	m_ControllerRegistered[id] = false;
 }
 
 void dae::InputManager::AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType)

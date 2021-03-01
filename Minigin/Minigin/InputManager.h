@@ -2,6 +2,7 @@
 #include <functional>
 #include <unordered_map>
 #include <windows.h>
+#include <XInput.h>
 #include "Commands.h"
 #include "Singleton.h"
 
@@ -21,8 +22,14 @@ namespace dae
 		
 		bool ProcessInput();
 
-		void AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType);
+		//Returns controller id, or DWORD -1 (watch out, DWORD is unsigned) if no controller found
+		DWORD RegisterController();
+		void UnregisterController(DWORD id);
+		
+		void AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType = EventType::released);
 	private:
+		bool m_ControllerRegistered[XUSER_MAX_COUNT];
+		
 		static size_t ControllerButtonHash(const ControllerButton& controllerButton);
 		static bool CompareControllerButton(const ControllerButton& cb1, const ControllerButton& cb2);
 

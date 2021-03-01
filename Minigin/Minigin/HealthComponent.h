@@ -18,7 +18,6 @@ namespace dae
 	
 	private:
 		int m_Lives;
-		float m_ElapsedSec = 0;
 		
 		//Not owned
 		SubjectComponent* m_pBroadcasterRef;

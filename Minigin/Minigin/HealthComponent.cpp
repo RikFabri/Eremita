@@ -16,9 +16,6 @@ dae::HealthComponent::HealthComponent(int nrOfLives)
 void dae::HealthComponent::Init(SceneObject& sceneObject)
 {
 	m_pBroadcasterRef = sceneObject.GetFirstComponentOfType<SubjectComponent>();
-
-	// To-Do: move this out of health component - it's test purpose only
-	InputManager::GetInstance().AddInputAction(ControllerButton{ XINPUT_GAMEPAD_A, 0 }, new ExecuteFunction([this]() {Die(); }), EventType::released);
 }
 
 void dae::HealthComponent::Die()
