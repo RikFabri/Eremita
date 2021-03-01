@@ -32,7 +32,7 @@ namespace dae
 	class ExecuteFunction final : public Command
 	{
 	public:
-		ExecuteFunction(const std::function<void()>& callback);
+		ExecuteFunction(std::function<void()> callback);
 		
 		void Execute() override;
 

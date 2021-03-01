@@ -26,7 +26,7 @@ void dae::HealthDisplayComponent::Init(SceneObject& parent)
 	if (!m_pTextComponentRef)
 		throw std::exception("HealthDisplayComponent requires a sibling textComponent to work");
 
-	auto sceneObjects = parent.GetScene()->GetObjectsByTag("player");
+	const auto sceneObjects = parent.GetScene()->GetObjectsByTag("player");
 
 	if (sceneObjects.size() <= size_t(m_PlayerId))
 	{
@@ -34,7 +34,7 @@ void dae::HealthDisplayComponent::Init(SceneObject& parent)
 		throw std::exception(message.c_str());
 	}
 
-	auto wasSuccess = sceneObjects[m_PlayerId]->RegisterAsObserver(this);
+	const auto wasSuccess = sceneObjects[m_PlayerId]->RegisterAsObserver(this);
 
 	if (!wasSuccess)
 		throw std::exception("HealthDisplayComponent couldn't register as observer, does subject have a subjectComponent?");

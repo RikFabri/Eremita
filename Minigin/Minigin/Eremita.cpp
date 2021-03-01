@@ -17,6 +17,8 @@
 #include "SubjectComponent.h"
 #include "FPSComponent.h"
 #include "GameTime.h"
+#include "ScoreDisplayComponent.h"
+#include "ScoreComponent.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -76,6 +78,7 @@ void dae::Eremita::LoadGame() const
 	const auto scoreDisplay = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 0, 60, 0 });
 	scoreDisplay->AddComponent(new TextComponent("Score: 0", font));
 	scoreDisplay->AddComponent(new RenderComponent(), true);
+	scoreDisplay->AddComponent(new ScoreDisplayComponent());
 	
 	scene.Add(scoreDisplay);
 
@@ -83,6 +86,7 @@ void dae::Eremita::LoadGame() const
 	const auto qBert = std::make_shared<SceneObject>();
 	qBert->AddComponent(new HealthComponent());
 	qBert->AddComponent(new SubjectComponent());
+	qBert->AddComponent(new ScoreComponent());
 	qBert->SetTag("player");
 	scene.Add(qBert);
 

@@ -11,8 +11,7 @@ namespace dae
 		HealthComponent(int nrOfLives = 3);
 		
 		void Init(SceneObject&) override;
-
-		void DoDamage(int amount);
+		
 		void Die();
 
 		int GetLives() const;

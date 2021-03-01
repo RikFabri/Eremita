@@ -17,22 +17,14 @@ void dae::HealthComponent::Init(SceneObject& sceneObject)
 {
 	m_pBroadcasterRef = sceneObject.GetFirstComponentOfType<SubjectComponent>();
 
-	
-	InputManager::GetInstance().AddInputAction(ControllerButton{ XINPUT_GAMEPAD_A, 0 }, new ExecuteFunction([this]() {DoDamage(1); }), EventType::released);
-}
-
-void dae::HealthComponent::DoDamage(int amount)
-{
-	m_Lives -= amount;
-
-	Die();
-	
-	//if (m_Lives <= 0)
-	//	Die();
+	// To-Do: move this out of health component - it's test purpose only
+	InputManager::GetInstance().AddInputAction(ControllerButton{ XINPUT_GAMEPAD_A, 0 }, new ExecuteFunction([this]() {Die(); }), EventType::released);
 }
 
 void dae::HealthComponent::Die()
 {
+	--m_Lives;
+	
 	if (m_pBroadcasterRef)
 		m_pBroadcasterRef->Broadcast(this, "Died");
 }

@@ -1,7 +1,7 @@
 #include "Commands.h"
 
-dae::ExecuteFunction::ExecuteFunction(const std::function<void()>& callback)
-	: m_Callback(callback)
+dae::ExecuteFunction::ExecuteFunction(std::function<void()> callback)
+	: m_Callback(std::move(callback))
 {
 }
 
