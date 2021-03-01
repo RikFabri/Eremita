@@ -7,6 +7,8 @@
 dae::InputManager::InputManager()
 	: m_InputCommandMap(14, ControllerButtonHash, CompareControllerButton)
 	, m_InputState(14, ControllerButtonHash, CompareControllerButton)
+	, m_ControllerConnectedAtId{ false }
+	, m_ControllerRegisteredAtId{ false }
 {
 }
 
@@ -24,20 +26,20 @@ bool dae::InputManager::ProcessInput()
 		if (dwResult != ERROR_SUCCESS)
 		{
 			// If the controller was previously connected, fire callbacks
-			if (m_ControllerConnected[i])
+			if (m_ControllerConnectedAtId[i])
 			{
 				ControllerDisconnected();
-				m_ControllerConnected[i] = false;
+				m_ControllerConnectedAtId[i] = false;
 			}
 			
 			continue;
 		}
 
 		// If controller is newly connected, fire callbacks
-		if (!m_ControllerConnected[i])
+		if (!m_ControllerConnectedAtId[i])
 			ControllerConnected();
 		
-		m_ControllerConnected[i] = true;
+		m_ControllerConnectedAtId[i] = true;
 
 		// Iterate over registered input actions and execute them when necessary
 		for (auto& inputCommand : m_InputCommandMap)
@@ -84,17 +86,19 @@ DWORD dae::InputManager::RegisterController()
 {
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i)
 	{
+		// Don't use m_ControllerConnectedAtId here! This function can be called before that array is properly loaded!
 		XINPUT_STATE state;
 		ZeroMemory(&state, sizeof(XINPUT_STATE));
 
 		const auto dwResult = XInputGetState(i, &state);
 
+		// Check if a controller is connected at this index
 		if (dwResult != ERROR_SUCCESS)
 			continue;
 
-		if(!m_ControllerRegistered[i])
+		if(!m_ControllerRegisteredAtId[i])
 		{
-			m_ControllerRegistered[i] = true;
+			m_ControllerRegisteredAtId[i] = true;
 			return i;
 		}
 	}
@@ -107,7 +111,7 @@ void dae::InputManager::UnregisterController(DWORD id)
 	if (id >= XUSER_MAX_COUNT)
 		return;
 	
-	m_ControllerRegistered[id] = false;
+	m_ControllerRegisteredAtId[id] = false;
 }
 
 void dae::InputManager::AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType)

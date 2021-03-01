@@ -33,8 +33,8 @@ namespace dae
 		size_t AddControllerDisconnectCallback(const std::function<void()>& callback);
 		void RemoveControllerDisconnectCallback(size_t id);
 	private:		
-		bool m_ControllerRegistered[XUSER_MAX_COUNT];
-		bool m_ControllerConnected[XUSER_MAX_COUNT];
+		bool m_ControllerRegisteredAtId[XUSER_MAX_COUNT];
+		bool m_ControllerConnectedAtId[XUSER_MAX_COUNT];
 
 		void ControllerConnected() const;
 		void ControllerDisconnected() const;
