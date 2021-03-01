@@ -20,6 +20,7 @@
 #include "ScoreDisplayComponent.h"
 #include "ScoreComponent.h"
 #include "InputComponent.h"
+#include "Logger.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -117,6 +118,12 @@ void dae::Eremita::LoadGame() const
 	scene.Add(qBert2);
 
 	scene.Init();
+
+	//To-Do: remove this
+	Logger::GetInstance().ClearLog(); // To clear the warning in case the teachers only plug in one controller.
+	Logger::GetInstance().Print("\n-----------------------------------------------------------");
+	Logger::GetInstance().Print("All D-Pad buttons add a certain amount of points, \nthe A button costs one life. Keyboard input isn't used yet");
+	Logger::GetInstance().Print("-----------------------------------------------------------");
 }
 
 void dae::Eremita::Cleanup()

@@ -27,8 +27,19 @@ namespace dae
 		void UnregisterController(DWORD id);
 		
 		void AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType = EventType::released);
-	private:
+
+		size_t AddControllerConnectCallback(const std::function<void()>& callback);
+		void RemoveControllerConnectCallback(size_t id);
+		size_t AddControllerDisconnectCallback(const std::function<void()>& callback);
+		void RemoveControllerDisconnectCallback(size_t id);
+	private:		
 		bool m_ControllerRegistered[XUSER_MAX_COUNT];
+		bool m_ControllerConnected[XUSER_MAX_COUNT];
+
+		void ControllerConnected() const;
+		void ControllerDisconnected() const;
+		std::vector<std::function<void()>> m_OnControllerDisconnectCallbacks;
+		std::vector<std::function<void()>> m_OnControllerConnectCallbacks;
 		
 		static size_t ControllerButtonHash(const ControllerButton& controllerButton);
 		static bool CompareControllerButton(const ControllerButton& cb1, const ControllerButton& cb2);
@@ -37,5 +48,4 @@ namespace dae
 		std::unordered_map<ControllerButton, InputAction, std::function<size_t(const ControllerButton&)>, std::function<bool(const ControllerButton&, const ControllerButton&)>> m_InputCommandMap;
 		std::unordered_map<ControllerButton, bool, std::function<size_t(const ControllerButton&)>, std::function<bool(const ControllerButton&, const ControllerButton&)>> m_InputState;
 	};
-
 }

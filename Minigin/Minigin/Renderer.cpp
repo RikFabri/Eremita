@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "Texture2D.h"
 #include "imgui.h"
+#include "Logger.h"
 #include "backends/imgui_impl_opengl2.h"
 #include "backends/imgui_impl_sdl.h"
 
@@ -98,4 +99,5 @@ void dae::Renderer::RenderImGUI()
 	ImGui::Button("Versus", { 100,40 });
 	ImGui::End();
 
+	Logger::GetInstance().Render();
 }

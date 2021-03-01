@@ -215,6 +215,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Eremita.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="MiniginPCH.h" />
     <ClInclude Include="ObserverInterface.h" />
     <ClInclude Include="RenderComponent.h" />
@@ -247,6 +248,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="HealthDisplayComponent.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Eremita.cpp" />
     <ClCompile Include="MiniginPCH.cpp">

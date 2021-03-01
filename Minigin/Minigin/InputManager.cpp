@@ -12,6 +12,7 @@ dae::InputManager::InputManager()
 
 bool dae::InputManager::ProcessInput()
 {
+	//Iterate over all possible controllers
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i)
 	{
 		XINPUT_STATE state;
@@ -19,11 +20,26 @@ bool dae::InputManager::ProcessInput()
 
 		const auto dwResult = XInputGetState(i, &state);
 
+		// Check if a controller is connected at this index
 		if (dwResult != ERROR_SUCCESS)
 		{
+			// If the controller was previously connected, fire callbacks
+			if (m_ControllerConnected[i])
+			{
+				ControllerDisconnected();
+				m_ControllerConnected[i] = false;
+			}
+			
 			continue;
 		}
+
+		// If controller is newly connected, fire callbacks
+		if (!m_ControllerConnected[i])
+			ControllerConnected();
 		
+		m_ControllerConnected[i] = true;
+
+		// Iterate over registered input actions and execute them when necessary
 		for (auto& inputCommand : m_InputCommandMap)
 		{
 			if (inputCommand.first.ControllerId != i)
@@ -99,6 +115,28 @@ void dae::InputManager::AddInputAction(const ControllerButton& controllerButton,
 	m_InputCommandMap.insert(std::make_pair(controllerButton, InputAction{pCommand, eventType}));
 }
 
+size_t dae::InputManager::AddControllerConnectCallback(const std::function<void()>& callback)
+{
+	m_OnControllerConnectCallbacks.push_back(callback);
+	return m_OnControllerConnectCallbacks.size() - 1;
+}
+
+void dae::InputManager::RemoveControllerConnectCallback(size_t id)
+{
+	m_OnControllerConnectCallbacks.erase(m_OnControllerConnectCallbacks.begin() + id);
+}
+
+size_t dae::InputManager::AddControllerDisconnectCallback(const std::function<void()>& callback)
+{
+	m_OnControllerDisconnectCallbacks.push_back(callback);
+	return m_OnControllerDisconnectCallbacks.size() - 1;
+}
+
+void dae::InputManager::RemoveControllerDisconnectCallback(size_t id)
+{
+	m_OnControllerDisconnectCallbacks.erase(m_OnControllerDisconnectCallbacks.begin() + id);
+}
+
 size_t dae::InputManager::ControllerButtonHash(const ControllerButton& controllerButton)
 {
 	const auto hash = std::hash<WORD>();
@@ -108,4 +146,16 @@ size_t dae::InputManager::ControllerButtonHash(const ControllerButton& controlle
 bool dae::InputManager::CompareControllerButton(const ControllerButton& cb1, const ControllerButton& cb2)
 {
 	return cb1.Button == cb2.Button && cb1.ControllerId == cb2.ControllerId;
+}
+
+void dae::InputManager::ControllerConnected() const
+{
+	for (auto& func : m_OnControllerConnectCallbacks)
+		func();
+}
+
+void dae::InputManager::ControllerDisconnected() const
+{
+	for (auto& func : m_OnControllerDisconnectCallbacks)
+		func();
 }

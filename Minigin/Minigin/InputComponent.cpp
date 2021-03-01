@@ -6,6 +6,7 @@
 #include "HealthComponent.h"
 #include "SceneObject.h"
 #include "ScoreComponent.h"
+#include "Logger.h"
 
 dae::InputComponent::InputComponent()
 	: m_ControllerId(0)
@@ -23,9 +24,11 @@ void dae::InputComponent::Init(SceneObject& parent)
 
 	if (m_ControllerId == (DWORD)-1)
 	{
-		const auto message = "Couldn't register controller, did you exceed " + std::to_string(XUSER_MAX_COUNT) + "Controllers?";
-		//throw std::exception(message.c_str());
+		//const auto message = "Couldn't register controller, \ndid you forget to plug it in or exceed " + std::to_string(XUSER_MAX_COUNT) + " Controllers?";
+		//Logger::GetInstance().Print(message);
 
+		InputManager::GetInstance().AddControllerConnectCallback([this, &parent]() {Init(parent); });
+		
 		return;
 	}
 
