@@ -1,4 +1,7 @@
 #include "InputComponent.h"
+
+#include <iostream>
+
 #include "InputManager.h"
 #include <string>
 
@@ -7,6 +10,7 @@
 #include "SceneObject.h"
 #include "ScoreComponent.h"
 #include "Logger.h"
+#include "SubjectComponent.h"
 
 dae::InputComponent::InputComponent()
 	: m_ControllerId(0)
@@ -22,12 +26,46 @@ void dae::InputComponent::Init(SceneObject& parent)
 {
 	m_ControllerId = InputManager::GetInstance().RegisterController();
 
+	// If there was no controller to subscribe to, add the initialization as a callback
 	if (m_ControllerId == (DWORD)-1)
 	{
-		//const auto message = "Couldn't register controller, \ndid you forget to plug it in or exceed " + std::to_string(XUSER_MAX_COUNT) + " Controllers?";
-		//Logger::GetInstance().Print(message);
+		InputManager::GetInstance().AddControllerConnectCallback([this, &parent]()
+		{
+			Init(parent);
 
-		InputManager::GetInstance().AddControllerConnectCallback([this, &parent]() {Init(parent); });
+			Logger::GetInstance().Print("Player " + std::to_string(m_ControllerId + 1) + " joined");
+			
+			auto* subject = parent.GetFirstComponentOfType<SubjectComponent>();
+			auto* pScoreComp = parent.GetFirstComponentOfType<ScoreComponent>();
+			auto* pHealthComp = parent.GetFirstComponentOfType<HealthComponent>();
+			if (!subject)
+			{
+				Logger::GetInstance().Print("no subject found");
+				return;
+			}
+			if (!pScoreComp)
+			{
+				Logger::GetInstance().Print("no scoreComp found");
+				return;
+			}
+			//We want to fake a score increase so that possibly invisible score displays update
+			subject->Broadcast(pScoreComp, "UpdateScore");
+			//We want to fake a change in health so that possibly invisible health displays update
+			subject->Broadcast(pHealthComp, "UpdateHealth");
+		});
+		InputManager::GetInstance().AddControllerConnectCallback([]()
+		{
+				//std::cout << "test";
+				//Logger::GetInstance().Print("tes");
+			//auto* subject = parent.GetFirstComponentOfType<SubjectComponent>();
+			//auto* fakeSender = parent.GetFirstComponentOfType<ScoreComponent>();
+			//if (!subject)
+			//	return;
+			//if (!fakeSender)
+			//	return;
+			////We want to fake a score increase so that possibly invisible score displays update
+			//subject->Broadcast(fakeSender, "scoreIncreased");
+		});
 		
 		return;
 	}

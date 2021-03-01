@@ -14,7 +14,16 @@ void dae::Logger::Render()
 	if (!m_IsOpen)
 		return;
 	
-	ImGui::Begin("Logger", &m_IsOpen, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+	ImGui::Begin("Logger", &m_IsOpen, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_MenuBar);
+
+	ImGui::BeginMenuBar();
+	if (ImGui::Button("Save log"))
+		SaveLog("Log.txt");
+
+	if (ImGui::Button("Clear log"))
+		ClearLog();
+
+	ImGui::EndMenuBar();
 	ImGui::Text(m_Log.str().c_str());
 	
 	ImGui::End();
@@ -36,7 +45,10 @@ void dae::Logger::SaveLog(const std::string& path)
 {
 	std::ofstream logFile{ path };
 	if (logFile)
+	{
 		logFile << m_Log.str();
+		Print("Saved log to: " + path);
+	}
 	else
 		Print("Failed to save logFile to: " + path);
 }

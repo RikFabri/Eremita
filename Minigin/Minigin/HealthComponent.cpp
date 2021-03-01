@@ -16,6 +16,9 @@ dae::HealthComponent::HealthComponent(int nrOfLives)
 void dae::HealthComponent::Init(SceneObject& sceneObject)
 {
 	m_pBroadcasterRef = sceneObject.GetFirstComponentOfType<SubjectComponent>();
+
+	if (m_pBroadcasterRef)
+		m_pBroadcasterRef->Broadcast(this, "UpdateHealth");
 }
 
 void dae::HealthComponent::Die()
@@ -23,7 +26,7 @@ void dae::HealthComponent::Die()
 	--m_Lives;
 	
 	if (m_pBroadcasterRef)
-		m_pBroadcasterRef->Broadcast(this, "Died");
+		m_pBroadcasterRef->Broadcast(this, "UpdateHealth");
 }
 
 int dae::HealthComponent::GetLives() const

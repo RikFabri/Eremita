@@ -11,7 +11,7 @@ dae::HealthDisplayComponent::HealthDisplayComponent(int playerId)
 
 void dae::HealthDisplayComponent::OnNotify(const BaseComponent* pSenderComponent, const std::string& message)
 {
-	if (message != "Died")
+	if (message != "UpdateHealth")
 		return;
 
 	const auto* healthComponent = static_cast<const HealthComponent*>(pSenderComponent);

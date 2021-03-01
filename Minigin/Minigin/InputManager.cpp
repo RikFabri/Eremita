@@ -10,6 +10,7 @@ dae::InputManager::InputManager()
 	, m_ControllerConnectedAtId{ false }
 	, m_ControllerRegisteredAtId{ false }
 {
+	ProcessInput();
 }
 
 bool dae::InputManager::ProcessInput()

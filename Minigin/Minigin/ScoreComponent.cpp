@@ -13,6 +13,9 @@ dae::ScoreComponent::ScoreComponent()
 void dae::ScoreComponent::Init(SceneObject& parent)
 {
 	m_SubjectComponentRef = parent.GetFirstComponentOfType<SubjectComponent>();
+
+	if (m_SubjectComponentRef)
+		m_SubjectComponentRef->Broadcast(this, "UpdateScore");
 }
 
 void dae::ScoreComponent::IncreaseScore(int amount)
@@ -20,7 +23,7 @@ void dae::ScoreComponent::IncreaseScore(int amount)
 	m_Score += amount;
 
 	if (m_SubjectComponentRef)
-		m_SubjectComponentRef->Broadcast(this, "ScoreIncreased");
+		m_SubjectComponentRef->Broadcast(this, "UpdateScore");
 }
 
 int dae::ScoreComponent::GetScore() const

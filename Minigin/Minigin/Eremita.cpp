@@ -78,7 +78,7 @@ void dae::Eremita::LoadGame() const
 
 	// Lives display right
 	const auto livesDisplayRight = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{200,30,0});
-	livesDisplayRight->AddComponent(new TextComponent("3 lives", font));
+	livesDisplayRight->AddComponent(new TextComponent(" ", font));
 	livesDisplayRight->AddComponent(new RenderComponent(), true);
 	livesDisplayRight->AddComponent(new HealthDisplayComponent(1));
 	scene.Add(livesDisplayRight);
@@ -93,7 +93,7 @@ void dae::Eremita::LoadGame() const
 
 	// Score display right
 	const auto scoreDisplayRight = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 200, 60, 0 });
-	scoreDisplayRight->AddComponent(new TextComponent("Score: 0", font));
+	scoreDisplayRight->AddComponent(new TextComponent(" ", font));
 	scoreDisplayRight->AddComponent(new RenderComponent(), true);
 	scoreDisplayRight->AddComponent(new ScoreDisplayComponent(1));
 	

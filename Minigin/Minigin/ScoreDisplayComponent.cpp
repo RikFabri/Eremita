@@ -30,7 +30,7 @@ void dae::ScoreDisplayComponent::Init(SceneObject& parent)
 
 void dae::ScoreDisplayComponent::OnNotify(const BaseComponent* sender, const std::string& message)
 {
-	if (message != "ScoreIncreased")
+	if (message != "UpdateScore")
 		return;
 
 	const auto* scoreComp = static_cast<const ScoreComponent*>(sender);
