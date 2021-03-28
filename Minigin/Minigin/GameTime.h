@@ -6,6 +6,8 @@ namespace dae
 {
     class GameTime : public Singleton<GameTime>
     {
+        friend class Singleton<GameTime>;
+
     public:
         void SetDeltaTime(const std::chrono::duration<float>& dt);
 
@@ -16,5 +18,7 @@ namespace dae
         static const int TimeStep = 8;
     private:
         std::chrono::duration<float> m_Dt{};
+
+        GameTime() = default;
     };
 }

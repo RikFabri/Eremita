@@ -31,6 +31,15 @@
     <Filter Include="Logging">
       <UniqueIdentifier>{4edb89eb-3f9b-41f5-84eb-0ed699c48872}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Services">
+      <UniqueIdentifier>{505027b7-2670-46aa-a7c3-7a70ce37ddaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Services\Sound">
+      <UniqueIdentifier>{e3283007-0ea7-40e3-bb43-c68f4a90ad70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{3090e688-ef6f-4894-8c05-7f7206c67132}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniginPCH.h">
@@ -135,6 +144,24 @@
     <ClInclude Include="Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SoundServiceLocator.h">
+      <Filter>Services\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="ISoundService.h">
+      <Filter>Services\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="NullSound.h">
+      <Filter>Services\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="audio.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleSoundService.h">
+      <Filter>Services\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundLogService.h">
+      <Filter>Services\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -229,6 +256,24 @@
     </ClCompile>
     <ClCompile Include="Logger.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ISoundService.cpp">
+      <Filter>Services\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="NullSound.cpp">
+      <Filter>Services\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundServiceLocator.cpp">
+      <Filter>Services\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="audio.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleSoundService.cpp">
+      <Filter>Services\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundLogService.cpp">
+      <Filter>Services\Sound</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

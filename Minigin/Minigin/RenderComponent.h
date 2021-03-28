@@ -1,9 +1,9 @@
 #pragma once
 #include "BaseComponent.h"
 
-#pragma warning(disable : 4201)
-#include "glm/common.hpp"
-#pragma warning(default : 4201)
+//#pragma warning(disable : 4201)
+//#include "glm/common.hpp"
+//#pragma warning(default : 4201)
 
 struct SDL_Texture;
 

@@ -8,6 +8,8 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <SDL.h>
+
+#include "audio.h"
 #include "TextComponent.h"
 #include "Scene.h"
 #include "SceneObject.h"
@@ -21,16 +23,28 @@
 #include "ScoreComponent.h"
 #include "InputComponent.h"
 #include "Logger.h"
+#include "SoundServiceLocator.h"
+#include "SimpleSoundService.h"
+#include "SoundLogService.h"
 
 using namespace std;
 using namespace std::chrono;
 
 void dae::Eremita::Initialize()
 {
+	_putenv("SDL_AUDIODRIVER=DirectSound");
+	
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
+
+	if(SDL_Init(SDL_INIT_AUDIO) != 0)
+	{
+		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
+	}
+
+	initAudio();
 
 	m_Window = SDL_CreateWindow(
 		"Programming 4 assignment",
@@ -46,6 +60,8 @@ void dae::Eremita::Initialize()
 	}
 
 	Renderer::GetInstance().Init(m_Window);
+	SoundServiceLocator::RegisterSoundService(new SimpleSoundService());
+	//SoundServiceLocator::RegisterSoundService(new SoundLogService());
 }
 
 /**
@@ -128,9 +144,11 @@ void dae::Eremita::LoadGame() const
 
 void dae::Eremita::Cleanup()
 {
+	SoundServiceLocator::RegisterSoundService(nullptr);
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
+	endAudio();
 	SDL_Quit();
 }
 

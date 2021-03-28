@@ -24,7 +24,7 @@ void dae::RenderComponent::Receive(int message)
 
 void dae::RenderComponent::Update(SceneObject&)
 {
-	auto& transform = m_pTransformRef->GetPosition();
+	const auto& transform = m_pTransformRef->GetPosition();
 	Renderer::GetInstance().RenderTexture(*m_pTexture, transform.x, transform.y);
 }
 
