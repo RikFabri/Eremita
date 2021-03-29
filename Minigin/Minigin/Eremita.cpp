@@ -60,8 +60,10 @@ void dae::Eremita::Initialize()
 	}
 
 	Renderer::GetInstance().Init(m_Window);
+	SoundServiceLocator::RegisterSoundService(new SoundLogService());
 	SoundServiceLocator::RegisterSoundService(new SimpleSoundService());
-	//SoundServiceLocator::RegisterSoundService(new SoundLogService());
+	SoundServiceLocator::RegisterSoundService(new SoundLogService());
+	SoundServiceLocator::RegisterSoundService(new SimpleSoundService());
 }
 
 /**
@@ -139,6 +141,7 @@ void dae::Eremita::LoadGame() const
 	Logger::GetInstance().ClearLog(); // To clear the warning in case the teachers only plug in one controller.
 	Logger::GetInstance().Print("\n-----------------------------------------------------------");
 	Logger::GetInstance().Print("All D-Pad buttons add a certain amount of points, \nthe A button costs one life. Keyboard input isn't used yet");
+	Logger::GetInstance().Print("controller-B plays a sound, X mutes/unmutes");
 	Logger::GetInstance().Print("-----------------------------------------------------------");
 }
 

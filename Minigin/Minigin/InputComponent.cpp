@@ -14,6 +14,7 @@
 #include "Logger.h"
 #include "SubjectComponent.h"
 #include "SoundServiceLocator.h"
+#include <thread>
 
 dae::InputComponent::InputComponent()
 	: m_ControllerId(0)
@@ -94,7 +95,18 @@ void dae::InputComponent::Init(SceneObject& parent)
 
 	InputManager::GetInstance().AddInputAction(ControllerButton{ XINPUT_GAMEPAD_B, m_ControllerId }, new ExecuteFunction([this]()
 	{
-			SoundServiceLocator::GetSoundService()->PlaySound("../Data/door2.wav", SDL_MIX_MAXVOLUME);
-			Logger::GetInstance().Print("sound plays");
+			auto* const service = SoundServiceLocator::GetSoundService();
+			service->PlaySound("../Data/door2.wav", SDL_MIX_MAXVOLUME);
+	}));
+
+	InputManager::GetInstance().AddInputAction(ControllerButton{ XINPUT_GAMEPAD_Y, m_ControllerId }, new ExecuteFunction([this]()
+	{
+			SoundServiceLocator::GetSoundService()->StopAllSounds();
+	}));
+
+	InputManager::GetInstance().AddInputAction(ControllerButton{ XINPUT_GAMEPAD_X, m_ControllerId }, new ExecuteFunction([this]()
+	{
+			auto* const service = SoundServiceLocator::GetSoundService();
+			service->SetMuted(!service->IsMuted());
 	}));
 }
