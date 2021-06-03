@@ -19,6 +19,9 @@
 dae::InputComponent::InputComponent()
 	: m_ControllerId(0)
 	, m_RegisteredCallback(false)
+	, m_pHealthComponentRef(nullptr)
+	, m_pScoreComponentRef(nullptr)
+	, m_pParentRef(nullptr)
 {
 }
 

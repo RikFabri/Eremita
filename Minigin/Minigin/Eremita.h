@@ -1,4 +1,10 @@
 #pragma once
+
+#if _DEBUG
+// ReSharper disable once CppUnusedIncludeDirective
+#include <vld.h>
+#endif
+
 struct SDL_Window;
 namespace dae
 {
