@@ -289,7 +289,6 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="ISoundService.cpp" />
     <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Eremita.cpp" />
     <ClCompile Include="MiniginPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
