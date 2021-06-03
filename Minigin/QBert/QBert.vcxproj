@@ -125,10 +125,9 @@ xcopy "$(SolutionDir)3rdParty\vld\vld.ini" /R /Y</Command>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\$(LibrariesArchitecture)\SDL2.dll" /R /Y
-xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(LibrariesArchitecture)\*.dll" /R /Y
-xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(LibrariesArchitecture)\*.dll" /R /Y
-</Command>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\$(LibrariesArchitecture)\SDL2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(LibrariesArchitecture)\*.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(LibrariesArchitecture)\*.dll" "$(OutputPath)" /R /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -174,10 +173,9 @@ xcopy "$(SolutionDir)3rdParty\vld\vld.ini" /R /Y</Command>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\$(LibrariesArchitecture)\SDL2.dll" /R /Y
-xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(LibrariesArchitecture)\*.dll" /R /Y
-xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(LibrariesArchitecture)\*.dll" /R /Y
-</Command>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\x64\SDL2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\x64\*.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
