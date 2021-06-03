@@ -7,8 +7,9 @@
 dae::InputManager::InputManager()
 	: m_InputCommandMap(14, ControllerButtonHash, CompareControllerButton)
 	, m_InputState(14, ControllerButtonHash, CompareControllerButton)
-	, m_ControllerConnectedAtId{ false }
-	, m_ControllerRegisteredAtId{ false }
+	, m_PhysicalControllerConnectedAtId{ false }
+	, m_VirtualControllerRegisteredAtId{ false }
+	, m_pSubjectComponent(std::make_unique<SubjectComponent>())
 {
 	ProcessInput();
 }
@@ -27,20 +28,20 @@ bool dae::InputManager::ProcessInput()
 		if (dwResult != ERROR_SUCCESS)
 		{
 			// If the controller was previously connected, fire callbacks
-			if (m_ControllerConnectedAtId[i])
+			if (m_PhysicalControllerConnectedAtId[i])
 			{
 				ControllerDisconnected();
-				m_ControllerConnectedAtId[i] = false;
+				m_PhysicalControllerConnectedAtId[i] = false;
 			}
 			
 			continue;
 		}
 
 		// If controller is newly connected, fire callbacks
-		if (!m_ControllerConnectedAtId[i])
+		if (!m_PhysicalControllerConnectedAtId[i])
 			ControllerConnected();
 		
-		m_ControllerConnectedAtId[i] = true;
+		m_PhysicalControllerConnectedAtId[i] = true;
 
 		// Iterate over registered input actions and execute them when necessary
 		for (auto& inputCommand : m_InputCommandMap)
@@ -87,7 +88,7 @@ DWORD dae::InputManager::RegisterController()
 {
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i)
 	{
-		// Don't use m_ControllerConnectedAtId here! This function can be called before that array is properly loaded!
+		// Don't use m_PhysicalControllerConnectedAtId here! This function can be called before that array is properly loaded!
 		XINPUT_STATE state;
 		ZeroMemory(&state, sizeof(XINPUT_STATE));
 
@@ -97,9 +98,9 @@ DWORD dae::InputManager::RegisterController()
 		if (dwResult != ERROR_SUCCESS)
 			continue;
 
-		if(!m_ControllerRegisteredAtId[i])
+		if(!m_VirtualControllerRegisteredAtId[i])
 		{
-			m_ControllerRegisteredAtId[i] = true;
+			m_VirtualControllerRegisteredAtId[i] = true;
 			return i;
 		}
 	}
@@ -112,7 +113,7 @@ void dae::InputManager::UnregisterController(DWORD id)
 	if (id >= XUSER_MAX_COUNT)
 		return;
 	
-	m_ControllerRegisteredAtId[id] = false;
+	m_VirtualControllerRegisteredAtId[id] = false;
 }
 
 void dae::InputManager::AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType)
@@ -120,26 +121,14 @@ void dae::InputManager::AddInputAction(const ControllerButton& controllerButton,
 	m_InputCommandMap.insert(std::make_pair(controllerButton, InputAction{pCommand, eventType}));
 }
 
-size_t dae::InputManager::AddControllerConnectCallback(const std::function<void()>& callback)
+void dae::InputManager::SubscribeToControllerEvents(ObserverInterface* observer)
 {
-	m_OnControllerConnectCallbacks.push_back(callback);
-	return m_OnControllerConnectCallbacks.size() - 1;
+	m_pSubjectComponent->Subscribe(observer);
 }
 
-void dae::InputManager::RemoveControllerConnectCallback(size_t id)
+void dae::InputManager::UnSubscribeToControllerEvents(ObserverInterface* observer)
 {
-	m_OnControllerConnectCallbacks.erase(m_OnControllerConnectCallbacks.begin() + id);
-}
-
-size_t dae::InputManager::AddControllerDisconnectCallback(const std::function<void()>& callback)
-{
-	m_OnControllerDisconnectCallbacks.push_back(callback);
-	return m_OnControllerDisconnectCallbacks.size() - 1;
-}
-
-void dae::InputManager::RemoveControllerDisconnectCallback(size_t id)
-{
-	m_OnControllerDisconnectCallbacks.erase(m_OnControllerDisconnectCallbacks.begin() + id);
+	m_pSubjectComponent->Unsubscribe(observer);
 }
 
 size_t dae::InputManager::ControllerButtonHash(const ControllerButton& controllerButton)
@@ -155,12 +144,10 @@ bool dae::InputManager::CompareControllerButton(const ControllerButton& cb1, con
 
 void dae::InputManager::ControllerConnected() const
 {
-	for (auto& func : m_OnControllerConnectCallbacks)
-		func();
+	m_pSubjectComponent->Broadcast(nullptr, "Controller connected");
 }
 
 void dae::InputManager::ControllerDisconnected() const
 {
-	for (auto& func : m_OnControllerDisconnectCallbacks)
-		func();
+	m_pSubjectComponent->Broadcast(nullptr, "Controller disconnected");
 }

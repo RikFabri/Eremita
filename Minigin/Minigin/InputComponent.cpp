@@ -18,6 +18,7 @@
 
 dae::InputComponent::InputComponent()
 	: m_ControllerId(0)
+	, m_RegisteredCallback(false)
 {
 }
 
@@ -28,36 +29,17 @@ dae::InputComponent::~InputComponent()
 
 void dae::InputComponent::Init(SceneObject& parent)
 {
+	m_pParentRef = &parent;
 	m_ControllerId = InputManager::GetInstance().RegisterController();
 
-	// If there was no controller to subscribe to, add the initialization as a callback
+	// If there was no controller to subscribe to subscribe to controller events and initialize whenever possible
 	if (m_ControllerId == (DWORD)-1)
 	{
-		InputManager::GetInstance().AddControllerConnectCallback([this, &parent]()
-		{
-			Init(parent);
+		if (m_RegisteredCallback)
+			return;
 
-			Logger::GetInstance().Print("Player " + std::to_string(m_ControllerId + 1) + " joined");
-			
-			auto* subject = parent.GetFirstComponentOfType<SubjectComponent>();
-			auto* pScoreComp = parent.GetFirstComponentOfType<ScoreComponent>();
-			auto* pHealthComp = parent.GetFirstComponentOfType<HealthComponent>();
-			if (!subject)
-			{
-				Logger::GetInstance().Print("no subject found");
-				return;
-			}
-			if (!pScoreComp)
-			{
-				Logger::GetInstance().Print("no scoreComp found");
-				return;
-			}
-			//We want to fake a score update so that possibly invisible score displays update
-			subject->Broadcast(pScoreComp, "UpdateScore");
-			//We want to fake a change in health so that possibly invisible health displays update
-			subject->Broadcast(pHealthComp, "UpdateHealth");
-		});
-		
+		InputManager::GetInstance().SubscribeToControllerEvents(this);
+		m_RegisteredCallback = true;
 		return;
 	}
 
@@ -109,4 +91,17 @@ void dae::InputComponent::Init(SceneObject& parent)
 			auto* const service = SoundServiceLocator::GetSoundService();
 			service->SetMuted(!service->IsMuted());
 	}));
+}
+
+void dae::InputComponent::OnNotify(const BaseComponent*, const std::string& message)
+{
+	if (message == "Controller connected")
+	{
+		Init(*m_pParentRef);
+		if (m_ControllerId == (DWORD)-1)
+			return;
+		Logger::GetInstance().Print("Player " + std::to_string(m_ControllerId) + " joined");
+
+		InputManager::GetInstance().UnSubscribeToControllerEvents(this);
+	}
 }
