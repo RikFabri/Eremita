@@ -27,6 +27,11 @@
 #include "SimpleSoundService.h"
 #include "SoundLogService.h"
 
+#if _DEBUG
+// ReSharper disable once CppUnusedIncludeDirective
+#include <vld.h>
+#endif
+
 using namespace std;
 using namespace std::chrono;
 

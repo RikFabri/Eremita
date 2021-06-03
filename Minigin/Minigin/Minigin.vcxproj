@@ -118,7 +118,7 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\vld\lib\$(Platform);$(SolutionDir)3rdParty\SDL2\lib\$(LibrariesArchitecture);$(SolutionDir)3rdParty\SDL2_image\lib\$(LibrariesArchitecture);$(SolutionDir)3rdParty\SDL2_ttf\lib\$(LibrariesArchitecture);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\vld\lib\Win32;$(SolutionDir)3rdParty\SDL2\lib\$(LibrariesArchitecture);$(SolutionDir)3rdParty\SDL2_image\lib\$(LibrariesArchitecture);$(SolutionDir)3rdParty\SDL2_ttf\lib\$(LibrariesArchitecture);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -141,14 +141,8 @@
       <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\x64\SDL2.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\x64\*.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y
-
-
-xcopy "$(SolutionDir)3rdParty\vld\bin\$(Platform)\*.dll" /R /Y
-xcopy "$(SolutionDir)3rdParty\vld\bin\$(Platform)\*.manifest" /R /Y
-xcopy "$(SolutionDir)3rdParty\vld\vld.ini" /R /Y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
@@ -157,7 +151,7 @@ xcopy "$(SolutionDir)3rdParty\vld\vld.ini" /R /Y</Command>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;xinput.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\vld\lib\$(Platform);$(SolutionDir)3rdParty\SDL2\lib\$(LibrariesArchitecture);$(SolutionDir)3rdParty\SDL2_image\lib\$(LibrariesArchitecture);$(SolutionDir)3rdParty\SDL2_ttf\lib\$(LibrariesArchitecture);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\vld\lib\Win64;$(SolutionDir)3rdParty\SDL2\lib\$(LibrariesArchitecture);$(SolutionDir)3rdParty\SDL2_image\lib\$(LibrariesArchitecture);$(SolutionDir)3rdParty\SDL2_ttf\lib\$(LibrariesArchitecture);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

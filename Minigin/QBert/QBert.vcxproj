@@ -94,16 +94,16 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Minigin.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\vld\lib\Win32;$(SolutionDir)$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\$(LibrariesArchitecture)\SDL2.dll" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(LibrariesArchitecture)\*.dll" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(LibrariesArchitecture)\*.dll" /R /Y
 
-xcopy "$(SolutionDir)3rdParty\vld\bin\$(Platform)\*.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)3rdParty\vld\bin\$(Platform)\*.manifest" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)3rdParty\vld\vld.ini" "$(OutputPath)" /R /Y</Command>
+xcopy "$(SolutionDir)3rdParty\vld\bin\Win32\*.dll" /R /Y
+xcopy "$(SolutionDir)3rdParty\vld\bin\Win32\*.manifest" /R /Y
+xcopy "$(SolutionDir)3rdParty\vld\vld.ini" /R /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -143,17 +143,16 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(LibrariesArchitecture)\*.dll" /R /Y
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Minigin.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\vld\lib\Win64;$(SolutionDir)$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\x64\SDL2.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\x64\*.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\$(LibrariesArchitecture)\SDL2.dll" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(LibrariesArchitecture)\*.dll" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(LibrariesArchitecture)\*.dll" /R /Y
 
-
-xcopy "$(SolutionDir)3rdParty\vld\bin\$(Platform)\*.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)3rdParty\vld\bin\$(Platform)\*.manifest" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)3rdParty\vld\vld.ini" "$(OutputPath)" /R /Y</Command>
+xcopy "$(SolutionDir)3rdParty\vld\bin\Win64\*.dll" /R /Y
+xcopy "$(SolutionDir)3rdParty\vld\bin\Win64\*.manifest" /R /Y
+xcopy "$(SolutionDir)3rdParty\vld\vld.ini" /R /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
