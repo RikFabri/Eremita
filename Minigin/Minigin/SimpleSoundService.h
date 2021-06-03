@@ -20,13 +20,14 @@ namespace dae {
 
 	private:
 		void ProcessSoundQueue();
-		
+
 		std::mutex m_Mutex;
 		std::condition_variable m_ConditionVariable;
 		
 		std::atomic<bool> m_IsRunning;
 		std::atomic<bool> m_IsMuted;
 		std::queue<SoundRequest> m_SoundRequests;
+		
+		std::thread m_AudioThread;
 	};
 }
-

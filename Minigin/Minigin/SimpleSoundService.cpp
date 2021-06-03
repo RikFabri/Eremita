@@ -6,18 +6,15 @@
 
 dae::SimpleSoundService::SimpleSoundService()
 	: m_IsRunning(true)
+	, m_AudioThread(&SimpleSoundService::ProcessSoundQueue, this)
 {
-	std::thread thread(&SimpleSoundService::ProcessSoundQueue, this);
-	thread.detach();
 }
 
 dae::SimpleSoundService::~SimpleSoundService()
 {
 	m_IsRunning.store(false);
 	m_ConditionVariable.notify_one();
-	
-	std::unique_lock<std::mutex> lock{ m_Mutex };
-	m_ConditionVariable.wait(lock);
+	m_AudioThread.join();
 }
 
 void dae::SimpleSoundService::PlaySound(const std::string& filename, int volume)
@@ -51,16 +48,15 @@ void dae::SimpleSoundService::ProcessSoundQueue()
 		std::unique_lock<std::mutex> lock{ m_Mutex };
 		if(!m_SoundRequests.empty())
 		{
-			SoundRequest request = m_SoundRequests.back();
+			SoundRequest request = m_SoundRequests.front();
 			m_SoundRequests.pop();
 
 			if(!m_IsMuted.load())
 				playSound(request.first.c_str(), request.second);
 		}
 
-		if(m_SoundRequests.empty())
+		if (m_SoundRequests.empty())
 			m_ConditionVariable.wait(lock);
-	}
 
-	m_ConditionVariable.notify_one();
+	}
 }
