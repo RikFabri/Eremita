@@ -13,7 +13,11 @@ void dae::SubjectComponent::Subscribe(ObserverInterface* pObserver)
 void dae::SubjectComponent::Unsubscribe(ObserverInterface* pObserver)
 {
 	if (!m_IsNotifying)
-		m_pObservers.erase(std::find(m_pObservers.begin(), m_pObservers.end(), pObserver));
+	{
+		auto it = std::find(m_pObservers.begin(), m_pObservers.end(), pObserver);
+		if(it != m_pObservers.end())
+			m_pObservers.erase(it);
+	}
 	else
 	{
 		// Don't remove observers while broadcasting
@@ -39,4 +43,6 @@ void dae::SubjectComponent::Broadcast(BaseComponent* pComponent, const std::stri
 		m_pObservers.erase(m_pObservers.begin(), endIt);
 		m_pObserversToRemove.clear();
 	}
+
+	m_IsNotifying = false;
 }

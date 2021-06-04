@@ -44,6 +44,9 @@
     <ClCompile Include="DestroyOnPlayerDamageComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SlickAndSamBehaviourComponent.cpp">
+      <Filter>Components\Characters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TileMapComponent.h">
@@ -65,5 +68,8 @@
       <Filter>Components\Characters</Filter>
     </ClInclude>
     <ClInclude Include="DestroyOnPlayerDamageComponent.h" />
+    <ClInclude Include="SlickAndSamBehaviourComponent.h">
+      <Filter>Components\Characters</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

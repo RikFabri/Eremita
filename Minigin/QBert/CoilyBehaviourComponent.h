@@ -12,7 +12,7 @@ class TileMapComponent;
 
 using int2 = std::pair<int, int>;
 
-class CoilyBehaviourComponent : public dae::BaseComponent
+class CoilyBehaviourComponent final : public dae::BaseComponent
 {
 public:
 	CoilyBehaviourComponent();
