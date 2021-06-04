@@ -46,7 +46,7 @@ void dae::RenderComponent::SetTexture(SDL_Texture* texture)
 	m_pTexture = std::make_shared<Texture2D>(texture);
 }
 
-void dae::RenderComponent::SetTexture(std::shared_ptr<Texture2D> texture)
+void dae::RenderComponent::SetTexture(const std::string& texturePath)
 {
-	m_pTexture = texture;
+	m_pTexture = ResourceManager::GetInstance().LoadTexture(texturePath);
 }

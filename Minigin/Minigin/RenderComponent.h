@@ -24,7 +24,7 @@ namespace dae
 		void Init(SceneObject& object) override;
 		void Receive(int message) override;
 		void SetTexture(SDL_Texture* texture);
-		void SetTexture(std::shared_ptr<Texture2D> texture);
+		void SetTexture(const std::string& texturePath);
 
 	private:
 		std::shared_ptr<Texture2D> m_pTexture;

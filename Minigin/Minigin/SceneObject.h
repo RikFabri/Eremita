@@ -26,6 +26,8 @@ namespace dae
 		Scene* GetScene() const;
 		void SetScene(Scene* pScene);
 		void SetTag(const std::string& newTag);
+		void SetPosition(const glm::vec3& pos);
+		void SetPosition(float x, float y, float z = 0);
 
 		bool RegisterAsObserver(ObserverInterface* pObserver);
 		
@@ -37,6 +39,7 @@ namespace dae
 		SceneObject& operator=(SceneObject&& other) = delete;
 
 	private:
+		Transform* m_pTransform;
 		std::string m_Tag;
 		Scene* m_pScene;
 		

@@ -28,6 +28,11 @@ void Scene::Add(const std::shared_ptr<SceneObject>& object)
 	m_Objects.push_back(object);
 }
 
+void dae::Scene::Remove(const std::shared_ptr<SceneObject>& object)
+{
+	m_Objects.erase(std::remove(m_Objects.begin(), m_Objects.end(), object), m_Objects.end());
+}
+
 void Scene::Init()
 {
 	for (auto& object : m_Objects)

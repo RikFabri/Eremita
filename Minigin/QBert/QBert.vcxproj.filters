@@ -32,6 +32,9 @@
     <ClCompile Include="InputComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="DiskComponent.cpp">
+      <Filter>Components\Tiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TileMapComponent.h">
@@ -45,6 +48,9 @@
     </ClInclude>
     <ClInclude Include="InputComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DiskComponent.h">
+      <Filter>Components\Tiles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

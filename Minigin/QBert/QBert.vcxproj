@@ -181,6 +181,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DiskComponent.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="QBert.cpp" />
     <ClCompile Include="QBertBehaviourComponent.cpp" />
@@ -188,6 +189,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="TileMapComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DiskComponent.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="QBertBehaviourComponent.h" />
     <ClInclude Include="TileComponent.h" />

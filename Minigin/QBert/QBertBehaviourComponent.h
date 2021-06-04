@@ -9,9 +9,11 @@ namespace dae
 	class TimerComponent;
 }
 
+using int2 = std::pair<int, int>;
 class TileMapComponent;
 
-class QBertBehaviourComponent : public dae::BaseComponent
+
+class QBertBehaviourComponent final : public dae::BaseComponent
 {
 public:
 	virtual void Init(dae::SceneObject&) override;
@@ -20,14 +22,13 @@ public:
 
 	void Move(int x, int y);
 private:
-	int m_X, m_Y;
-
-
+	int2 m_Index;
 
 	// No ownership
 	TileMapComponent* m_pTileMapRef;
 	dae::Transform* m_pTransformRef;
 	dae::HealthComponent* m_pHealthCompRef;
 	dae::TimerComponent* m_pTimerCompRef;
+	dae::SceneObject* m_pParent;
 };
 

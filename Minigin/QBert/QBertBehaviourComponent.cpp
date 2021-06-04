@@ -7,6 +7,8 @@
 
 void QBertBehaviourComponent::Init(dae::SceneObject& parent)
 {
+	m_pParent = &parent;
+
 	const auto renderComp = new dae::RenderComponent("QBert.png", {16, -16});
 	renderComp->Init(parent);
 	parent.AddComponent(renderComp, true);
@@ -45,21 +47,31 @@ void QBertBehaviourComponent::Move(int x, int y)
 
 	m_pTimerCompRef->Reset();
 
-	m_X += x;
-	m_Y += y;
+	m_Index.first += x;
+	m_Index.second += y;
 
-	const auto isValid = m_pTileMapRef->IsBlockIndexValid({ m_X, m_Y });
+	auto isDisk = false;
+	auto isValid = m_pTileMapRef->IsBlockIndexValid(m_Index);
+	
+	if (!isValid)
+		isDisk = isValid = m_pTileMapRef->IsBlockIndexDisk(m_Index);
 	
 	if (isValid)
 	{
-		m_pTileMapRef->HoppedOnTile({ m_X, m_Y });
+		if (!isDisk)
+			m_pTileMapRef->HoppedOnTile(m_Index);
+		else
+		{
+			m_pTileMapRef->HoppedOnDisk(m_Index, m_pParent);
+			m_Index = { 0, 0 };
+		}
 	}
 	else
 	{
-		m_X = m_Y = 0;
+		m_Index = { 0, 0 };
 		m_pHealthCompRef->Die();
 	}
 
-	const auto pos = m_pTileMapRef->IndexToTilePosition({ m_X, m_Y });
+	const auto pos = m_pTileMapRef->IndexToTilePosition(m_Index);
 	m_pTransformRef->SetPosition(pos.x, pos.y, 0);
 }

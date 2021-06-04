@@ -18,7 +18,8 @@ dae::SceneObject::SceneObject(const std::vector<BaseComponent*>& components, con
 	: m_Components(components)
 	, m_Tag(tag)
 {
-	m_Components.push_back(new Transform(position, scale));
+	m_pTransform = new Transform(position, scale);
+	m_Components.push_back(m_pTransform);
 }
 
 dae::SceneObject::~SceneObject()
@@ -38,6 +39,16 @@ void dae::SceneObject::SetScene(Scene* pScene)
 void dae::SceneObject::SetTag(const std::string& newTag)
 {
 	m_Tag = newTag;
+}
+
+void dae::SceneObject::SetPosition(const glm::vec3& pos)
+{
+	m_pTransform->SetPosition(pos.x, pos.y, pos.z);
+}
+
+void dae::SceneObject::SetPosition(float x, float y, float z)
+{
+	m_pTransform->SetPosition(x, y, z);
 }
 
 bool dae::SceneObject::RegisterAsObserver(ObserverInterface* pObserver)
