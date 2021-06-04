@@ -36,6 +36,14 @@ dae::SceneObject::~SceneObject()
 	
 	for (auto* pComponent : m_GraphicalComponents)
 		delete pComponent;
+
+
+	// In case the user closes right after these queues got populated
+	for (auto& pComponent : m_ComponentsToBeAdded)
+		delete pComponent.first;
+
+	for (auto& pComponent : m_ComponentsToBeRemoved)
+		delete pComponent.first;
 }
 
 void dae::SceneObject::SetScene(Scene* pScene)
@@ -75,6 +83,33 @@ void dae::SceneObject::Update()
 {
 	for (auto* pComponent : m_Components)
 		pComponent->Update(*this);
+
+	// Add components created during update
+	for (auto& comp : m_ComponentsToBeAdded)
+	{
+		// differentiate between normal and graphical components
+		if (!comp.second)
+		{
+			m_Components.push_back(comp.first);
+			continue;
+		}
+		m_GraphicalComponents.push_back(comp.first);
+	}
+	m_ComponentsToBeAdded.clear();
+
+	// Remove components removed during update
+	for (auto& comp : m_ComponentsToBeRemoved)
+	{
+		delete comp.first;
+		// differentiate between normal and graphical components
+		if (!comp.second)
+		{
+			m_Components.erase(std::find(m_Components.begin(), m_Components.end(), comp.first));
+			continue;
+		}
+		m_GraphicalComponents.erase(std::find(m_GraphicalComponents.begin(), m_GraphicalComponents.end(), comp.first));
+	}
+	m_ComponentsToBeRemoved.clear();
 }
 
 void dae::SceneObject::FixedUpdate()
@@ -106,4 +141,14 @@ void dae::SceneObject::AddComponent(BaseComponent* component, const bool isGraph
 	}
 
 	m_GraphicalComponents.push_back(component);
+}
+
+void dae::SceneObject::AddComponentAfterUpdate(BaseComponent* component, bool isGraphical)
+{
+	m_ComponentsToBeAdded.push_back({ component, isGraphical });
+}
+
+void dae::SceneObject::RemoveComponent(BaseComponent* component, bool isGraphical)
+{
+	m_ComponentsToBeRemoved.push_back({ component, isGraphical });
 }

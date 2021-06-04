@@ -19,6 +19,8 @@ namespace dae
 
 		void Init();
 		void AddComponent(BaseComponent* component, bool isGraphical = false);
+		void AddComponentAfterUpdate(BaseComponent* component, bool isGraphical = false);
+		void RemoveComponent(BaseComponent* component, bool isGraphical = false);
 		
 		template<typename ComponentType>
 		ComponentType* GetFirstComponentOfType() const;
@@ -47,6 +49,9 @@ namespace dae
 		
 		std::vector<BaseComponent*> m_Components; //To-Do: find better solution
 		std::vector<BaseComponent*> m_GraphicalComponents;
+
+		std::vector<std::pair<BaseComponent*, bool>> m_ComponentsToBeRemoved;
+		std::vector<std::pair<BaseComponent*, bool>> m_ComponentsToBeAdded;
 	};
 
 

@@ -141,7 +141,7 @@ glm::vec2 TileMapComponent::IndexToTilePosition(const int2& blockIndex, bool abs
 	const int horizontalOffset = tileSize / 2;
 	const int verticalOffset = tileSize * 3 / 4;
 
-	auto result =	glm::vec2(blockIndex.first * tileSize - blockIndex.second * horizontalOffset, blockIndex.second * verticalOffset);
+	auto result = glm::vec2(blockIndex.first * tileSize - blockIndex.second * horizontalOffset, blockIndex.second * verticalOffset);
 
 	if (absolutePosition)
 	{

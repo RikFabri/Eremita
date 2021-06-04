@@ -1,7 +1,9 @@
 #include "CoilyBehaviourComponent.h"
 #include "QBertBehaviourComponent.h"
+#include "CoilyMovementComponent.h"
 #include "TileMapComponent.h"
 #include "RenderComponent.h"
+#include "DefaultMovement.h"
 #include "SceneObject.h"
 #include "Scene.h"
 
@@ -16,6 +18,8 @@ CoilyBehaviourComponent::CoilyBehaviourComponent()
 
 void CoilyBehaviourComponent::Init(dae::SceneObject& parent)
 {
+	using namespace std::placeholders;
+
 	m_pTimerCompRef = parent.GetFirstComponentOfType<dae::TimerComponent>();
 
 	auto tileMapObj = parent.GetScene()->GetObjectsByTag("tileMap");
@@ -25,6 +29,10 @@ void CoilyBehaviourComponent::Init(dae::SceneObject& parent)
 	m_QBertRef = players[0];
 
 	m_pRenderCompRef = parent.GetFirstComponentOfType<dae::RenderComponent>();
+
+	const auto defaultMovement = parent.GetFirstComponentOfType<DefaultMovement>();
+	defaultMovement->SetReachedEnd(std::bind(&CoilyBehaviourComponent::HatchEgg, this, _1));
+	m_pDefaultMovement = defaultMovement;
 }
 
 void CoilyBehaviourComponent::Update(dae::SceneObject& parent)
@@ -36,7 +44,9 @@ void CoilyBehaviourComponent::Update(dae::SceneObject& parent)
 
 	m_pTimerCompRef->Reset();
 
-	m_IsEgg ? UpdateEgg(parent) : UpdateCoily(parent);
+	//m_IsEgg ? HatchEgg() : UpdateCoily(parent);
+	//if (!m_IsEgg)
+	//	UpdateCoily(parent);
 }
 
 void CoilyBehaviourComponent::KillQbertIfClose(dae::SceneObject& parent)
@@ -59,51 +69,20 @@ void CoilyBehaviourComponent::KillQbertIfClose(dae::SceneObject& parent)
 	}
 }
 
-void CoilyBehaviourComponent::UpdateEgg(dae::SceneObject& parent)
+void CoilyBehaviourComponent::HatchEgg(dae::SceneObject& parent)
 {
-	// Semi-random movement
-	const auto movement = int2(std::rand() & 0b01 ? 1 : 0, 1);
-	const auto nextIndex = int2{ m_Index.first + movement.first, m_Index.second + movement.second };
-	const auto isNextLocationValid = m_pTileMapRef->IsBlockIndexValid(nextIndex);
+	parent;
 
-	if (isNextLocationValid)
-		m_Index = nextIndex;
-	else
-	{
-		m_IsEgg = false;
-		m_pRenderCompRef->SetTexture("Coily.png");
-	}
+	m_IsEgg = false;
+	m_pRenderCompRef->SetTexture("Coily.png");
 
-	const auto pos = m_pTileMapRef->IndexToTilePosition(m_Index);
-	parent.SetPosition(pos.x, pos.y);
+	parent.RemoveComponent(m_pDefaultMovement);
+	m_pDefaultMovement = new CoilyMovementComponent();
+	m_pDefaultMovement->Init(parent);
+	parent.AddComponentAfterUpdate(m_pDefaultMovement);
 }
 
 void CoilyBehaviourComponent::UpdateCoily(dae::SceneObject& parent)
 {
-	if (m_QBertRef.expired())
-		return;
-
-	const auto qbert = m_QBertRef.lock();
-	const auto qbertPos = qbert->GetTransform()->GetPosition();
-	const auto pos = parent.GetTransform()->GetPosition();
-
-	// Move towards qbert 
-	bool goLeft = qbertPos.x < pos.x;
-	bool goUp = qbertPos.y < pos.y;
-
-	int2 movement;
-	movement.second = goUp ? -1 : 1;
-
-	if (goUp)
-		movement.first = goLeft ? -1 : 0;
-	else
-		movement.first = goLeft ? 0 : 1;
-
-
-	const auto nextIndex = int2{ m_Index.first + movement.first, m_Index.second + movement.second };
-
-
-	m_Index = nextIndex;
-	const auto newPos = m_pTileMapRef->IndexToTilePosition(nextIndex);
-	parent.SetPosition(newPos.x, newPos.y);
+	parent;
 }

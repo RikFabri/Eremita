@@ -47,6 +47,12 @@
     <ClCompile Include="SlickAndSamBehaviourComponent.cpp">
       <Filter>Components\Characters</Filter>
     </ClCompile>
+    <ClCompile Include="DefaultMovement.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CoilyMovementComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TileMapComponent.h">
@@ -71,5 +77,9 @@
     <ClInclude Include="SlickAndSamBehaviourComponent.h">
       <Filter>Components\Characters</Filter>
     </ClInclude>
+    <ClInclude Include="DefaultMovement.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CoilyMovementComponent.h" />
   </ItemGroup>
 </Project>

@@ -6,9 +6,11 @@
 namespace dae
 {
 	class RenderComponent;
+	class TimerComponent;
 }
 
 class TileMapComponent;
+class DefaultMovement;
 
 using int2 = std::pair<int, int>;
 
@@ -23,7 +25,7 @@ public:
 
 private:
 	void KillQbertIfClose(dae::SceneObject& parent);
-	void UpdateEgg(dae::SceneObject& parent);
+	void HatchEgg(dae::SceneObject& parent);
 	void UpdateCoily(dae::SceneObject& parent);
 
 	bool m_IsEgg;
@@ -35,5 +37,6 @@ private:
 	dae::TimerComponent* m_pTimerCompRef;
 	TileMapComponent* m_pTileMapRef;
 	dae::RenderComponent* m_pRenderCompRef;
+	BaseComponent* m_pDefaultMovement;
 };
 
