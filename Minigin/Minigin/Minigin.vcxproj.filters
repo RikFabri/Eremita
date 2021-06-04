@@ -113,9 +113,6 @@
     <ClInclude Include="ScoreDisplayComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="InputComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="SoundServiceLocator.h">
       <Filter>Services\Sound</Filter>
     </ClInclude>
@@ -233,9 +230,6 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="ScoreDisplayComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="InputComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="ISoundService.cpp">

@@ -9,7 +9,6 @@
 #include <ScoreDisplayComponent.h>
 #include <HealthComponent.h>
 #include <ScoreComponent.h>
-#include <InputComponent.h>
 #include <SubjectComponent.h>
 #include <SceneObject.h>
 #include <Scene.h>
@@ -17,7 +16,9 @@
 #include <Logger.h>
 
 #include "TileComponent.h"
-#include "TileManagerComponent.h"
+#include "TileMapComponent.h"
+#include "QBertBehaviourComponent.h"
+#include "InputComponent.h"
 
 using namespace dae;
 
@@ -40,8 +41,9 @@ void LoadGame()
 
 	const auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 27);
 
-	const auto tileManager = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{310,50,0});
+	const auto tileManager = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{288,64,0});
 	tileManager->AddComponent(new TileMapComponent(), true);
+	tileManager->SetTag("tileMap");
 	scene.Add(tileManager);
 
 	// FPS display
@@ -62,7 +64,7 @@ void LoadGame()
 	scene.Add(livesDisplay);
 
 	// Lives display right
-	const auto livesDisplayRight = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 200,30,0 });
+	const auto livesDisplayRight = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 400,30,0 });
 	livesDisplayRight->AddComponent(new TextComponent(" ", font));
 	livesDisplayRight->AddComponent(new RenderComponent(), true);
 	livesDisplayRight->AddComponent(new HealthDisplayComponent(1));
@@ -77,7 +79,7 @@ void LoadGame()
 	scene.Add(scoreDisplay);
 
 	// Score display right
-	const auto scoreDisplayRight = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 200, 60, 0 });
+	const auto scoreDisplayRight = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 400, 60, 0 });
 	scoreDisplayRight->AddComponent(new TextComponent(" ", font));
 	scoreDisplayRight->AddComponent(new RenderComponent(), true);
 	scoreDisplayRight->AddComponent(new ScoreDisplayComponent(1));
@@ -85,11 +87,12 @@ void LoadGame()
 	scene.Add(scoreDisplayRight);
 
 	// Qbert
-	const auto qBert = std::make_shared<SceneObject>();
+	const auto qBert = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 100, 100, 0 }, glm::vec2{ 2, 2 }, "player");
 	qBert->AddComponent(new HealthComponent());
 	qBert->AddComponent(new SubjectComponent());
 	qBert->AddComponent(new ScoreComponent());
 	qBert->AddComponent(new InputComponent());
+	qBert->AddComponent(new QBertBehaviourComponent());
 	qBert->SetTag("player");
 	scene.Add(qBert);
 
@@ -105,7 +108,7 @@ void LoadGame()
 	scene.Init();
 
 	//To-Do: remove this
-	Logger::GetInstance().ClearLog(); // To clear the warning in case the teachers only plug in one controller.
+	//Logger::GetInstance().ClearLog(); // To clear the warning in case the teachers only plug in one controller.
 	Logger::GetInstance().Print("\n-----------------------------------------------------------");
 	Logger::GetInstance().Print("All D-Pad buttons add a certain amount of points, \nthe A button costs one life. Keyboard input isn't used yet");
 	Logger::GetInstance().Print("controller-B plays a sound, X mutes/unmutes");

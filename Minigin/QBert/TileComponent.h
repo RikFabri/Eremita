@@ -10,11 +10,26 @@ namespace dae {
 class TileComponent : public dae::BaseComponent
 {
 public:
-	explicit TileComponent(glm::vec2 posOffset = { 0, 0 }, int requiredJumps = 1, bool resetJumps = false);
+	enum class TileState
+	{
+		// Tile was completed but got reset
+		eUncompleted,
+		// Tile isn't completed yet
+		eProgress,
+		// Tile just got completed
+		eNewlyCompleted,
+		// Tile was and still is complete
+		eAlreadyCompleted
+	};
+
+	explicit TileComponent(glm::vec2 posOffset = { 0, 0 }, int requiredJumps = 10, bool resetJumps = true);
 	virtual void Init(dae::SceneObject&) override;
 
 	virtual void Update(dae::SceneObject&) override;
 	
+	// Updates the tileState and returns whether or not it's complete.
+	TileState HopOnTile();
+
 	static int GetTileSize();
 private:
 	// The amount of times this block needs to be jumped on

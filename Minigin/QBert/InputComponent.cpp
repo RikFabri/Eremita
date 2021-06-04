@@ -7,7 +7,7 @@
 #include "InputManager.h"
 #include <string>
 
-
+#include "QBertBehaviourComponent.h"
 #include "HealthComponent.h"
 #include "SceneObject.h"
 #include "ScoreComponent.h"
@@ -16,7 +16,9 @@
 #include "SoundServiceLocator.h"
 #include <thread>
 
-dae::InputComponent::InputComponent()
+using namespace dae;
+
+InputComponent::InputComponent()
 	: m_ControllerId(0)
 	, m_RegisteredCallback(false)
 	, m_pHealthComponentRef(nullptr)
@@ -25,12 +27,12 @@ dae::InputComponent::InputComponent()
 {
 }
 
-dae::InputComponent::~InputComponent()
+InputComponent::~InputComponent()
 {
 	InputManager::GetInstance().UnregisterController(m_ControllerId);
 }
 
-void dae::InputComponent::Init(SceneObject& parent)
+void InputComponent::Init(SceneObject& parent)
 {
 	m_pParentRef = &parent;
 	m_ControllerId = InputManager::GetInstance().RegisterController();
@@ -48,29 +50,34 @@ void dae::InputComponent::Init(SceneObject& parent)
 
 	m_pScoreComponentRef = parent.GetFirstComponentOfType<ScoreComponent>();
 	m_pHealthComponentRef = parent.GetFirstComponentOfType<HealthComponent>();
+	m_pQbertBehaviour = parent.GetFirstComponentOfType<QBertBehaviourComponent>();
 	
 	InputManager::GetInstance().AddInputAction(
 	{XINPUT_GAMEPAD_DPAD_LEFT, m_ControllerId}, new ExecuteFunction([this]()
 	{
-			m_pScoreComponentRef->IncreaseScore(25);
+			//m_pScoreComponentRef->IncreaseScore(25);
+			m_pQbertBehaviour->Move(-1, -1);
 	}));
 	
 	InputManager::GetInstance().AddInputAction(
 	{XINPUT_GAMEPAD_DPAD_UP, m_ControllerId}, new ExecuteFunction([this]()
 	{
-			m_pScoreComponentRef->IncreaseScore(50);
+			//m_pScoreComponentRef->IncreaseScore(50);
+			m_pQbertBehaviour->Move(0, -1);
 	}));
 	
 	InputManager::GetInstance().AddInputAction(
 	{XINPUT_GAMEPAD_DPAD_RIGHT, m_ControllerId}, new ExecuteFunction([this]()
 	{
-			m_pScoreComponentRef->IncreaseScore(300);
+			//m_pScoreComponentRef->IncreaseScore(300);
+			m_pQbertBehaviour->Move(1, 1);
 	}));
 	
 	InputManager::GetInstance().AddInputAction(
 	{XINPUT_GAMEPAD_DPAD_DOWN, m_ControllerId}, new ExecuteFunction([this]()
 	{
-			m_pScoreComponentRef->IncreaseScore(500);
+			//m_pScoreComponentRef->IncreaseScore(500);
+			m_pQbertBehaviour->Move(0, 1);
 	}));
 	
 	InputManager::GetInstance().AddInputAction(ControllerButton{ XINPUT_GAMEPAD_A, m_ControllerId }, new ExecuteFunction([this]()
@@ -96,7 +103,7 @@ void dae::InputComponent::Init(SceneObject& parent)
 	}));
 }
 
-void dae::InputComponent::OnNotify(const BaseComponent*, const std::string& message)
+void InputComponent::OnNotify(const BaseComponent*, const std::string& message)
 {
 	if (message == "Controller connected")
 	{

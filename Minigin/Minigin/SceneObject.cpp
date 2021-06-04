@@ -14,11 +14,11 @@ dae::Scene* dae::SceneObject::GetScene() const
 	return m_pScene;
 }
 
-dae::SceneObject::SceneObject(const std::vector<BaseComponent*>& components, const glm::vec3& position, const std::string& tag)
+dae::SceneObject::SceneObject(const std::vector<BaseComponent*>& components, const glm::vec3& position, const glm::vec2& scale, const std::string& tag)
 	: m_Components(components)
 	, m_Tag(tag)
 {
-	m_Components.push_back(new Transform(position));
+	m_Components.push_back(new Transform(position, scale));
 }
 
 dae::SceneObject::~SceneObject()

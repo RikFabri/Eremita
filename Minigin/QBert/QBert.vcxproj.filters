@@ -23,16 +23,28 @@
     <ClCompile Include="TileComponent.cpp">
       <Filter>Components\Tiles</Filter>
     </ClCompile>
-    <ClCompile Include="TileManagerComponent.cpp">
+    <ClCompile Include="TileMapComponent.cpp">
       <Filter>Components\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="QBertBehaviourComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TileManagerComponent.h">
+    <ClInclude Include="TileMapComponent.h">
       <Filter>Components\Tiles</Filter>
     </ClInclude>
     <ClInclude Include="TileComponent.h">
       <Filter>Components\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="QBertBehaviourComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

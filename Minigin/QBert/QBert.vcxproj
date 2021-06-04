@@ -181,13 +181,17 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="QBert.cpp" />
+    <ClCompile Include="QBertBehaviourComponent.cpp" />
     <ClCompile Include="TileComponent.cpp" />
-    <ClCompile Include="TileManagerComponent.cpp" />
+    <ClCompile Include="TileMapComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="QBertBehaviourComponent.h" />
     <ClInclude Include="TileComponent.h" />
-    <ClInclude Include="TileManagerComponent.h" />
+    <ClInclude Include="TileMapComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

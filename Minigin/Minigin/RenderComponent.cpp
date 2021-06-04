@@ -7,8 +7,9 @@
 #include "Texture2D.h"
 #include "Transform.h"
 
-dae::RenderComponent::RenderComponent(const std::string& texturePath)
+dae::RenderComponent::RenderComponent(const std::string& texturePath, const glm::vec2& posOffset)
 	: m_pTexture(ResourceManager::GetInstance().LoadTexture(texturePath))
+	, m_PositionOffset(posOffset)
 {
 }
 
@@ -25,7 +26,12 @@ void dae::RenderComponent::Receive(int message)
 void dae::RenderComponent::Update(SceneObject&)
 {
 	const auto& transform = m_pTransformRef->GetPosition();
-	Renderer::GetInstance().RenderTexture(*m_pTexture, transform.x, transform.y);
+	const auto& scale = m_pTransformRef->GetScale();
+	const auto dimensions = m_pTexture->GetDimensions();
+
+	Renderer::GetInstance().RenderTexture(*m_pTexture,
+		transform.x + m_PositionOffset.x, transform.y + m_PositionOffset.y,
+		dimensions.x * scale.x, dimensions.y * scale.y);
 }
 
 void dae::RenderComponent::Init(SceneObject& object)

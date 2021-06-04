@@ -21,7 +21,6 @@
 #include "GameTime.h"
 #include "ScoreDisplayComponent.h"
 #include "ScoreComponent.h"
-#include "InputComponent.h"
 #include "Logger.h"
 #include "SoundServiceLocator.h"
 #include "SimpleSoundService.h"

@@ -245,7 +245,6 @@
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="HealthDisplayComponent.h" />
-    <ClInclude Include="InputComponent.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Eremita.h" />
     <ClInclude Include="ISoundService.h" />
@@ -285,7 +284,6 @@
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="HealthDisplayComponent.cpp" />
-    <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="ISoundService.cpp" />
     <ClCompile Include="Logger.cpp" />

@@ -1,4 +1,9 @@
 #pragma once
+#pragma warning(push)
+#pragma warning (disable:4201)
+#include <glm/glm.hpp>
+#pragma warning(pop)
+
 struct SDL_Texture;
 namespace dae
 {
@@ -9,6 +14,8 @@ namespace dae
 	{
 	public:
 		SDL_Texture* GetSDLTexture() const;
+		glm::vec2 GetDimensions() const;
+
 		explicit Texture2D(SDL_Texture* texture);
 		~Texture2D();
 

@@ -29,7 +29,7 @@ namespace dae
 
 		bool RegisterAsObserver(ObserverInterface* pObserver);
 		
-		SceneObject(const std::vector<BaseComponent*>& components = {}, const glm::vec3& position = { 0,0,0 }, const std::string& tag = "defaultTag");
+		SceneObject(const std::vector<BaseComponent*>& components = {}, const glm::vec3& position = { 0,0,0 }, const glm::vec2& scale = { 1, 1 }, const std::string & tag = "defaultTag");
 		~SceneObject();
 		SceneObject(const SceneObject& other) = delete;
 		SceneObject(SceneObject&& other) = delete;
