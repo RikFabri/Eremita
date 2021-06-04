@@ -6,6 +6,7 @@
 namespace dae 
 {
 	class HealthComponent;
+	class TimerComponent;
 }
 
 class TileMapComponent;
@@ -21,9 +22,12 @@ public:
 private:
 	int m_X, m_Y;
 
+
+
 	// No ownership
 	TileMapComponent* m_pTileMapRef;
 	dae::Transform* m_pTransformRef;
 	dae::HealthComponent* m_pHealthCompRef;
+	dae::TimerComponent* m_pTimerCompRef;
 };
 

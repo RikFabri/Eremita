@@ -158,6 +158,9 @@
     <ClInclude Include="SceneObject.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="TimerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -264,6 +267,9 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Singletons</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

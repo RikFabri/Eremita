@@ -22,7 +22,7 @@ public:
 		eAlreadyCompleted
 	};
 
-	explicit TileComponent(glm::vec2 posOffset = { 0, 0 }, int requiredJumps = 10, bool resetJumps = true);
+	explicit TileComponent(glm::vec2 posOffset = { 0, 0 }, int requiredJumps = 2, bool resetJumps = true);
 	virtual void Init(dae::SceneObject&) override;
 
 	virtual void Update(dae::SceneObject&) override;

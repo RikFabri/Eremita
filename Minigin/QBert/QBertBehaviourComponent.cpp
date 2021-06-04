@@ -2,6 +2,7 @@
 #include "RenderComponent.h"
 #include "TileMapComponent.h"
 #include "HealthComponent.h"
+#include "TimerComponent.h"
 #include "Scene.h"
 
 void QBertBehaviourComponent::Init(dae::SceneObject& parent)
@@ -11,6 +12,10 @@ void QBertBehaviourComponent::Init(dae::SceneObject& parent)
 	parent.AddComponent(renderComp, true);
 
 	auto tileMapObj = parent.GetScene()->GetObjectsByTag("tileMap");
+
+	m_pTimerCompRef = new dae::TimerComponent(0.5f);
+	m_pTimerCompRef->Init(parent);
+	parent.AddComponent(m_pTimerCompRef);
 
 	if (tileMapObj.begin() == tileMapObj.end())
 		throw std::exception("QBertBehaviour couldn't find a tileMap in the level, did you forget to add it?");
@@ -29,11 +34,17 @@ void QBertBehaviourComponent::Init(dae::SceneObject& parent)
 
 void QBertBehaviourComponent::Update(dae::SceneObject&)
 {
-
 }
 
 void QBertBehaviourComponent::Move(int x, int y)
 {
+	if (!m_pTimerCompRef->TimerCompleted())
+	{
+		return;
+	}
+
+	m_pTimerCompRef->Reset();
+
 	m_X += x;
 	m_Y += y;
 
