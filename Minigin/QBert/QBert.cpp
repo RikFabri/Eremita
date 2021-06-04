@@ -108,15 +108,17 @@ void LoadGame()
 	qBert2->SetTag("player");
 	scene.Add(qBert2);
 
-	// Coily
-	const auto coilyRenderer = new RenderComponent("Coily_egg.png", { 16, -16 });
-	const auto coilyBehaviour = new CoilyBehaviourComponent();
-	const auto coilyTimer = new TimerComponent(1);
-	const auto destroyOnReset = new DestroyOnPlayerDamageComponent();
-	const auto coily = std::make_shared<SceneObject>(pComponentVec{ coilyTimer, coilyBehaviour, destroyOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "coily");
-	coily->AddComponent(coilyRenderer, true);
-	scene.Add(coily);
-
+	for (int i = 0; i < 100; ++i)
+	{
+		// Coily
+		const auto coilyRenderer = new RenderComponent("Coily_egg.png", { 16, -16 });
+		const auto coilyBehaviour = new CoilyBehaviourComponent();
+		const auto coilyTimer = new TimerComponent(1);
+		const auto destroyOnReset = new DestroyOnPlayerDamageComponent();
+		const auto coily = std::make_shared<SceneObject>(pComponentVec{ coilyTimer, coilyBehaviour, destroyOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "coily");
+		coily->AddComponent(coilyRenderer, true);
+		scene.Add(coily);
+	}
 	scene.Init();
 
 	//To-Do: remove this

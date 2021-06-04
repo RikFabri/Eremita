@@ -81,6 +81,7 @@ void Scene::Update()
 			endIt = std::remove(m_Objects.begin(), endIt, object);
 		}
 		m_Objects.erase(endIt, m_Objects.end());
+		m_ObjectsToBeRemovedSP.clear();
 	}
 
 	if (!m_ObjectsToBeRemovedRP.empty())
@@ -94,6 +95,7 @@ void Scene::Update()
 				});
 		}
 		m_Objects.erase(endIt, m_Objects.end());
+		m_ObjectsToBeRemovedRP.clear();
 	}
 }
 
