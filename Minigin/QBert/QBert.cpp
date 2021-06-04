@@ -16,6 +16,9 @@
 
 #include <Logger.h>
 
+#include "TileComponent.h"
+#include "TileManagerComponent.h"
+
 using namespace dae;
 
 void LoadGame();
@@ -36,6 +39,10 @@ void LoadGame()
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
 	const auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 27);
+
+	const auto tileManager = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{310,50,0});
+	tileManager->AddComponent(new TileMapComponent(), true);
+	scene.Add(tileManager);
 
 	// FPS display
 	auto* const pRenderComponent = new RenderComponent();

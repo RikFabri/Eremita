@@ -115,6 +115,7 @@ xcopy "$(SolutionDir)3rdParty\vld\vld.ini" "$(OutputPath)" /R /Y</Command>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)Minigin</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,6 +164,7 @@ xcopy "$(SolutionDir)3rdParty\vld\vld.ini" "$(OutputPath)" /R /Y</Command>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)Minigin</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -180,6 +182,12 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="QBert.cpp" />
+    <ClCompile Include="TileComponent.cpp" />
+    <ClCompile Include="TileManagerComponent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TileComponent.h" />
+    <ClInclude Include="TileManagerComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

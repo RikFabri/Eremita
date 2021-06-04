@@ -5,8 +5,6 @@
 
 using namespace dae;
 
-//unsigned int Scene::m_IdCounter = 0;
-
 std::vector<std::shared_ptr<SceneObject>> Scene::GetObjectsByTag(const std::string& tag)
 {
 	std::vector<std::shared_ptr<SceneObject>> objects;

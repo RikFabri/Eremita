@@ -39,3 +39,8 @@ void dae::RenderComponent::SetTexture(SDL_Texture* texture)
 {
 	m_pTexture = std::make_shared<Texture2D>(texture);
 }
+
+void dae::RenderComponent::SetTexture(std::shared_ptr<Texture2D> texture)
+{
+	m_pTexture = texture;
+}

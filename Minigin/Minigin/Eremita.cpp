@@ -56,7 +56,7 @@ void dae::Eremita::Initialize()
 	initAudio();
 
 	m_Window = SDL_CreateWindow(
-		"Programming 4 assignment",
+		"Q*Bert",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		640,

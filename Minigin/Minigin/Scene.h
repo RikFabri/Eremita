@@ -28,8 +28,6 @@ namespace dae
 
 		std::string m_Name;
 		std::vector < std::shared_ptr<SceneObject>> m_Objects{};
-
-		//static unsigned int m_IdCounter; 
 	};
 
 }

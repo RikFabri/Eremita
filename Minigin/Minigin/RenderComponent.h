@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "BaseComponent.h"
 
 //#pragma warning(disable : 4201)
@@ -23,6 +24,7 @@ namespace dae
 		void Init(SceneObject& object) override;
 		void Receive(int message) override;
 		void SetTexture(SDL_Texture* texture);
+		void SetTexture(std::shared_ptr<Texture2D> texture);
 
 	private:
 		std::shared_ptr<Texture2D> m_pTexture;
