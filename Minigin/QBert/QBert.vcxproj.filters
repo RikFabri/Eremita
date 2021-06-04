@@ -15,6 +15,9 @@
     <Filter Include="Components\Tiles">
       <UniqueIdentifier>{63a653a8-cdca-429c-8a9b-8591f62e737d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\Characters">
+      <UniqueIdentifier>{327d79a1-576e-4369-a7a6-2d839a0ca5b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="QBert.cpp">
@@ -26,14 +29,20 @@
     <ClCompile Include="TileMapComponent.cpp">
       <Filter>Components\Tiles</Filter>
     </ClCompile>
-    <ClCompile Include="QBertBehaviourComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="InputComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="DiskComponent.cpp">
       <Filter>Components\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="QBertBehaviourComponent.cpp">
+      <Filter>Components\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="CoilyBehaviourComponent.cpp">
+      <Filter>Components\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="DestroyOnPlayerDamageComponent.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -43,14 +52,18 @@
     <ClInclude Include="TileComponent.h">
       <Filter>Components\Tiles</Filter>
     </ClInclude>
-    <ClInclude Include="QBertBehaviourComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="InputComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="DiskComponent.h">
       <Filter>Components\Tiles</Filter>
     </ClInclude>
+    <ClInclude Include="QBertBehaviourComponent.h">
+      <Filter>Components\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="CoilyBehaviourComponent.h">
+      <Filter>Components\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="DestroyOnPlayerDamageComponent.h" />
   </ItemGroup>
 </Project>

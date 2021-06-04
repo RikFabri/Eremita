@@ -1,5 +1,6 @@
 #pragma once
 #include "Transform.h"
+#include "Logger.h"
 #include <string>
 #include <vector>
 
@@ -24,6 +25,7 @@ namespace dae
 
 		const std::string& GetTag() const;
 		Scene* GetScene() const;
+		const Transform* GetTransform() const;
 		void SetScene(Scene* pScene);
 		void SetTag(const std::string& newTag);
 		void SetPosition(const glm::vec3& pos);
@@ -47,6 +49,7 @@ namespace dae
 		std::vector<BaseComponent*> m_GraphicalComponents;
 	};
 
+
 	// Templated functions
 	template <typename ComponentType>
 	ComponentType* SceneObject::GetFirstComponentOfType() const
@@ -64,6 +67,11 @@ namespace dae
 			if (castObject != nullptr)
 				return castObject;
 		}
+
+#if _DEBUG
+		Logger::GetInstance().Print(std::string("Couldn't find component ") + typeid(ComponentType).name());
+		Logger::GetInstance().SaveLog("Log.txt");
+#endif // _DEBUG
 
 		return nullptr;
 	}

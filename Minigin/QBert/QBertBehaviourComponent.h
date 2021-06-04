@@ -21,6 +21,7 @@ public:
 	virtual void Update(dae::SceneObject&) override;
 
 	void Move(int x, int y);
+	void Damage();
 private:
 	int2 m_Index;
 

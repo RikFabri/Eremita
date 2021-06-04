@@ -19,7 +19,7 @@ void QBertBehaviourComponent::Init(dae::SceneObject& parent)
 	m_pTimerCompRef->Init(parent);
 	parent.AddComponent(m_pTimerCompRef);
 
-	if (tileMapObj.begin() == tileMapObj.end())
+	if (tileMapObj.empty())
 		throw std::exception("QBertBehaviour couldn't find a tileMap in the level, did you forget to add it?");
 
 	m_pTileMapRef = tileMapObj[0]->GetFirstComponentOfType<TileMapComponent>();
@@ -68,10 +68,19 @@ void QBertBehaviourComponent::Move(int x, int y)
 	}
 	else
 	{
-		m_Index = { 0, 0 };
-		m_pHealthCompRef->Die();
+		Damage();
 	}
 
 	const auto pos = m_pTileMapRef->IndexToTilePosition(m_Index);
 	m_pTransformRef->SetPosition(pos.x, pos.y, 0);
+}
+
+void QBertBehaviourComponent::Damage()
+{
+	m_pHealthCompRef->Die();
+
+	m_Index = { 0, 0 };
+	const auto pos = m_pTileMapRef->IndexToTilePosition(m_Index);
+	m_pTransformRef->SetPosition(pos.x, pos.y, 0);
+
 }

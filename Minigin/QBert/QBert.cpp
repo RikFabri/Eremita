@@ -19,6 +19,8 @@
 #include "TileMapComponent.h"
 #include "QBertBehaviourComponent.h"
 #include "InputComponent.h"
+#include "CoilyBehaviourComponent.h"
+#include "DestroyOnPlayerDamageComponent.h"
 
 using namespace dae;
 
@@ -41,10 +43,11 @@ void LoadGame()
 
 	const auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 27);
 
-	const auto tileManager = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{288,64,0});
-	tileManager->AddComponent(new TileMapComponent(), true);
-	tileManager->SetTag("tileMap");
-	scene.Add(tileManager);
+	// Map
+	const auto map = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{288,64,0});
+	map->AddComponent(new TileMapComponent(), true);
+	map->SetTag("tileMap");
+	scene.Add(map);
 
 	// FPS display
 	auto* const pRenderComponent = new RenderComponent();
@@ -104,6 +107,15 @@ void LoadGame()
 	qBert2->AddComponent(new InputComponent());
 	qBert2->SetTag("player");
 	scene.Add(qBert2);
+
+	// Coily
+	const auto coilyRenderer = new RenderComponent("Coily_egg.png", { 16, -16 });
+	const auto coilyBehaviour = new CoilyBehaviourComponent();
+	const auto coilyTimer = new TimerComponent(1);
+	const auto destroyOnReset = new DestroyOnPlayerDamageComponent();
+	const auto coily = std::make_shared<SceneObject>(pComponentVec{ coilyTimer, coilyBehaviour, destroyOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "coily");
+	coily->AddComponent(coilyRenderer, true);
+	scene.Add(coily);
 
 	scene.Init();
 

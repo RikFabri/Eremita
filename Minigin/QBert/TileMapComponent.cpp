@@ -117,10 +117,10 @@ bool TileMapComponent::IsBlockIndexValid(const int2& blockIndex) const
 	const auto x = blockIndex.first;
 	const auto y = blockIndex.second;
 
-	if (y < 0 || y >= m_Tiles.size())
+	if (y < 0 || y >= (int)m_Tiles.size())
 		return false;
 
-	if (x < 0 || x >= m_Tiles[y].size())
+	if (x < 0 || x >= (int)m_Tiles[y].size())
 		return false;
 
 	if (m_Tiles[y][x] == nullptr)
