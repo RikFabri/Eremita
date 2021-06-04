@@ -9,6 +9,8 @@ namespace dae
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 		void Add(const std::shared_ptr<SceneObject>& object);
+		// Adds object after initialization, it's your responsibility to initialize said object
+		void AddAfterInitialize(const std::shared_ptr<SceneObject>& object);
 		void Remove(const std::shared_ptr<SceneObject>& object);
 
 		void Init();
@@ -29,6 +31,7 @@ namespace dae
 
 		std::string m_Name;
 		std::vector < std::shared_ptr<SceneObject>> m_Objects{};
+		std::vector < std::shared_ptr<SceneObject>> m_ObjectsToBeAddedPostInit{};
 	};
 
 }

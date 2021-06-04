@@ -40,16 +40,32 @@ void TileMapComponent::Init(dae::SceneObject& parent)
 
 
 	// Testing the disks
-	const auto diskPos = IndexToTilePosition({ 4, 3 });
-	const auto disk = std::make_shared<dae::SceneObject>(std::vector<dae::BaseComponent*>{}, glm::vec3{diskPos.x, diskPos.y, 0}, glm::vec2{ 2, 2 });
-	disk->AddComponent(new DiskComponent());
-	const auto renderComp = new dae::RenderComponent("Disk.png", {16, 16});
-	disk->AddComponent(renderComp, true);
+	{
+		const auto idx = int2({ 4, 3 });
+		const auto diskPos = IndexToTilePosition(idx);
+		const auto disk = std::make_shared<dae::SceneObject>(std::vector<dae::BaseComponent*>{}, glm::vec3{ diskPos.x, diskPos.y, 0 }, glm::vec2{ 2, 2 });
+		disk->AddComponent(new DiskComponent());
+		const auto renderComp = new dae::RenderComponent("Disk.png", { 16, 16 });
+		disk->AddComponent(renderComp, true);
 
-	parent.GetScene()->Add(disk);
-	disk->Init();
+		parent.GetScene()->AddAfterInitialize(disk);
+		disk->Init();
 
-	m_Disks[{4, 3}] = disk;
+		m_Disks[idx] = disk;
+	}
+	{
+		const auto idx = int2({ -1, 3 });
+		const auto diskPos = IndexToTilePosition(idx);
+		const auto disk = std::make_shared<dae::SceneObject>(std::vector<dae::BaseComponent*>{}, glm::vec3{ diskPos.x, diskPos.y, 0 }, glm::vec2{ 2, 2 });
+		disk->AddComponent(new DiskComponent());
+		const auto renderComp = new dae::RenderComponent("Disk.png", { 16, 16 });
+		disk->AddComponent(renderComp, true);
+
+		parent.GetScene()->AddAfterInitialize(disk);
+		disk->Init();
+
+		m_Disks[idx] = disk;
+	}
 }
 
 void TileMapComponent::Update(dae::SceneObject& parent)
@@ -90,6 +106,7 @@ void TileMapComponent::HoppedOnDisk(const int2& blockIndex, dae::SceneObject* qB
 		qBert->GetScene()->Remove(diskPtr);
 		diskPtr->SetPosition(diskPos.x, diskPos.y);
 		qBert->SetPosition(diskPos.x, diskPos.y);
+		HoppedOnTile({ 0, 0 });
 	}
 
 	m_Disks.erase(diskIt);
