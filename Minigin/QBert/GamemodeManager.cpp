@@ -28,6 +28,7 @@
 #include "UggMovementComponent.h"
 #include "DefaultMovement.h"
 #include "InputManager.h"
+#include "PosessedMovementComponent.h"
 
 using namespace dae;
 
@@ -110,15 +111,17 @@ void GamemodeManager::LoadAI()
 	scene.Add(scoreDisplay);
 
 	// Qbert
-	const auto qbertBehaviour = new QBertBehaviourComponent();
-	qbertBehaviour->SetBlockIndex({ 0,0 });
+	const auto qbertMovement = new PosessedMovementComponent();
+	qbertMovement->SetBlockIndex({ 0,0 });
 	const auto qBert = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 100, 100, 0 }, glm::vec2{ 2, 2 }, "player");
 	qBert->AddComponent(new dae::RenderComponent("QBert.png", { 16, -16 }), true);
 	qBert->AddComponent(new HealthComponent());
 	qBert->AddComponent(new SubjectComponent());
 	qBert->AddComponent(new ScoreComponent());
 	qBert->AddComponent(new InputComponent());
-	qBert->AddComponent(qbertBehaviour);
+	qBert->AddComponent(new TimerComponent(0.5f));
+	qBert->AddComponent(qbertMovement);
+	qBert->AddComponent(new QBertBehaviourComponent());
 	scene.Add(qBert);
 
 	// Coily
@@ -241,31 +244,34 @@ void GamemodeManager::LoadCoop()
 
 	scene.Add(scoreDisplayRight);
 
-	// Qbert
-	const auto qbertBehaviour = new QBertBehaviourComponent();
-	qbertBehaviour->SetBlockIndex({ 0,6 });
-	const auto qBert = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 100, 100, 0 }, glm::vec2{ 2, 2 }, "player");
-	qBert->AddComponent(new dae::RenderComponent("QBert.png", { 16, -16 }), true);
-	qBert->AddComponent(new HealthComponent());
-	qBert->AddComponent(new SubjectComponent());
-	qBert->AddComponent(new ScoreComponent());
-	qBert->AddComponent(new InputComponent());
-	qBert->AddComponent(qbertBehaviour);
-	qBert->SetTag("player");
-	scene.Add(qBert);
-
-	// Qbert 2 
-	const auto qbert2Behaviour = new QBertBehaviourComponent();
-	qbert2Behaviour->SetBlockIndex({ 6,6 });
-	const auto qBert2 = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 100, 100, 0 }, glm::vec2{ 2, 2 }, "player");
-	qBert2->AddComponent(new dae::RenderComponent("QBert.png", { 16, -16 }), true);
-	qBert2->AddComponent(new HealthComponent());
-	qBert2->AddComponent(new SubjectComponent());
-	qBert2->AddComponent(new ScoreComponent());
-	qBert2->AddComponent(new InputComponent());
-	qBert2->AddComponent(qbert2Behaviour);
-	scene.Add(qBert2);
-
+	{	// Qbert
+		const auto qbertMovement = new PosessedMovementComponent();
+		qbertMovement->SetBlockIndex({ 0,6 });
+		const auto qBert = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 100, 100, 0 }, glm::vec2{ 2, 2 }, "player");
+		qBert->AddComponent(new dae::RenderComponent("QBert.png", { 16, -16 }), true);
+		qBert->AddComponent(new HealthComponent());
+		qBert->AddComponent(new SubjectComponent());
+		qBert->AddComponent(new ScoreComponent());
+		qBert->AddComponent(new InputComponent());
+		qBert->AddComponent(new TimerComponent(0.5f));
+		qBert->AddComponent(qbertMovement);
+		qBert->AddComponent(new QBertBehaviourComponent());
+		scene.Add(qBert);
+	}
+	{	// Qbert 2
+		const auto qbertMovement = new PosessedMovementComponent();
+		qbertMovement->SetBlockIndex({ 6,6 });
+		const auto qBert = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 100, 100, 0 }, glm::vec2{ 2, 2 }, "player");
+		qBert->AddComponent(new dae::RenderComponent("QBert.png", { 16, -16 }), true);
+		qBert->AddComponent(new HealthComponent());
+		qBert->AddComponent(new SubjectComponent());
+		qBert->AddComponent(new ScoreComponent());
+		qBert->AddComponent(new InputComponent());
+		qBert->AddComponent(new TimerComponent(0.5f));
+		qBert->AddComponent(qbertMovement);
+		qBert->AddComponent(new QBertBehaviourComponent());
+		scene.Add(qBert);
+	}
 
 	// Coily
 	const auto coilyRenderer = new RenderComponent("Coily_egg.png", { 16, -16 });

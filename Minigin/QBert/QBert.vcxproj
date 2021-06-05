@@ -191,6 +191,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="GamemodeManager.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="KillPlayerOnTouchComponent.cpp" />
+    <ClCompile Include="PosessedMovementComponent.cpp" />
     <ClCompile Include="QBert.cpp" />
     <ClCompile Include="QBertBehaviourComponent.cpp" />
     <ClCompile Include="SlickAndSamBehaviourComponent.cpp" />
@@ -208,6 +209,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="GamemodeManager.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="KillPlayerOnTouchComponent.h" />
+    <ClInclude Include="PosessedMovementComponent.h" />
     <ClInclude Include="QBertBehaviourComponent.h" />
     <ClInclude Include="SlickAndSamBehaviourComponent.h" />
     <ClInclude Include="TileComponent.h" />

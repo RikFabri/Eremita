@@ -11,7 +11,7 @@ namespace dae
 
 using int2 = std::pair<int, int>;
 class TileMapComponent;
-
+class PosessedMovementComponent;
 
 class QBertBehaviourComponent final : public dae::BaseComponent
 {
@@ -20,18 +20,11 @@ public:
 
 	virtual void Update(dae::SceneObject&) override;
 
-	void Move(int x, int y);
 	void Damage();
-	// Sets the block index but doesn't automatically update position
-	void SetBlockIndex(const int2& idx);
-	bool UsedDisk() const;
-	const glm::vec3& GetPreviousPos() const;
 private:
-	int2 m_Index;
-	bool m_UsedDisk;
-	glm::vec3 m_PrevPos;
 
 	// No ownership
+	PosessedMovementComponent* m_pMovementCompRef;
 	TileMapComponent* m_pTileMapRef;
 	dae::Transform* m_pTransformRef;
 	dae::HealthComponent* m_pHealthCompRef;

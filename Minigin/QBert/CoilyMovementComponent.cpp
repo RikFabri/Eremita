@@ -1,5 +1,5 @@
 #include "CoilyMovementComponent.h"
-#include "QBertBehaviourComponent.h"
+#include "PosessedMovementComponent.h"
 #include "TileMapComponent.h"
 #include "TimerComponent.h"
 #include "SceneObject.h"
@@ -16,7 +16,7 @@ void CoilyMovementComponent::Init(dae::SceneObject& parent)
 
 	m_pTimerCompRef = parent.GetFirstComponentOfType<dae::TimerComponent>();
 
-	m_pQBertBeahviourCompRef = m_QBertRef.lock()->GetFirstComponentOfType<QBertBehaviourComponent>();
+	m_pQBertMovementCompRef = m_QBertRef.lock()->GetFirstComponentOfType<PosessedMovementComponent>();
 }
 
 void CoilyMovementComponent::Update(dae::SceneObject& parent)
@@ -31,14 +31,14 @@ void CoilyMovementComponent::Update(dae::SceneObject& parent)
 		return;
 
 	const auto qbert = m_QBertRef.lock();
-	auto qbertPos = m_pQBertBeahviourCompRef->GetPreviousPos();
+	auto qbertPos = m_pQBertMovementCompRef->GetPreviousPos();
 	const auto pos = parent.GetTransform()->GetPosition();
 
 	// Move towards qbert's previous position, or towards him if you're already there
 	if (qbertPos == pos)
 	{
 		// If he used a disk, die instead
-		if (m_pQBertBeahviourCompRef->UsedDisk())
+		if (m_pQBertMovementCompRef->UsedDisk())
 		{
 			parent.GetScene()->Remove(&parent);
 		}

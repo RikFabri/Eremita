@@ -8,6 +8,7 @@ void SlickAndSamBehaviourComponent::Init(dae::SceneObject& parent)
 	const auto players = parent.GetScene()->GetObjectsByTag("player");
 	std::copy(players.begin(), players.end(), std::back_inserter(m_QBertRefs));
 
+	// Die when the end of the map is reached
 	parent.GetFirstComponentOfType<DefaultMovement>()->SetReachedEnd([](dae::SceneObject& parent)
 		{
 			parent.GetScene()->Remove(&parent);
@@ -33,9 +34,9 @@ void SlickAndSamBehaviourComponent::DieIfQbertClose(dae::SceneObject& parent)
 		const auto pos = parent.GetTransform()->GetPosition();
 
 
-		const auto coilyToQbertDistance = glm::distance(qbertPos, pos);
+		const auto distanceToQbert = glm::distance(qbertPos, pos);
 
-		if (coilyToQbertDistance < killDistance)
+		if (distanceToQbert < killDistance)
 		{
 			parent.GetScene()->Remove(&parent);
 		}

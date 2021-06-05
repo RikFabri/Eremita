@@ -9,7 +9,7 @@ namespace dae {
 	class HealthComponent;
 }
 
-class QBertBehaviourComponent;
+class PosessedMovementComponent;
 
 class InputComponent final : public dae::BaseComponent, public dae::ObserverInterface
 {
@@ -25,9 +25,7 @@ private:
 
 	//No ownership
 	dae::SceneObject* m_pParentRef;
-	dae::ScoreComponent* m_pScoreComponentRef;
-	dae::HealthComponent* m_pHealthComponentRef;
-	QBertBehaviourComponent* m_pQbertBehaviour;
+	PosessedMovementComponent* m_pMovementCompRef;
 
 	virtual void OnNotify(const BaseComponent*, const std::string& message) override;
 };

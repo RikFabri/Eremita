@@ -65,6 +65,9 @@
     <ClCompile Include="GamemodeManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="PosessedMovementComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TileMapComponent.h">
@@ -106,6 +109,11 @@
     <ClInclude Include="KillPlayerOnTouchComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="GamemodeManager.h" />
+    <ClInclude Include="PosessedMovementComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GamemodeManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

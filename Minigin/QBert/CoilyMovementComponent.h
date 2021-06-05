@@ -9,7 +9,7 @@ namespace dae {
 
 using int2 = std::pair<int, int>;
 class TileMapComponent;
-class QBertBehaviourComponent;
+class PosessedMovementComponent;
 
 class CoilyMovementComponent : public dae::BaseComponent
 {
@@ -23,7 +23,7 @@ private:
 
 	// No ownership
 	std::weak_ptr<dae::SceneObject> m_QBertRef;
-	QBertBehaviourComponent* m_pQBertBeahviourCompRef;
+	PosessedMovementComponent* m_pQBertMovementCompRef;
 	TileMapComponent* m_pTileMapRef;
 	dae::TimerComponent* m_pTimerCompRef;
 
