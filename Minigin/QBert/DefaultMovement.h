@@ -21,6 +21,7 @@ public:
 
 	void SetReachedEnd(std::function<void(dae::SceneObject& parent)> callback);
 	int2 GetBlockIndex() const;
+	void SetBlockIndex(const int2& id);
 private:
 	std::function<void(dae::SceneObject& parent)> m_ReachedEndCallback;
 

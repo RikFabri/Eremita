@@ -64,3 +64,8 @@ int2 DefaultMovement::GetBlockIndex() const
 {
 	return m_Index;
 }
+
+void DefaultMovement::SetBlockIndex(const int2& id)
+{
+	m_Index = id;
+}

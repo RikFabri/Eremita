@@ -22,8 +22,12 @@ public:
 
 	void Move(int x, int y);
 	void Damage();
+	bool UsedDisk() const;
+	const glm::vec3& GetPreviousPos() const;
 private:
 	int2 m_Index;
+	bool m_UsedDisk;
+	glm::vec3 m_PrevPos;
 
 	// No ownership
 	TileMapComponent* m_pTileMapRef;

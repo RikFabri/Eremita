@@ -1,10 +1,10 @@
 #include "CoilyMovementComponent.h"
+#include "QBertBehaviourComponent.h"
 #include "TileMapComponent.h"
 #include "TimerComponent.h"
 #include "SceneObject.h"
 #include "Scene.h"
 #include <utility>
-
 
 void CoilyMovementComponent::Init(dae::SceneObject& parent)
 {
@@ -15,6 +15,8 @@ void CoilyMovementComponent::Init(dae::SceneObject& parent)
 	m_pTileMapRef = tileMapObj[0]->GetFirstComponentOfType<TileMapComponent>();
 
 	m_pTimerCompRef = parent.GetFirstComponentOfType<dae::TimerComponent>();
+
+	m_pQBertBeahviourCompRef = m_QBertRef.lock()->GetFirstComponentOfType<QBertBehaviourComponent>();
 }
 
 void CoilyMovementComponent::Update(dae::SceneObject& parent)
@@ -29,8 +31,19 @@ void CoilyMovementComponent::Update(dae::SceneObject& parent)
 		return;
 
 	const auto qbert = m_QBertRef.lock();
-	const auto qbertPos = qbert->GetTransform()->GetPosition();
+	auto qbertPos = m_pQBertBeahviourCompRef->GetPreviousPos();
 	const auto pos = parent.GetTransform()->GetPosition();
+
+	// Move towards qbert's previous position, or towards him if you're already there
+	if (qbertPos == pos)
+	{
+		// If he used a disk, die instead
+		if (m_pQBertBeahviourCompRef->UsedDisk())
+		{
+			parent.GetScene()->Remove(&parent);
+		}
+		qbertPos = qbert->GetTransform()->GetPosition();
+	}
 
 	// Move towards qbert 
 	bool goLeft = qbertPos.x < pos.x;

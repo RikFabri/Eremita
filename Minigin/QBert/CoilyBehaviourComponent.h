@@ -21,17 +21,13 @@ public:
 
 	virtual void Init(dae::SceneObject&) override;
 
-	virtual void Update(dae::SceneObject&) override;
-
 private:
-	void KillQbertIfClose(dae::SceneObject& parent);
 	void HatchEgg(dae::SceneObject& parent);
 
 	// Positional index on the map
 	int2 m_Index;
 
 	//No ownership
-	std::weak_ptr<dae::SceneObject> m_QBertRef;
 	dae::TimerComponent* m_pTimerCompRef;
 	TileMapComponent* m_pTileMapRef;
 	dae::RenderComponent* m_pRenderCompRef;

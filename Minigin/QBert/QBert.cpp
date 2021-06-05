@@ -22,6 +22,9 @@
 #include "CoilyBehaviourComponent.h"
 #include "DestroyOnPlayerDamageComponent.h"
 #include "SlickAndSamBehaviourComponent.h"
+#include "KillPlayerOnTouchComponent.h"
+#include "WrongwayMovementComponent.h"
+#include "UggMovementComponent.h"
 #include "DefaultMovement.h"
 
 using namespace dae;
@@ -117,7 +120,8 @@ void LoadGame()
 	const auto coilyTimer = new TimerComponent(1);
 	const auto destroyOnReset = new DestroyOnPlayerDamageComponent();
 	const auto eggMovement = new DefaultMovement();
-	const auto coily = std::make_shared<SceneObject>(pComponentVec{ coilyTimer, eggMovement, coilyBehaviour, destroyOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "coily");
+	auto dmgPlayerComp = new KillPlayerOnTouchComponent();
+	const auto coily = std::make_shared<SceneObject>(pComponentVec{ coilyTimer, eggMovement, coilyBehaviour, destroyOnReset, dmgPlayerComp }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "coily");
 	coily->AddComponent(coilyRenderer, true);
 	scene.Add(coily);
 
@@ -140,6 +144,26 @@ void LoadGame()
 	const auto sam = std::make_shared<SceneObject>(pComponentVec{ samTimer, samMovement, samBehaviour, destroySamOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "sam");
 	sam->AddComponent(samRenderer, true);
 	scene.Add(sam);
+
+	// Ugg
+	const auto uggRenderer = new RenderComponent("Ugg.png", { 16, -16 });
+	const auto destroyUggOnReset = new DestroyOnPlayerDamageComponent();
+	const auto uggTimer = new TimerComponent(1);
+	dmgPlayerComp = new KillPlayerOnTouchComponent();
+	const auto uggMovement = new UggMovementComponent();
+	const auto ugg = std::make_shared<SceneObject>(pComponentVec{ uggTimer, uggMovement, destroyUggOnReset, dmgPlayerComp }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "ugg");
+	ugg->AddComponent(uggRenderer, true);
+	scene.Add(ugg);
+
+	// Wrongway
+	const auto wrongWayRenderer = new RenderComponent("Wrongway.png", { 16, -16 });
+	const auto destroywrongWayOnReset = new DestroyOnPlayerDamageComponent();
+	const auto wrongWayTimer = new TimerComponent(1);
+	const auto wrongWayMovement = new WrongwayMovementComponent();
+	dmgPlayerComp = new KillPlayerOnTouchComponent();
+	const auto wrongWay = std::make_shared<SceneObject>(pComponentVec{ wrongWayTimer, wrongWayMovement, destroywrongWayOnReset, dmgPlayerComp }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "wrongWay");
+	wrongWay->AddComponent(wrongWayRenderer, true);
+	scene.Add(wrongWay);
 
 	scene.Init();
 

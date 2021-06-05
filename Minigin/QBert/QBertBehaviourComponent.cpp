@@ -7,6 +7,8 @@
 
 void QBertBehaviourComponent::Init(dae::SceneObject& parent)
 {
+	m_UsedDisk = false;
+
 	m_pParent = &parent;
 
 	const auto renderComp = new dae::RenderComponent("QBert.png", {16, -16});
@@ -36,6 +38,14 @@ void QBertBehaviourComponent::Init(dae::SceneObject& parent)
 
 void QBertBehaviourComponent::Update(dae::SceneObject&)
 {
+	if (m_pTimerCompRef->TimerCompleted())
+	{
+		if (m_UsedDisk)
+		{
+			m_UsedDisk = false;
+			m_PrevPos = m_pTransformRef->GetPosition();
+		}
+	}
 }
 
 void QBertBehaviourComponent::Move(int x, int y)
@@ -50,12 +60,14 @@ void QBertBehaviourComponent::Move(int x, int y)
 	m_Index.first += x;
 	m_Index.second += y;
 
+	m_PrevPos = m_pTransformRef->GetPosition();
+	m_UsedDisk = false;
 	auto isDisk = false;
 	auto isValid = m_pTileMapRef->IsBlockIndexValid(m_Index);
-	
+
 	if (!isValid)
 		isDisk = isValid = m_pTileMapRef->IsBlockIndexDisk(m_Index);
-	
+
 	if (isValid)
 	{
 		if (!isDisk)
@@ -64,6 +76,7 @@ void QBertBehaviourComponent::Move(int x, int y)
 		{
 			m_pTileMapRef->HoppedOnDisk(m_Index, m_pParent);
 			m_Index = { 0, 0 };
+			m_UsedDisk = true;
 		}
 	}
 	else
@@ -73,6 +86,12 @@ void QBertBehaviourComponent::Move(int x, int y)
 
 	const auto pos = m_pTileMapRef->IndexToTilePosition(m_Index);
 	m_pTransformRef->SetPosition(pos.x, pos.y, 0);
+
+	if (m_UsedDisk)
+	{
+		m_PrevPos.x = pos.x;
+		m_PrevPos.y = pos.y;
+	}
 }
 
 void QBertBehaviourComponent::Damage()
@@ -83,4 +102,14 @@ void QBertBehaviourComponent::Damage()
 	const auto pos = m_pTileMapRef->IndexToTilePosition(m_Index);
 	m_pTransformRef->SetPosition(pos.x, pos.y, 0);
 
+}
+
+bool QBertBehaviourComponent::UsedDisk() const
+{
+	return m_UsedDisk;
+}
+
+const glm::vec3& QBertBehaviourComponent::GetPreviousPos() const
+{
+	return m_PrevPos;
 }
