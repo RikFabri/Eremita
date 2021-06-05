@@ -19,6 +19,7 @@ namespace dae
 
 		void Init();
 		void AddComponent(BaseComponent* component, bool isGraphical = false);
+		// Add components after update finished, they don't automatically get initialized 
 		void AddComponentAfterUpdate(BaseComponent* component, bool isGraphical = false);
 		void RemoveComponent(BaseComponent* component, bool isGraphical = false);
 		

@@ -21,6 +21,7 @@
 #include "InputComponent.h"
 #include "CoilyBehaviourComponent.h"
 #include "DestroyOnPlayerDamageComponent.h"
+#include "SlickAndSamBehaviourComponent.h"
 #include "DefaultMovement.h"
 
 using namespace dae;
@@ -109,18 +110,37 @@ void LoadGame()
 	qBert2->SetTag("player");
 	scene.Add(qBert2);
 
-	for (int i = 0; i < 1; ++i)
-	{
-		// Coily
-		const auto coilyRenderer = new RenderComponent("Coily_egg.png", { 16, -16 });
-		const auto coilyBehaviour = new CoilyBehaviourComponent();
-		const auto coilyTimer = new TimerComponent(1);
-		const auto destroyOnReset = new DestroyOnPlayerDamageComponent();
-		const auto eggMovement = new DefaultMovement();
-		const auto coily = std::make_shared<SceneObject>(pComponentVec{ coilyTimer, eggMovement, coilyBehaviour, destroyOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "coily");
-		coily->AddComponent(coilyRenderer, true);
-		scene.Add(coily);
-	}
+
+	// Coily
+	const auto coilyRenderer = new RenderComponent("Coily_egg.png", { 16, -16 });
+	const auto coilyBehaviour = new CoilyBehaviourComponent();
+	const auto coilyTimer = new TimerComponent(1);
+	const auto destroyOnReset = new DestroyOnPlayerDamageComponent();
+	const auto eggMovement = new DefaultMovement();
+	const auto coily = std::make_shared<SceneObject>(pComponentVec{ coilyTimer, eggMovement, coilyBehaviour, destroyOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "coily");
+	coily->AddComponent(coilyRenderer, true);
+	scene.Add(coily);
+
+	// Slick
+	const auto slickRenderer = new RenderComponent("Slick.png", { 16, -16 });
+	const auto destroySlickOnReset = new DestroyOnPlayerDamageComponent();
+	const auto slickTimer = new TimerComponent(1);
+	const auto slickBehaviour = new SlickAndSamBehaviourComponent();
+	const auto slickMovement = new DefaultMovement();
+	const auto slick = std::make_shared<SceneObject>(pComponentVec{ slickTimer, slickMovement, slickBehaviour, destroySlickOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "slick");
+	slick->AddComponent(slickRenderer, true);
+	scene.Add(slick);
+
+	// Sam
+	const auto samRenderer = new RenderComponent("Sam.png", { 16, -16 });
+	const auto destroySamOnReset = new DestroyOnPlayerDamageComponent();
+	const auto samTimer = new TimerComponent(1);
+	const auto samBehaviour = new SlickAndSamBehaviourComponent();
+	const auto samMovement = new DefaultMovement();
+	const auto sam = std::make_shared<SceneObject>(pComponentVec{ samTimer, samMovement, samBehaviour, destroySamOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "sam");
+	sam->AddComponent(samRenderer, true);
+	scene.Add(sam);
+
 	scene.Init();
 
 	//To-Do: remove this

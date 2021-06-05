@@ -47,10 +47,13 @@ void CoilyMovementComponent::Update(dae::SceneObject& parent)
 
 	const auto nextIndex = int2{ m_Index.first + movement.first, m_Index.second + movement.second };
 
-
-	m_Index = nextIndex;
-	const auto newPos = m_pTileMapRef->IndexToTilePosition(nextIndex);
-	parent.SetPosition(newPos.x, newPos.y);
+	const auto isIndexValid = m_pTileMapRef->IsBlockIndexValid(nextIndex);
+	if (isIndexValid)
+	{
+		m_Index = nextIndex;
+		const auto newPos = m_pTileMapRef->IndexToTilePosition(nextIndex);
+		parent.SetPosition(newPos.x, newPos.y);
+	}
 }
 
 void CoilyMovementComponent::SetIndex(const int2& idx)

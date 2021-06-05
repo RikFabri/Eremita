@@ -41,17 +41,17 @@
     <ClCompile Include="CoilyBehaviourComponent.cpp">
       <Filter>Components\Characters</Filter>
     </ClCompile>
-    <ClCompile Include="DestroyOnPlayerDamageComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SlickAndSamBehaviourComponent.cpp">
       <Filter>Components\Characters</Filter>
     </ClCompile>
     <ClCompile Include="DefaultMovement.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="DestroyOnPlayerDamageComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
     <ClCompile Include="CoilyMovementComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Components\Characters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,13 +73,17 @@
     <ClInclude Include="CoilyBehaviourComponent.h">
       <Filter>Components\Characters</Filter>
     </ClInclude>
-    <ClInclude Include="DestroyOnPlayerDamageComponent.h" />
     <ClInclude Include="SlickAndSamBehaviourComponent.h">
       <Filter>Components\Characters</Filter>
     </ClInclude>
     <ClInclude Include="DefaultMovement.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="CoilyMovementComponent.h" />
+    <ClInclude Include="DestroyOnPlayerDamageComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CoilyMovementComponent.h">
+      <Filter>Components\Characters</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

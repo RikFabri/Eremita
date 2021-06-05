@@ -20,8 +20,10 @@ void dae::SubjectComponent::Unsubscribe(ObserverInterface* pObserver)
 	}
 	else
 	{
-		// Don't remove observers while broadcasting
-		m_pObserversToRemove.push_back(pObserver);
+		if (pObserver)
+		{	// Don't remove observers while broadcasting
+			m_pObserversToRemove.push_back(pObserver);
+		}
 	}
 }
 
@@ -40,7 +42,7 @@ void dae::SubjectComponent::Broadcast(BaseComponent* pComponent, const std::stri
 		{
 			endIt = std::remove(m_pObservers.begin(), endIt, observer);
 		}
-		m_pObservers.erase(m_pObservers.begin(), endIt);
+		m_pObservers.erase(endIt, m_pObservers.end());
 		m_pObserversToRemove.clear();
 	}
 

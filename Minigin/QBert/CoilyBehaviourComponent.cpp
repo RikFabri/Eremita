@@ -9,7 +9,6 @@
 
 CoilyBehaviourComponent::CoilyBehaviourComponent()
 	: m_Index({0, 0})
-	, m_IsEgg(true)
 	, m_pTileMapRef(nullptr)
 	, m_QBertRef()
 	, m_pTimerCompRef(nullptr)
@@ -38,10 +37,6 @@ void CoilyBehaviourComponent::Init(dae::SceneObject& parent)
 void CoilyBehaviourComponent::Update(dae::SceneObject& parent)
 {
 	KillQbertIfClose(parent);
-
-	//m_IsEgg ? HatchEgg() : UpdateCoily(parent);
-	//if (!m_IsEgg)
-	//	UpdateCoily(parent);
 }
 
 void CoilyBehaviourComponent::KillQbertIfClose(dae::SceneObject& parent)
@@ -57,6 +52,7 @@ void CoilyBehaviourComponent::KillQbertIfClose(dae::SceneObject& parent)
 
 
 	const auto coilyToQbertDistance = glm::distance(qbertPos, pos);
+
 	if (coilyToQbertDistance < killDistance)
 	{
 		const auto qbertBehaviour = qbert->GetFirstComponentOfType<QBertBehaviourComponent>();
@@ -66,23 +62,17 @@ void CoilyBehaviourComponent::KillQbertIfClose(dae::SceneObject& parent)
 
 void CoilyBehaviourComponent::HatchEgg(dae::SceneObject& parent)
 {
-	parent;
-
-	m_IsEgg = false;
 	m_pRenderCompRef->SetTexture("Coily.png");
 
 	const auto defaultMovement = static_cast<DefaultMovement*>(m_pDefaultMovement);
 	auto coilyMovement = new CoilyMovementComponent();
+	// Set the new movement's position on the tiles grid
 	coilyMovement->SetIndex(defaultMovement->GetBlockIndex());
 	coilyMovement->Init(parent);
 
+	// Swap movement components
 	parent.RemoveComponent(defaultMovement);
 	parent.AddComponentAfterUpdate(coilyMovement);
 
 	m_pDefaultMovement = coilyMovement;
-}
-
-void CoilyBehaviourComponent::UpdateCoily(dae::SceneObject& parent)
-{
-	parent;
 }

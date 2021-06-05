@@ -26,9 +26,7 @@ public:
 private:
 	void KillQbertIfClose(dae::SceneObject& parent);
 	void HatchEgg(dae::SceneObject& parent);
-	void UpdateCoily(dae::SceneObject& parent);
 
-	bool m_IsEgg;
 	// Positional index on the map
 	int2 m_Index;
 
