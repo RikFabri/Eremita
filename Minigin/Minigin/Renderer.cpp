@@ -7,6 +7,7 @@
 #include "Logger.h"
 #include "backends/imgui_impl_opengl2.h"
 #include "backends/imgui_impl_sdl.h"
+#include "WidgetManager.h"
 
 int GetOpenGLDriverIndex()
 {
@@ -43,6 +44,7 @@ void dae::Renderer::Render()
 {
 	SDL_RenderClear(m_Renderer);
 
+	WidgetManager::GetInstance().Render();
 	SceneManager::GetInstance().Render();
 	
 	ImGui_ImplOpenGL2_NewFrame();

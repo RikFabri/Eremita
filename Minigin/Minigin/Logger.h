@@ -7,7 +7,6 @@ namespace dae
     class Logger : public Singleton<Logger>
     {
     public:
-        Logger();
     	
         void Render();
 
@@ -15,6 +14,7 @@ namespace dae
         void ClearLog();
         void SaveLog(const std::string& path);
     private:
+        Logger();
         bool m_IsOpen;
     	
         std::stringstream m_Log;
