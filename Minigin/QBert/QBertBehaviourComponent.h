@@ -22,6 +22,8 @@ public:
 
 	void Move(int x, int y);
 	void Damage();
+	// Sets the block index but doesn't automatically update position
+	void SetBlockIndex(const int2& idx);
 	bool UsedDisk() const;
 	const glm::vec3& GetPreviousPos() const;
 private:

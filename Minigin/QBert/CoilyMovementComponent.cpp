@@ -9,7 +9,7 @@
 void CoilyMovementComponent::Init(dae::SceneObject& parent)
 {
 	const auto players = parent.GetScene()->GetObjectsByTag("player");
-	m_QBertRef = players[0];
+	m_QBertRef = players[std::rand() % players.size()];
 
 	auto tileMapObj = parent.GetScene()->GetObjectsByTag("tileMap");
 	m_pTileMapRef = tileMapObj[0]->GetFirstComponentOfType<TileMapComponent>();

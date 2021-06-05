@@ -1,6 +1,7 @@
 #pragma once
 #include <BaseComponent.h>
 #include <memory>
+#include <vector>
 
 class SlickAndSamBehaviourComponent final : public dae::BaseComponent
 {
@@ -13,7 +14,7 @@ private:
 	
 	
 	// No ownership
-	std::weak_ptr<dae::SceneObject> m_QBertRef;
+	std::vector<std::weak_ptr<dae::SceneObject>> m_QBertRefs;
 
 
 };

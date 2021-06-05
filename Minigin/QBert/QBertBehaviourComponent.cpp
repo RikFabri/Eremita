@@ -11,10 +11,6 @@ void QBertBehaviourComponent::Init(dae::SceneObject& parent)
 
 	m_pParent = &parent;
 
-	const auto renderComp = new dae::RenderComponent("QBert.png", {16, -16});
-	renderComp->Init(parent);
-	parent.AddComponent(renderComp, true);
-
 	auto tileMapObj = parent.GetScene()->GetObjectsByTag("tileMap");
 
 	m_pTimerCompRef = new dae::TimerComponent(0.5f);
@@ -32,7 +28,7 @@ void QBertBehaviourComponent::Init(dae::SceneObject& parent)
 	m_pTransformRef = parent.GetFirstComponentOfType<dae::Transform>();
 	m_pHealthCompRef = parent.GetFirstComponentOfType<dae::HealthComponent>();
 
-	const auto pos = m_pTileMapRef->IndexToTilePosition({ 0, 0 });
+	const auto pos = m_pTileMapRef->IndexToTilePosition(m_Index);
 	m_pTransformRef->SetPosition(pos.x, pos.y, 0);
 	m_PrevPos = glm::vec3{ pos, 0 };
 }
@@ -103,6 +99,11 @@ void QBertBehaviourComponent::Damage()
 	const auto pos = m_pTileMapRef->IndexToTilePosition(m_Index);
 	m_pTransformRef->SetPosition(pos.x, pos.y, 0);
 
+}
+
+void QBertBehaviourComponent::SetBlockIndex(const int2& idx)
+{
+	m_Index = idx;
 }
 
 bool QBertBehaviourComponent::UsedDisk() const

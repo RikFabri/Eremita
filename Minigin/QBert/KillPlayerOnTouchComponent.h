@@ -1,6 +1,7 @@
 #pragma once
 #include <BaseComponent.h>
 #include <memory>
+#include <vector>
 
 
 class KillPlayerOnTouchComponent : public dae::BaseComponent
@@ -10,7 +11,7 @@ public:
 	virtual void Update(dae::SceneObject& parent) override;
 
 private:
-	std::weak_ptr<dae::SceneObject> m_QBertRef;
+	std::vector<std::weak_ptr<dae::SceneObject>> m_QBertRefs;
 
 
 };
