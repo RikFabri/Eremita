@@ -7,7 +7,7 @@
 #include "Logger.h"
 #include "backends/imgui_impl_opengl2.h"
 #include "backends/imgui_impl_sdl.h"
-#include "WidgetManager.h"
+#include "WidgetRenderer.h"
 
 int GetOpenGLDriverIndex()
 {
@@ -44,15 +44,12 @@ void dae::Renderer::Render()
 {
 	SDL_RenderClear(m_Renderer);
 
-	WidgetManager::GetInstance().Render();
 	SceneManager::GetInstance().Render();
 	
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplSDL2_NewFrame(m_pWindow);
 	ImGui::NewFrame();
-	//if (m_ShowImGuiDemo)
-	//	ImGui::ShowDemoWindow(&m_ShowImGuiDemo);
-	
+
 	RenderImGUI();
 	
 	ImGui::Render();
@@ -95,11 +92,6 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 
 void dae::Renderer::RenderImGUI()
 {
-	ImGui::Begin("Gamemode");
-	ImGui::Button("Single player", { 100,40 });
-	ImGui::Button("Co-op", { 100,40 });
-	ImGui::Button("Versus", { 100,40 });
-	ImGui::End();
-
+	WidgetRenderer::GetInstance().Render();
 	Logger::GetInstance().Render();
 }

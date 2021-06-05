@@ -1,8 +1,11 @@
 #pragma once
 
-class IWidget
+namespace dae
 {
-public:
-	virtual void Render() = 0;
-};
+	class IWidget
+	{
+	public:
+		virtual void Render() = 0;
+	};
+}
 

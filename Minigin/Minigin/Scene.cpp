@@ -28,6 +28,11 @@ std::vector<std::shared_ptr<SceneObject>> Scene::GetObjectsByTag(const std::stri
 	return objects;
 }
 
+const std::string& dae::Scene::GetName() const
+{
+	return m_Name;
+}
+
 Scene::Scene(const std::string& name) : m_Name(name) {}
 
 Scene::~Scene() = default;

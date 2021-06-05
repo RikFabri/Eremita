@@ -1,7 +1,7 @@
-#include "WidgetManager.h"
+#include "WidgetRenderer.h"
 #include <iterator>
 
-void dae::WidgetManager::Render()
+void dae::WidgetRenderer::Render()
 {
 	m_Rendering = true;
 
@@ -28,7 +28,7 @@ void dae::WidgetManager::Render()
 	}
 }
 
-void dae::WidgetManager::AddWidget(IWidget* widget)
+void dae::WidgetRenderer::AddWidget(IWidget* widget)
 {
 	if (!m_Rendering)
 		m_pWidgets.push_back(widget);
@@ -38,7 +38,7 @@ void dae::WidgetManager::AddWidget(IWidget* widget)
 	}
 }
 
-void dae::WidgetManager::RemoveWidget(IWidget* widget)
+void dae::WidgetRenderer::RemoveWidget(IWidget* widget)
 {
 	if (!m_Rendering)
 	{
@@ -52,7 +52,7 @@ void dae::WidgetManager::RemoveWidget(IWidget* widget)
 	}
 }
 
-dae::WidgetManager::WidgetManager()
+dae::WidgetRenderer::WidgetRenderer()
 	: m_Rendering(false)
 {
 }

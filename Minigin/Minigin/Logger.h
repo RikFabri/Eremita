@@ -14,6 +14,7 @@ namespace dae
         void ClearLog();
         void SaveLog(const std::string& path);
     private:
+        friend class Singleton;
         Logger();
         bool m_IsOpen;
     	

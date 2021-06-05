@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -18,10 +14,14 @@
     <Filter Include="Components\Characters">
       <UniqueIdentifier>{327d79a1-576e-4369-a7a6-2d839a0ca5b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="QBert.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="TileComponent.cpp">
       <Filter>Components\Tiles</Filter>
@@ -60,7 +60,10 @@
       <Filter>Components\Characters</Filter>
     </ClCompile>
     <ClCompile Include="KillPlayerOnTouchComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GamemodeManager.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +103,9 @@
     <ClInclude Include="WrongwayMovementComponent.h">
       <Filter>Components\Characters</Filter>
     </ClInclude>
-    <ClInclude Include="KillPlayerOnTouchComponent.h" />
+    <ClInclude Include="KillPlayerOnTouchComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GamemodeManager.h" />
   </ItemGroup>
 </Project>

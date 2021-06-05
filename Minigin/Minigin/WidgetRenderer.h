@@ -5,15 +5,18 @@
 
 namespace dae
 {
-	class WidgetManager : public Singleton<WidgetManager>
+	class WidgetRenderer : public Singleton<WidgetRenderer>
 	{
 	public:
+
 		void Render();
 
 		void AddWidget(IWidget*);
 		void RemoveWidget(IWidget*);
 	private:
-		WidgetManager();
+		friend class Singleton;
+		WidgetRenderer();
+
 		bool m_Rendering;
 
 		std::vector<IWidget*> m_pWidgets;

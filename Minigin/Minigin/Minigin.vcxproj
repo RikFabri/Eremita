@@ -248,6 +248,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Eremita.h" />
     <ClInclude Include="ISoundService.h" />
+    <ClInclude Include="IWidget.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MiniginPCH.h" />
     <ClInclude Include="NullSound.h" />
@@ -269,6 +270,7 @@
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TimerComponent.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="WidgetRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rdParty\imgui-1.81\backends\imgui_impl_opengl2.cpp" />
@@ -287,6 +289,7 @@
     <ClCompile Include="HealthDisplayComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="ISoundService.cpp" />
+    <ClCompile Include="IWidget.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Eremita.cpp" />
     <ClCompile Include="MiniginPCH.cpp">
@@ -313,6 +316,7 @@
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TimerComponent.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="WidgetRenderer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

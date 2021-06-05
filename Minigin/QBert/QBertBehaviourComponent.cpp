@@ -34,6 +34,7 @@ void QBertBehaviourComponent::Init(dae::SceneObject& parent)
 
 	const auto pos = m_pTileMapRef->IndexToTilePosition({ 0, 0 });
 	m_pTransformRef->SetPosition(pos.x, pos.y, 0);
+	m_PrevPos = glm::vec3{ pos, 0 };
 }
 
 void QBertBehaviourComponent::Update(dae::SceneObject&)

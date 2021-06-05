@@ -19,7 +19,6 @@ namespace dae
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
-		InputManager();
 		
 		bool ProcessInput();
 
@@ -35,6 +34,10 @@ namespace dae
 		void UnSubscribeToControllerEvents(ObserverInterface* observer);
 
 	private:
+		friend class Singleton;
+		InputManager();
+
+
 		// This array keeps track of which controllers are in use
 		bool m_VirtualControllerRegisteredAtId[XUSER_MAX_COUNT];
 		// This array keeps track of the physically connected controllers
