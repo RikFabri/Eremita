@@ -56,6 +56,19 @@ TileComponent::TileState TileComponent::HopOnTile()
 	return TileState::eProgress;
 }
 
+TileComponent::TileState TileComponent::RevertTile()
+{
+	if (m_CurrentJumps >= 1)
+	{
+		m_CurrentJumps = 0;
+		m_TileTex = ResourceManager::GetInstance().LoadTexture("Tile1_" + std::to_string(m_CurrentJumps) + ".png");
+		return TileState::eUncompleted;
+	}
+
+	return TileState::eProgress;
+	
+}
+
 int TileComponent::GetTileSize()
 {
 	return TileSize;

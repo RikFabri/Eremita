@@ -126,7 +126,7 @@ void LoadGame()
 	const auto destroySlickOnReset = new DestroyOnPlayerDamageComponent();
 	const auto slickTimer = new TimerComponent(1);
 	const auto slickBehaviour = new SlickAndSamBehaviourComponent();
-	const auto slickMovement = new DefaultMovement();
+	const auto slickMovement = new DefaultMovement(false, true, true);
 	const auto slick = std::make_shared<SceneObject>(pComponentVec{ slickTimer, slickMovement, slickBehaviour, destroySlickOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "slick");
 	slick->AddComponent(slickRenderer, true);
 	scene.Add(slick);
@@ -136,7 +136,7 @@ void LoadGame()
 	const auto destroySamOnReset = new DestroyOnPlayerDamageComponent();
 	const auto samTimer = new TimerComponent(1);
 	const auto samBehaviour = new SlickAndSamBehaviourComponent();
-	const auto samMovement = new DefaultMovement();
+	const auto samMovement = new DefaultMovement(false, true, true);
 	const auto sam = std::make_shared<SceneObject>(pComponentVec{ samTimer, samMovement, samBehaviour, destroySamOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "sam");
 	sam->AddComponent(samRenderer, true);
 	scene.Add(sam);

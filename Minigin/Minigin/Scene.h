@@ -8,8 +8,9 @@ namespace dae
 	{
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
+		// Only use this during loadgame
 		void Add(const std::shared_ptr<SceneObject>& object);
-		// Adds object after initialization, it's your responsibility to initialize said object
+		// Adds object created after scene initialization
 		void AddAfterInitialize(const std::shared_ptr<SceneObject>& object);
 		void Remove(const std::shared_ptr<SceneObject>& object);
 		void Remove(const SceneObject* object);

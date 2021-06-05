@@ -6,8 +6,10 @@
 #include <utility>
 #include <random>
 
-DefaultMovement::DefaultMovement(bool moveUp)
+DefaultMovement::DefaultMovement(bool moveUp, bool interactWithTiles, bool reverseTiles)
 	: m_MoveUp(moveUp)
+	, m_InteractWithTiles(interactWithTiles)
+	, m_ReverseTiles(reverseTiles)
 {
 }
 
@@ -37,7 +39,11 @@ void DefaultMovement::Update(dae::SceneObject& parent)
 	const auto isNextLocationValid = m_pTileMapRef->IsBlockIndexValid(nextIndex);
 
 	if (isNextLocationValid)
+	{
 		m_Index = nextIndex;
+		if (m_InteractWithTiles)
+			m_pTileMapRef->HoppedOnTile(m_Index, m_ReverseTiles);
+	}
 	else
 	{
 		if (m_ReachedEndCallback)

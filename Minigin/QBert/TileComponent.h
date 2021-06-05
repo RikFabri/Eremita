@@ -29,6 +29,7 @@ public:
 	
 	// Updates the tileState and returns whether or not it's complete.
 	TileState HopOnTile();
+	TileState RevertTile();
 
 	static int GetTileSize();
 private:

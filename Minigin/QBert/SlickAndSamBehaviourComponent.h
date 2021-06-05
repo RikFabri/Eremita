@@ -9,7 +9,7 @@ public:
 	virtual void Update(dae::SceneObject& parent) override;
 
 private:
-	void KillIfQbertClose(dae::SceneObject& parent);
+	void DieIfQbertClose(dae::SceneObject& parent);
 	
 	
 	// No ownership

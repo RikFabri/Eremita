@@ -1,4 +1,5 @@
 #include "SlickAndSamBehaviourComponent.h"
+#include "DefaultMovement.h"
 #include "SceneObject.h"
 #include "Scene.h"
 
@@ -7,14 +8,18 @@ void SlickAndSamBehaviourComponent::Init(dae::SceneObject& parent)
 	const auto players = parent.GetScene()->GetObjectsByTag("player");
 	m_QBertRef = players[0];
 
+	parent.GetFirstComponentOfType<DefaultMovement>()->SetReachedEnd([](dae::SceneObject& parent)
+		{
+			parent.GetScene()->Remove(&parent);
+		});
 }
 
 void SlickAndSamBehaviourComponent::Update(dae::SceneObject& parent)
 {
-	KillIfQbertClose(parent);
+	DieIfQbertClose(parent);
 }
 
-void SlickAndSamBehaviourComponent::KillIfQbertClose(dae::SceneObject& parent)
+void SlickAndSamBehaviourComponent::DieIfQbertClose(dae::SceneObject& parent)
 {
 	const int killDistance = 8;
 

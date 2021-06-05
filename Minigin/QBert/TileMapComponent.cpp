@@ -49,7 +49,6 @@ void TileMapComponent::Init(dae::SceneObject& parent)
 		disk->AddComponent(renderComp, true);
 
 		parent.GetScene()->AddAfterInitialize(disk);
-		disk->Init();
 
 		m_Disks[idx] = disk;
 	}
@@ -62,7 +61,6 @@ void TileMapComponent::Init(dae::SceneObject& parent)
 		disk->AddComponent(renderComp, true);
 
 		parent.GetScene()->AddAfterInitialize(disk);
-		disk->Init();
 
 		m_Disks[idx] = disk;
 	}
@@ -75,9 +73,14 @@ void TileMapComponent::Update(dae::SceneObject& parent)
 			tile->Update(parent);
 }
 
-void TileMapComponent::HoppedOnTile(const int2& blockIndex)
+void TileMapComponent::HoppedOnTile(const int2& blockIndex, bool forceReverse)
 {
-	const auto tileChange = m_Tiles[blockIndex.second][blockIndex.first]->HopOnTile();
+	auto tileChange = TileComponent::TileState::eProgress;
+
+	if(!forceReverse)
+		tileChange = m_Tiles[blockIndex.second][blockIndex.first]->HopOnTile();
+	else
+		tileChange = m_Tiles[blockIndex.second][blockIndex.first]->RevertTile();
 
 	switch (tileChange)
 	{

@@ -14,7 +14,7 @@ class TileMapComponent;
 class DefaultMovement : public dae::BaseComponent
 {
 public:
-	DefaultMovement(bool moveUp = false);
+	DefaultMovement(bool moveUp = false, bool interactWithTiles = false, bool reverseTiles = false);
 
 	virtual void Init(dae::SceneObject& parent) override;
 	virtual void Update(dae::SceneObject& parent) override;
@@ -25,6 +25,8 @@ private:
 	std::function<void(dae::SceneObject& parent)> m_ReachedEndCallback;
 
 	bool m_MoveUp;
+	bool m_InteractWithTiles;
+	bool m_ReverseTiles;
 	int2 m_Index;
 
 	// No ownership

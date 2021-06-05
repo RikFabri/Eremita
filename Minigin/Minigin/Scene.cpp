@@ -40,6 +40,8 @@ void Scene::Add(const std::shared_ptr<SceneObject>& object)
 
 void dae::Scene::AddAfterInitialize(const std::shared_ptr<SceneObject>& object)
 {
+	object->SetScene(this);
+	object->Init();
 	m_ObjectsToBeAddedPostInit.emplace_back(object);
 }
 
@@ -59,6 +61,7 @@ void Scene::Init()
 		object->Init();
 
 	std::move(m_ObjectsToBeAddedPostInit.begin(), m_ObjectsToBeAddedPostInit.end(), std::back_inserter(m_Objects));
+	m_ObjectsToBeAddedPostInit.clear();
 }
 
 void Scene::FixedUpdate()
@@ -96,6 +99,13 @@ void Scene::Update()
 		}
 		m_Objects.erase(endIt, m_Objects.end());
 		m_ObjectsToBeRemovedRP.clear();
+	}
+
+	// Add objects created past initialization
+	if (!m_ObjectsToBeAddedPostInit.empty())
+	{
+		std::move(m_ObjectsToBeAddedPostInit.begin(), m_ObjectsToBeAddedPostInit.end(), std::back_inserter(m_Objects));
+		m_ObjectsToBeAddedPostInit.clear();
 	}
 }
 
