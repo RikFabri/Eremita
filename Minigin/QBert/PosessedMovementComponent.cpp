@@ -4,10 +4,11 @@
 #include "Transform.h"
 #include "Scene.h"
 
-PosessedMovementComponent::PosessedMovementComponent(bool canInteractWBlocks, bool canUseDisks, bool canJumpOff)
+PosessedMovementComponent::PosessedMovementComponent(bool canInteractWBlocks, bool canUseDisks, bool canJumpOff, bool isEnabled)
 	: m_CanJumpOff(canJumpOff)
 	, m_CanUseDisks(canUseDisks)
 	, m_InteractWithBlocks(canInteractWBlocks)
+	, m_Enabled(isEnabled)
 {
 }
 
@@ -23,6 +24,9 @@ void PosessedMovementComponent::Init(dae::SceneObject& parent)
 
 void PosessedMovementComponent::Update(dae::SceneObject&)
 {
+	if (!m_Enabled)
+		return;
+
 	if (m_UsedDisk)
 	{
 		m_UsedDisk = false;
@@ -32,6 +36,9 @@ void PosessedMovementComponent::Update(dae::SceneObject&)
 
 void PosessedMovementComponent::Move(int x, int y)
 {
+	if (!m_Enabled)
+		return;
+
 	if (!m_pTimerCompRef->TimerCompleted())
 	{
 		return;
@@ -95,6 +102,11 @@ void PosessedMovementComponent::UpdateVisualLocation()
 {
 	const auto pos = m_pTileMapRef->IndexToTilePosition(m_Index);
 	m_pTransformRef->SetPosition(pos.x, pos.y, 0);
+}
+
+void PosessedMovementComponent::SetEnabled(bool enabled)
+{
+	m_Enabled = enabled;
 }
 
 bool PosessedMovementComponent::UsedDisk() const

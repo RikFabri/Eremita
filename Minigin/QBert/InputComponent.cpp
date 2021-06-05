@@ -57,6 +57,7 @@ void InputComponent::Init(SceneObject& parent)
 	}
 
 	m_pMovementCompRef = parent.GetFirstComponentOfType<PosessedMovementComponent>();
+	m_pMovementCompRef->SetEnabled(true);
 	
 	InputManager::GetInstance().AddInputAction(
 	{XINPUT_GAMEPAD_DPAD_LEFT, m_ControllerId}, new ExecuteFunction([this]()

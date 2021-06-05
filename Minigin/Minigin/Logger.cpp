@@ -5,8 +5,12 @@
 
 
 dae::Logger::Logger()
-	: m_IsOpen(true)
+	: m_IsOpen(false)
 {
+#if _DEBUG
+	m_IsOpen = true;
+#endif // _DEBUG
+
 }
 
 void dae::Logger::Render()
@@ -33,7 +37,9 @@ void dae::Logger::Print(const std::string& message, const std::string& lineEnd)
 {
 	m_Log << message << lineEnd;
 
+#if _DEBUG
 	m_IsOpen = true;
+#endif
 }
 
 void dae::Logger::ClearLog()

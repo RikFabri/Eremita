@@ -46,14 +46,23 @@ void GamemodeManager::Render()
 	ImGui::Begin("Gamemode", &m_IsOpen);
 
 	if (ImGui::Button("Single player", { 100,40 }))
+	{
+		StopPlaying();
 		LoadAI();
+	}
 
 	if (ImGui::Button("Co-op", { 100,40 }))
+	{
+		StopPlaying();
 		LoadCoop();
-
+	}
+	
 	if (ImGui::Button("Versus", { 100,40 }))
+	{
+		StopPlaying();
 		LoadVersus();
-
+	}
+	
 	if (ImGui::Button("Reset scenes", { 100,40 }))
 		StopPlaying();
 
@@ -67,6 +76,7 @@ void GamemodeManager::LoadAI()
 
 	m_CurrentGamemode = Gamemode::eAI;
 
+#pragma region Load AI level
 	// -------------- LOAD LEVEL ----------------
 	using pComponentVec = std::vector<BaseComponent*>;
 	const auto sceneName = "AI";
@@ -177,6 +187,7 @@ void GamemodeManager::LoadAI()
 
 	scene.Init();
 	// ------------------------------------------
+#pragma endregion
 }
 
 void GamemodeManager::LoadCoop()
@@ -186,6 +197,7 @@ void GamemodeManager::LoadCoop()
 
 	m_CurrentGamemode = Gamemode::eCoop;
 
+#pragma region Load Co-op Level
 	// -------------- LOAD LEVEL ----------------
 	using pComponentVec = std::vector<BaseComponent*>;
 	const auto sceneName = "Co-op";
@@ -326,6 +338,8 @@ void GamemodeManager::LoadCoop()
 
 	scene.Init();
 	// ------------------------------------------
+#pragma endregion
+
 }
 
 void GamemodeManager::LoadVersus()
@@ -334,6 +348,121 @@ void GamemodeManager::LoadVersus()
 		return;
 
 	m_CurrentGamemode = Gamemode::eVersus;
+
+#pragma region Load versus level
+	// -------------- LOAD LEVEL ----------------
+	using pComponentVec = std::vector<BaseComponent*>;
+	const auto sceneName = "Versus";
+
+	// If scene already exists, set it and return
+	if (SceneManager::GetInstance().SetActiveScene(sceneName))
+		return;
+
+	auto& scene = SceneManager::GetInstance().CreateScene(sceneName);
+
+	const auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 27);
+
+	// Map
+	const auto map = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 288,64,0 });
+	map->AddComponent(new TileMapComponent(), true);
+	map->SetTag("tileMap");
+	scene.Add(map);
+
+	// FPS display
+	auto* const pRenderComponent = new RenderComponent();
+	auto* const pTextComponent = new TextComponent("60", font, SDL_Color{ 255,255,255 });
+	auto* const pFPSComponent = new FPSComponent();
+
+	const auto fpsObject = std::make_shared<SceneObject>(pComponentVec{ pFPSComponent, pTextComponent });
+	fpsObject->AddComponent(pRenderComponent, true);
+
+	scene.Add(fpsObject);
+
+	// Lives display
+	const auto livesDisplay = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 0,30,0 });
+	livesDisplay->AddComponent(new TextComponent("3 lives", font));
+	livesDisplay->AddComponent(new RenderComponent(), true);
+	livesDisplay->AddComponent(new HealthDisplayComponent(0));
+	scene.Add(livesDisplay);
+
+	// Score display
+	const auto scoreDisplay = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 0, 60, 0 });
+	scoreDisplay->AddComponent(new TextComponent("Score: 0", font));
+	scoreDisplay->AddComponent(new RenderComponent(), true);
+	scoreDisplay->AddComponent(new ScoreDisplayComponent(0));
+
+	scene.Add(scoreDisplay);
+
+	// Qbert
+	const auto qbertMovement = new PosessedMovementComponent();
+	qbertMovement->SetBlockIndex({ 0,0 });
+	const auto qBert = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 100, 100, 0 }, glm::vec2{ 2, 2 }, "player");
+	qBert->AddComponent(new dae::RenderComponent("QBert.png", { 16, -16 }), true);
+	qBert->AddComponent(new HealthComponent());
+	qBert->AddComponent(new SubjectComponent());
+	qBert->AddComponent(new ScoreComponent());
+	qBert->AddComponent(new InputComponent());
+	qBert->AddComponent(new TimerComponent(0.5f));
+	qBert->AddComponent(qbertMovement);
+	qBert->AddComponent(new QBertBehaviourComponent());
+	scene.Add(qBert);
+
+	// Coily
+	const auto coilyRenderer = new RenderComponent("Coily_egg.png", { 16, -16 });
+	const auto coilyBehaviour = new CoilyBehaviourComponent(true);
+	const auto coilyTimer = new TimerComponent(0.5f);
+	const auto destroyOnReset = new DestroyOnPlayerDamageComponent();
+	const auto eggMovement = new DefaultMovement();
+	const auto possessedMovement = new PosessedMovementComponent(false, false, false, false);
+	auto dmgPlayerComp = new KillPlayerOnTouchComponent();
+	const auto coily = std::make_shared<SceneObject>(pComponentVec{ possessedMovement, coilyTimer, eggMovement, coilyBehaviour, destroyOnReset, dmgPlayerComp }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "coily");
+	coily->AddComponent(coilyRenderer, true);
+	scene.Add(coily);
+
+	// Slick
+	const auto slickRenderer = new RenderComponent("Slick.png", { 16, -16 });
+	const auto destroySlickOnReset = new DestroyOnPlayerDamageComponent();
+	const auto slickTimer = new TimerComponent(1);
+	const auto slickBehaviour = new SlickAndSamBehaviourComponent();
+	const auto slickMovement = new DefaultMovement(false, true, true);
+	const auto slick = std::make_shared<SceneObject>(pComponentVec{ slickTimer, slickMovement, slickBehaviour, destroySlickOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "slick");
+	slick->AddComponent(slickRenderer, true);
+	scene.Add(slick);
+
+	// Sam
+	const auto samRenderer = new RenderComponent("Sam.png", { 16, -16 });
+	const auto destroySamOnReset = new DestroyOnPlayerDamageComponent();
+	const auto samTimer = new TimerComponent(1);
+	const auto samBehaviour = new SlickAndSamBehaviourComponent();
+	const auto samMovement = new DefaultMovement(false, true, true);
+	const auto sam = std::make_shared<SceneObject>(pComponentVec{ samTimer, samMovement, samBehaviour, destroySamOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "sam");
+	sam->AddComponent(samRenderer, true);
+	scene.Add(sam);
+
+	// Ugg
+	const auto uggRenderer = new RenderComponent("Ugg.png", { 16, -16 });
+	const auto destroyUggOnReset = new DestroyOnPlayerDamageComponent();
+	const auto uggTimer = new TimerComponent(1);
+	dmgPlayerComp = new KillPlayerOnTouchComponent();
+	const auto uggMovement = new UggMovementComponent();
+	const auto ugg = std::make_shared<SceneObject>(pComponentVec{ uggTimer, uggMovement, destroyUggOnReset, dmgPlayerComp }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "ugg");
+	ugg->AddComponent(uggRenderer, true);
+	scene.Add(ugg);
+
+	// Wrongway
+	const auto wrongWayRenderer = new RenderComponent("Wrongway.png", { 16, -16 });
+	const auto destroywrongWayOnReset = new DestroyOnPlayerDamageComponent();
+	const auto wrongWayTimer = new TimerComponent(1);
+	const auto wrongWayMovement = new WrongwayMovementComponent();
+	dmgPlayerComp = new KillPlayerOnTouchComponent();
+	const auto wrongWay = std::make_shared<SceneObject>(pComponentVec{ wrongWayTimer, wrongWayMovement, destroywrongWayOnReset, dmgPlayerComp }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "wrongWay");
+	wrongWay->AddComponent(wrongWayRenderer, true);
+	scene.Add(wrongWay);
+
+	scene.Init();
+	// ------------------------------------------
+
+#pragma endregion
 
 
 	dae::Logger::GetInstance().Print("LoadVersus");

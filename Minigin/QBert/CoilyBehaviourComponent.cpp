@@ -1,16 +1,19 @@
 #include "CoilyBehaviourComponent.h"
+#include "PosessedMovementComponent.h"
 #include "QBertBehaviourComponent.h"
 #include "CoilyMovementComponent.h"
 #include "TileMapComponent.h"
 #include "RenderComponent.h"
 #include "DefaultMovement.h"
+#include "InputComponent.h"
 #include "SceneObject.h"
 #include "Scene.h"
 
-CoilyBehaviourComponent::CoilyBehaviourComponent()
+CoilyBehaviourComponent::CoilyBehaviourComponent(bool isPossessed)
 	: m_Index({0, 0})
 	, m_pTileMapRef(nullptr)
 	, m_pTimerCompRef(nullptr)
+	, m_Possessed(isPossessed)
 {
 }
 
@@ -34,15 +37,33 @@ void CoilyBehaviourComponent::HatchEgg(dae::SceneObject& parent)
 {
 	m_pRenderCompRef->SetTexture("Coily.png");
 
-	const auto defaultMovement = static_cast<DefaultMovement*>(m_pDefaultMovement);
-	auto coilyMovement = new CoilyMovementComponent();
-	// Set the new movement's position on the tiles grid
-	coilyMovement->SetIndex(defaultMovement->GetBlockIndex());
-	coilyMovement->Init(parent);
+	//To-Do: generalize movement components to get rid of this duplicate code.
+	if (m_Possessed)
+	{
+		const auto defaultMovement = static_cast<DefaultMovement*>(m_pDefaultMovement);
+		auto coilyMovement = parent.GetFirstComponentOfType<PosessedMovementComponent>();
+		// Set the new movement's position on the tiles grid
+		coilyMovement->SetBlockIndex(defaultMovement->GetBlockIndex());
+		coilyMovement->Init(parent);
 
-	// Swap movement components
-	parent.RemoveComponent(defaultMovement);
-	parent.AddComponentAfterUpdate(coilyMovement);
+		parent.RemoveComponent(defaultMovement);
 
-	m_pDefaultMovement = coilyMovement;
+		auto inputComp = new InputComponent();
+		inputComp->Init(parent);
+		parent.AddComponentAfterUpdate(inputComp);
+	}
+	else
+	{
+		const auto defaultMovement = static_cast<DefaultMovement*>(m_pDefaultMovement);
+		auto coilyMovement = new CoilyMovementComponent();
+		// Set the new movement's position on the tiles grid
+		coilyMovement->SetIndex(defaultMovement->GetBlockIndex());
+		coilyMovement->Init(parent);
+
+		// Swap movement components
+		parent.RemoveComponent(defaultMovement);
+		parent.AddComponentAfterUpdate(coilyMovement);
+		m_pDefaultMovement = coilyMovement;
+	}
+
 }

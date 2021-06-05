@@ -17,13 +17,15 @@ using int2 = std::pair<int, int>;
 class CoilyBehaviourComponent final : public dae::BaseComponent
 {
 public:
-	CoilyBehaviourComponent();
+	CoilyBehaviourComponent(bool isPossessed = false);
 
 	virtual void Init(dae::SceneObject&) override;
 
 private:
 	void HatchEgg(dae::SceneObject& parent);
 
+	// Whether or not to use ai/player input after hatching
+	bool m_Possessed;
 	// Positional index on the map
 	int2 m_Index;
 

@@ -16,7 +16,7 @@ using int2 = std::pair<int, int>;
 class PosessedMovementComponent : public dae::BaseComponent
 {
 public:
-	PosessedMovementComponent(bool canInteractWBlocks = true, bool canUseDisks = true, bool canJumpOff = true);
+	PosessedMovementComponent(bool canInteractWBlocks = true, bool canUseDisks = true, bool canJumpOff = true, bool isEnabled = true);
 
 	virtual void Init(dae::SceneObject& parent) override;
 	virtual void Update(dae::SceneObject& parent) override;
@@ -26,10 +26,12 @@ public:
 	// Sets the block index but doesn't automatically update position
 	void SetBlockIndex(const int2& idx);
 	void UpdateVisualLocation();
+	void SetEnabled(bool enabled);
 	bool UsedDisk() const;
 	const glm::vec3& GetPreviousPos() const;
 	void SetJumpedOffCallback(const std::function<void()>& func);
 private:
+	bool m_Enabled;
 	bool m_InteractWithBlocks;
 	bool m_CanUseDisks;
 	bool m_CanJumpOff;

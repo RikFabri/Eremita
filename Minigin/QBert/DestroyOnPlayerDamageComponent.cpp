@@ -42,8 +42,10 @@ void DestroyOnPlayerDamageComponent::UnSubscribeFromAllPlayers()
 	{
 		if (subject.expired())
 		{
+#if _DEBUG
 			dae::Logger::GetInstance().Print("couldn't unsubscribe");
 			dae::Logger::GetInstance().SaveLog("Log.txt");
+#endif // _DEBUG
 			continue;
 		}
 
