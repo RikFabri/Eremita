@@ -16,13 +16,16 @@ namespace dae
 		void Update();
 		void Render();
 
-		void SetActiveScene(const std::string& name);
+		// Sets the scene or returns false if it doesn't exist
+		bool SetActiveScene(const std::string& name);
+		// Removes a scene by name or returns false if it doesn't exist, the active scene is kept alive until a new active is set
+		bool RemoveSceneByName(const std::string& name);
 		void SetScenePaused(bool paused);
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
 
-		bool m_Initialized;
+		bool m_ValidActiveScene;
 		bool m_ScenePaused;
 
 		std::shared_ptr<Scene> m_ActiveScene;

@@ -131,6 +131,23 @@ void dae::InputManager::UnSubscribeToControllerEvents(ObserverInterface* observe
 	m_pSubjectComponent->Unsubscribe(observer);
 }
 
+void dae::InputManager::Reset()
+{
+	m_InputCommandMap.clear();
+	m_InputState.clear();
+
+	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i)
+	{
+		m_VirtualControllerRegisteredAtId[i] = false;
+		m_PhysicalControllerConnectedAtId[i] = false;
+	}
+
+	m_pSubjectComponent.reset(new SubjectComponent());
+
+	// This repopulates the controller states
+	ProcessInput();
+}
+
 size_t dae::InputManager::ControllerButtonHash(const ControllerButton& controllerButton)
 {
 	const auto hash = std::hash<WORD>();

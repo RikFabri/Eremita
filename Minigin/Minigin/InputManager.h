@@ -33,6 +33,7 @@ namespace dae
 		// No longer be notified when a controller connects/disconnects
 		void UnSubscribeToControllerEvents(ObserverInterface* observer);
 
+		void Reset();
 	private:
 		friend class Singleton;
 		InputManager();
@@ -43,10 +44,8 @@ namespace dae
 		// This array keeps track of the physically connected controllers
 		bool m_PhysicalControllerConnectedAtId[XUSER_MAX_COUNT];
 
-		// -------------------- Observer pattern fits better here ------------- //
 		void ControllerConnected() const;
 		void ControllerDisconnected() const;
-		// -------------------------------------------------------------------- //
 		
 		static size_t ControllerButtonHash(const ControllerButton& controllerButton);
 		static bool CompareControllerButton(const ControllerButton& cb1, const ControllerButton& cb2);

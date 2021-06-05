@@ -27,6 +27,7 @@
 #include "WrongwayMovementComponent.h"
 #include "UggMovementComponent.h"
 #include "DefaultMovement.h"
+#include "InputManager.h"
 
 using namespace dae;
 
@@ -52,6 +53,9 @@ void GamemodeManager::Render()
 	if (ImGui::Button("Versus", { 100,40 }))
 		LoadVersus();
 
+	if (ImGui::Button("Close", { 100,40 }))
+		StopPlaying();
+
 	ImGui::End();
 }
 
@@ -62,8 +66,13 @@ void GamemodeManager::LoadAI()
 
 	// -------------- LOAD LEVEL ----------------
 	using pComponentVec = std::vector<BaseComponent*>;
+	const auto sceneName = "AI";
 
-	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
+	// If scene already exists, set it and return
+	if (SceneManager::GetInstance().SetActiveScene(sceneName))
+		return;
+
+	auto& scene = SceneManager::GetInstance().CreateScene(sceneName);
 
 	const auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 27);
 
@@ -207,4 +216,26 @@ void GamemodeManager::LoadVersus()
 
 	dae::Logger::GetInstance().Print("LoadVersus");
 	m_CurrentGamemode = Gamemode::eVersus;
+}
+
+void GamemodeManager::StopPlaying()
+{
+	// Remove scenes
+	m_CurrentGamemode = Gamemode::eNone;
+	SceneManager::GetInstance().RemoveSceneByName("AI");
+	SceneManager::GetInstance().RemoveSceneByName("Co-op");
+	SceneManager::GetInstance().RemoveSceneByName("Versus");
+
+	// All gamemodes reconfigure it themselves, remove old settings
+	InputManager::GetInstance().Reset();
+
+	// Create an empty scene, otherwise the current one gets kept alive
+	const auto sceneName = "Empty";
+
+	// If scene already exists, set it and return
+	if (SceneManager::GetInstance().SetActiveScene(sceneName))
+		return;
+
+	SceneManager::GetInstance().CreateScene(sceneName);
+
 }

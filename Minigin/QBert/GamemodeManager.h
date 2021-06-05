@@ -20,6 +20,7 @@ private:
 	void LoadAI();
 	void LoadCoop();
 	void LoadVersus();
+	void StopPlaying();
 
 	bool m_IsOpen;
 
