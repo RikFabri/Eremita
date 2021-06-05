@@ -4,6 +4,13 @@
 #include "Transform.h"
 #include "Scene.h"
 
+PosessedMovementComponent::PosessedMovementComponent(bool canInteractWBlocks, bool canUseDisks, bool canJumpOff)
+	: m_CanJumpOff(canJumpOff)
+	, m_CanUseDisks(canUseDisks)
+	, m_InteractWithBlocks(canInteractWBlocks)
+{
+}
+
 void PosessedMovementComponent::Init(dae::SceneObject& parent)
 {
 	auto tileMapObj = parent.GetScene()->GetObjectsByTag("tileMap");
@@ -11,6 +18,7 @@ void PosessedMovementComponent::Init(dae::SceneObject& parent)
 
 	m_pTimerCompRef = parent.GetFirstComponentOfType<dae::TimerComponent>();
 	m_pTransformRef = parent.GetFirstComponentOfType<dae::Transform>();
+	m_pParent = &parent;
 }
 
 void PosessedMovementComponent::Update(dae::SceneObject&)
@@ -39,13 +47,16 @@ void PosessedMovementComponent::Move(int x, int y)
 	auto isDisk = false;
 	auto isValid = m_pTileMapRef->IsBlockIndexValid(m_Index);
 
-	if (!isValid)
+	if (!isValid && m_CanUseDisks)
 		isDisk = isValid = m_pTileMapRef->IsBlockIndexDisk(m_Index);
 
 	if (isValid)
 	{
 		if (!isDisk)
-			m_pTileMapRef->HoppedOnTile(m_Index);
+		{
+			if(m_InteractWithBlocks)
+				m_pTileMapRef->HoppedOnTile(m_Index);
+		}
 		else
 		{
 			m_pTileMapRef->HoppedOnDisk(m_Index, m_pParent);
@@ -55,8 +66,14 @@ void PosessedMovementComponent::Move(int x, int y)
 	}
 	else
 	{
-		if (m_JumpedOff)
+		if (m_CanJumpOff && m_JumpedOff)
 			m_JumpedOff();
+		else
+		{
+			m_Index.first -= x;
+			m_Index.second -= y;
+			return;
+		}
 	}
 
 	const auto pos = m_pTileMapRef->IndexToTilePosition(m_Index);

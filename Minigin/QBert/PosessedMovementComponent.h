@@ -16,6 +16,8 @@ using int2 = std::pair<int, int>;
 class PosessedMovementComponent : public dae::BaseComponent
 {
 public:
+	PosessedMovementComponent(bool canInteractWBlocks = true, bool canUseDisks = true, bool canJumpOff = true);
+
 	virtual void Init(dae::SceneObject& parent) override;
 	virtual void Update(dae::SceneObject& parent) override;
 
@@ -28,6 +30,10 @@ public:
 	const glm::vec3& GetPreviousPos() const;
 	void SetJumpedOffCallback(const std::function<void()>& func);
 private:
+	bool m_InteractWithBlocks;
+	bool m_CanUseDisks;
+	bool m_CanJumpOff;
+
 	std::function<void()> m_JumpedOff;
 	int2 m_Index;
 	bool m_UsedDisk;
