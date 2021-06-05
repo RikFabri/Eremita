@@ -16,6 +16,7 @@ public:
 	virtual void Init(dae::SceneObject& parent) override;
 	virtual void Update(dae::SceneObject& parent) override;
 
+	void SetIndex(const int2& idx);
 private:
 	int2 m_Index;
 

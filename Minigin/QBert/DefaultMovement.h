@@ -20,6 +20,7 @@ public:
 	virtual void Update(dae::SceneObject& parent) override;
 
 	void SetReachedEnd(std::function<void(dae::SceneObject& parent)> callback);
+	int2 GetBlockIndex() const;
 private:
 	std::function<void(dae::SceneObject& parent)> m_ReachedEndCallback;
 

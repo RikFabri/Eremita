@@ -39,11 +39,6 @@ void CoilyBehaviourComponent::Update(dae::SceneObject& parent)
 {
 	KillQbertIfClose(parent);
 
-	if (!m_pTimerCompRef->TimerCompleted())
-		return;
-
-	m_pTimerCompRef->Reset();
-
 	//m_IsEgg ? HatchEgg() : UpdateCoily(parent);
 	//if (!m_IsEgg)
 	//	UpdateCoily(parent);
@@ -76,10 +71,15 @@ void CoilyBehaviourComponent::HatchEgg(dae::SceneObject& parent)
 	m_IsEgg = false;
 	m_pRenderCompRef->SetTexture("Coily.png");
 
-	parent.RemoveComponent(m_pDefaultMovement);
-	m_pDefaultMovement = new CoilyMovementComponent();
-	m_pDefaultMovement->Init(parent);
-	parent.AddComponentAfterUpdate(m_pDefaultMovement);
+	const auto defaultMovement = static_cast<DefaultMovement*>(m_pDefaultMovement);
+	auto coilyMovement = new CoilyMovementComponent();
+	coilyMovement->SetIndex(defaultMovement->GetBlockIndex());
+	coilyMovement->Init(parent);
+
+	parent.RemoveComponent(defaultMovement);
+	parent.AddComponentAfterUpdate(coilyMovement);
+
+	m_pDefaultMovement = coilyMovement;
 }
 
 void CoilyBehaviourComponent::UpdateCoily(dae::SceneObject& parent)

@@ -1,5 +1,6 @@
 #include "CoilyMovementComponent.h"
 #include "TileMapComponent.h"
+#include "TimerComponent.h"
 #include "SceneObject.h"
 #include "Scene.h"
 #include <utility>
@@ -12,10 +13,18 @@ void CoilyMovementComponent::Init(dae::SceneObject& parent)
 
 	auto tileMapObj = parent.GetScene()->GetObjectsByTag("tileMap");
 	m_pTileMapRef = tileMapObj[0]->GetFirstComponentOfType<TileMapComponent>();
+
+	m_pTimerCompRef = parent.GetFirstComponentOfType<dae::TimerComponent>();
 }
 
 void CoilyMovementComponent::Update(dae::SceneObject& parent)
 {
+	if (!m_pTimerCompRef->TimerCompleted())
+		return;
+
+	m_pTimerCompRef->Reset();
+
+
 	if (m_QBertRef.expired())
 		return;
 
@@ -42,4 +51,9 @@ void CoilyMovementComponent::Update(dae::SceneObject& parent)
 	m_Index = nextIndex;
 	const auto newPos = m_pTileMapRef->IndexToTilePosition(nextIndex);
 	parent.SetPosition(newPos.x, newPos.y);
+}
+
+void CoilyMovementComponent::SetIndex(const int2& idx)
+{
+	m_Index = idx;
 }

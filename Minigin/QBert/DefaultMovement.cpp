@@ -24,6 +24,8 @@ void DefaultMovement::Update(dae::SceneObject& parent)
 	if (!m_pTimerCompRef->TimerCompleted())
 		return;
 
+	m_pTimerCompRef->Reset();
+
 	// Semi-random movement
 	auto movement = int2(std::rand() & 0b01 ? 1 : 0, 1);
 	if (m_MoveUp)
@@ -50,4 +52,9 @@ void DefaultMovement::Update(dae::SceneObject& parent)
 void DefaultMovement::SetReachedEnd(std::function<void(dae::SceneObject& parent)> callback)
 {
 	m_ReachedEndCallback = callback;
+}
+
+int2 DefaultMovement::GetBlockIndex() const
+{
+	return m_Index;
 }

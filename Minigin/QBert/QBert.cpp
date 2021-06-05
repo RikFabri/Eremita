@@ -109,7 +109,7 @@ void LoadGame()
 	qBert2->SetTag("player");
 	scene.Add(qBert2);
 
-	for (int i = 0; i < 200; ++i)
+	for (int i = 0; i < 1; ++i)
 	{
 		// Coily
 		const auto coilyRenderer = new RenderComponent("Coily_egg.png", { 16, -16 });
