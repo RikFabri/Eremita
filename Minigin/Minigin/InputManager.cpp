@@ -27,7 +27,15 @@ bool dae::InputManager::ProcessInput()
 		const auto dwResult = XInputGetState(i, &state);
 
 		// Check if a controller is connected at this index
-		if (dwResult != ERROR_SUCCESS)
+		if (dwResult == ERROR_SUCCESS)
+		{
+			// If controller is newly connected, fire callbacks
+			if (!m_PhysicalControllerConnectedAtId[i])
+				ControllerConnected();
+
+			m_PhysicalControllerConnectedAtId[i] = true;
+		}
+		else
 		{
 			// If the controller was previously connected, fire callbacks
 			if (m_PhysicalControllerConnectedAtId[i])
@@ -35,33 +43,16 @@ bool dae::InputManager::ProcessInput()
 				ControllerDisconnected();
 				m_PhysicalControllerConnectedAtId[i] = false;
 			}
-			
-			continue;
 		}
 
-		// If controller is newly connected, fire callbacks
-		if (!m_PhysicalControllerConnectedAtId[i])
-			ControllerConnected();
-		
-		m_PhysicalControllerConnectedAtId[i] = true;
-
 		// Iterate over registered input actions and execute them when necessary
+		// This also needs to be done for disconnected controllers since they might have fallback behaviour
 		for (auto& inputCommand : m_InputCommandMap)
 		{
 			CheckInputCommand(inputCommand, i, state);
 		}
 	}
 
-	// No controllers are connected, update all input commands once for keyboard input
-	if (m_ConnectedControllers <= 0)
-	{
-		for (auto& inputCommand : m_InputCommandMap)
-		{
-			// Passing dummy id & state
-			XINPUT_STATE state{};
-			CheckInputCommand(inputCommand, (DWORD)-1, state);
-		}
-	}
 
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
@@ -83,28 +74,49 @@ bool dae::InputManager::IsKeyDown(SDL_Keycode key)
 
 void dae::InputManager::CheckInputCommand(std::pair<const dae::ControllerButton, dae::InputAction>& inputCommand, const DWORD& i, XINPUT_STATE& state)
 {
+	const auto controllerId = inputCommand.first.ControllerId;
 	const auto useController = !inputCommand.first.KeyboardOnly;
-	if (inputCommand.first.ControllerId != i && useController && inputCommand.first.ControllerId != (DWORD)-1)
+	const auto keySet = inputCommand.first.Key != SDLK_UNKNOWN;
+	const auto controllerConnected = controllerId < XUSER_MAX_COUNT && m_PhysicalControllerConnectedAtId[controllerId];
+
+	auto testControllerState = useController;
+
+	// If this controller isn't the right one, return
+	if (controllerId != i)
 	{
-		return;
+		// some inputs might have to fall back to keyboard, only allow this during first iteration
+		if (i != 0)
+			return;
+
+		// If the controller isn't connected or used but a keyboard key is set, fall back
+		if ((!controllerConnected && keySet) || (!useController))
+		{
+			testControllerState = false;
+		}
+		else
+		{
+			return;
+		}
 	}
+
+
 
 	switch (inputCommand.second.eventType)
 	{
 	case EventType::pressed:
-		if (m_InputState[inputCommand.first] == false && ((useController && state.Gamepad.wButtons & inputCommand.first.Button) ||  IsKeyDown(inputCommand.first.Key)))
+		if (m_InputState[inputCommand.first] == false && ((testControllerState && state.Gamepad.wButtons & inputCommand.first.Button) ||  IsKeyDown(inputCommand.first.Key)))
 			inputCommand.second.pCommand->Execute();
 		break;
 	case EventType::released:
-		if (m_InputState[inputCommand.first] == true && !((useController && state.Gamepad.wButtons & inputCommand.first.Button) || IsKeyDown(inputCommand.first.Key)))
+		if (m_InputState[inputCommand.first] == true && !((testControllerState && state.Gamepad.wButtons & inputCommand.first.Button) || IsKeyDown(inputCommand.first.Key)))
 			inputCommand.second.pCommand->Execute();
 		break;
 	case EventType::down:
-		if ((useController && state.Gamepad.wButtons & inputCommand.first.Button) || IsKeyDown(inputCommand.first.Key))
+		if ((testControllerState && state.Gamepad.wButtons & inputCommand.first.Button) || IsKeyDown(inputCommand.first.Key))
 			inputCommand.second.pCommand->Execute();
 	}
 
-	m_InputState[inputCommand.first] = (useController && state.Gamepad.wButtons & inputCommand.first.Button) || IsKeyDown(inputCommand.first.Key);
+	m_InputState[inputCommand.first] = (testControllerState && state.Gamepad.wButtons & inputCommand.first.Button) || IsKeyDown(inputCommand.first.Key);
 }
 
 DWORD dae::InputManager::RegisterController()
