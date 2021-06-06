@@ -8,6 +8,7 @@ namespace dae
 {
 	class TimerComponent;
 	class Transform;
+	class ScoreComponent;
 }
 class TileMapComponent;
 
@@ -43,6 +44,7 @@ private:
 
 	// No ownership
 	dae::TimerComponent* m_pTimerCompRef;
+	dae::ScoreComponent* m_pScoreCompRef;
 	dae::Transform* m_pTransformRef;
 	TileMapComponent* m_pTileMapRef;
 	dae::SceneObject* m_pParent;

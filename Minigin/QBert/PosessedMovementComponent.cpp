@@ -2,6 +2,7 @@
 #include "SoundServiceLocator.h"
 #include "TileMapComponent.h"
 #include "TimerComponent.h"
+#include "ScoreComponent.h"
 #include "Transform.h"
 #include "Scene.h"
 #include "SDL.h"
@@ -22,6 +23,8 @@ void PosessedMovementComponent::Init(dae::SceneObject& parent)
 	m_pTimerCompRef = parent.GetFirstComponentOfType<dae::TimerComponent>();
 	m_pTransformRef = parent.GetFirstComponentOfType<dae::Transform>();
 	m_pParent = &parent;
+
+	m_pScoreCompRef = parent.GetFirstComponentOfType<dae::ScoreComponent>();
 }
 
 void PosessedMovementComponent::Update(dae::SceneObject&)
@@ -69,8 +72,12 @@ void PosessedMovementComponent::Move(int x, int y)
 	{
 		if (!isDisk)
 		{
-			if(m_InteractWithBlocks)
-				m_pTileMapRef->HoppedOnTile(m_Index);
+			if (m_InteractWithBlocks)
+			{
+				const auto causedColourChange = m_pTileMapRef->HoppedOnTile(m_Index);
+				if (causedColourChange && m_pScoreCompRef)
+					m_pScoreCompRef->IncreaseScore(25);
+			}
 		}
 		else
 		{

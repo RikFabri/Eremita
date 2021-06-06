@@ -1,5 +1,6 @@
 #include "SlickAndSamBehaviourComponent.h"
 #include "DefaultMovement.h"
+#include "ScoreComponent.h"
 #include "SceneObject.h"
 #include "Scene.h"
 
@@ -39,6 +40,7 @@ void SlickAndSamBehaviourComponent::DieIfQbertClose(dae::SceneObject& parent)
 		if (distanceToQbert < killDistance)
 		{
 			parent.GetScene()->Remove(&parent);
+			qbert->GetFirstComponentOfType<dae::ScoreComponent>()->IncreaseScore(300);
 		}
 	}
 }

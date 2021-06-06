@@ -23,7 +23,8 @@ public:
 	virtual void Init(dae::SceneObject&) override;
 	virtual void Update(dae::SceneObject&) override;
 
-	void HoppedOnTile(const int2& blockIndex, bool forceReverse = false);
+	// Interacts with tile and returns whether or not you caused a colour change
+	bool HoppedOnTile(const int2& blockIndex, bool forceReverse = false);
 	void HoppedOnDisk(const int2& blockIndex, dae::SceneObject* qBert);
 
 	bool IsBlockIndexValid(const int2& blockIndex) const;

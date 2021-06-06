@@ -11,6 +11,7 @@
 #include <rapidjson.h>
 #include <istreamwrapper.h>
 #include "SubjectComponent.h"
+#include "ScoreComponent.h"
 #include <document.h>
 #include "SoundServiceLocator.h"
 #include "SDL.h"
@@ -42,6 +43,12 @@ void TileMapComponent::Update(dae::SceneObject& parent)
 
 	if (m_SwitchLevel)
 	{
+		const auto nrOfDisksLeft = parent.GetScene()->GetNrOfObjectsByTag("disk");
+		for (auto& qbert : parent.GetScene()->GetObjectsByTag("player"))
+		{
+			qbert->GetFirstComponentOfType<dae::ScoreComponent>()->IncreaseScore(50 * (int)nrOfDisksLeft);
+		}
+
 		dae::SoundServiceLocator::GetSoundService()->PlaySound("../Data/LevelComplete.wav", SDL_MIX_MAXVOLUME / 2);
 		m_pSubjectCompRef->Broadcast(this, "level Changed");
 		m_SwitchLevel = false;
@@ -52,8 +59,9 @@ void TileMapComponent::Update(dae::SceneObject& parent)
 	}
 }
 
-void TileMapComponent::HoppedOnTile(const int2& blockIndex, bool forceReverse)
+bool TileMapComponent::HoppedOnTile(const int2& blockIndex, bool forceReverse)
 {
+	bool causedColourChange = false;
 	auto tileChange = TileComponent::TileState::eProgress;
 
 	if (!forceReverse)
@@ -64,10 +72,15 @@ void TileMapComponent::HoppedOnTile(const int2& blockIndex, bool forceReverse)
 	switch (tileChange)
 	{
 	case TileComponent::TileState::eNewlyCompleted:
+		causedColourChange = true;
 		++m_CompletedTiles;
 		break;
 	case TileComponent::TileState::eUncompleted:
+		causedColourChange = true;
 		--m_CompletedTiles;
+		break;
+	case TileComponent::TileState::eProgress:
+		causedColourChange = true;
 		break;
 	default:
 		break;
@@ -78,6 +91,8 @@ void TileMapComponent::HoppedOnTile(const int2& blockIndex, bool forceReverse)
 		dae::Logger::GetInstance().Print("Level complete");
 		m_SwitchLevel = true;
 	}
+
+	return causedColourChange;
 }
 
 void TileMapComponent::HoppedOnDisk(const int2& blockIndex, dae::SceneObject* qBert)
@@ -137,7 +152,7 @@ glm::vec2 TileMapComponent::IndexToTilePosition(const int2& blockIndex, bool abs
 	}
 
 	//dae::Logger::GetInstance().Print(std::to_string(cartesianCoords.x) + " | " + std::to_string(cartesianCoords.y));
-	//dae::Logger::GetInstance().Print(std::to_string(result.x) + " | " + std::to_string(result.y));
+	//dae::Logger::GetInstance().Print(std::to_string(causedColourChange.x) + " | " + std::to_string(causedColourChange.y));
 	//dae::Logger::GetInstance().Print(R"(----------------------------------------------------------)");
 
 	return result;
@@ -207,7 +222,7 @@ bool TileMapComponent::LoadLevelFromFile(const std::string& path, int level)
 
 			const auto idx = int2({ xIdx, yIdx });
 			const auto diskPos = IndexToTilePosition(idx);
-			const auto disk = std::make_shared<dae::SceneObject>(std::vector<dae::BaseComponent*>{}, glm::vec3{ diskPos.x, diskPos.y, 0 }, glm::vec2{ 2, 2 });
+			const auto disk = std::make_shared<dae::SceneObject>(std::vector<dae::BaseComponent*>{}, glm::vec3{ diskPos.x, diskPos.y, 0 }, glm::vec2{ 2, 2 }, "disk");
 			disk->AddComponent(new DiskComponent());
 			const auto renderComp = new dae::RenderComponent("Disk.png", { 16, 16 });
 			disk->AddComponent(renderComp, true);
