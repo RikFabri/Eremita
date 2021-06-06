@@ -43,6 +43,11 @@ InputComponent::~InputComponent()
 
 void InputComponent::Init(SceneObject& parent)
 {
+	auto destroyOnDmg = parent.GetFirstComponentOfType<DestroyOnPlayerDamageComponent>();
+
+	if (destroyOnDmg)
+		destroyOnDmg->SetOnDeath(std::bind(&InputComponent::RemoveConfig, this));
+
 	m_pParentRef = &parent;
 	m_ControllerId = InputManager::GetInstance().RegisterController();
 
@@ -69,12 +74,7 @@ void InputComponent::SetInputConfig(bool keyboardOnly)
 	m_pMovementCompRef = m_pParentRef->GetFirstComponentOfType<PosessedMovementComponent>();
 	m_pMovementCompRef->SetEnabled(true);
 
-	// Remove previous configuration
-	for (const auto& btn : m_InputActionIds)
-	{
-		InputManager::GetInstance().RemoveInputAction(btn);
-	}
-	m_InputActionIds.clear();
+	RemoveConfig();
 
 	auto Id = InputManager::GetInstance().AddInputAction(
 		{ XINPUT_GAMEPAD_DPAD_LEFT, m_ControllerId, m_UseWASD ? SDLK_a : SDLK_LEFT, keyboardOnly }, new ExecuteFunction([this]()
@@ -104,6 +104,16 @@ void InputComponent::SetInputConfig(bool keyboardOnly)
 			}))->first;
 	m_InputActionIds.push_back(Id);
 
+}
+
+void InputComponent::RemoveConfig()
+{
+	// Remove previous configuration
+	for (const auto& btn : m_InputActionIds)
+	{
+		InputManager::GetInstance().RemoveInputAction(btn);
+	}
+	m_InputActionIds.clear();
 }
 
 void InputComponent::OnNotify(const BaseComponent*, const std::string& message)

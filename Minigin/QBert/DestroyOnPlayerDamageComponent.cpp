@@ -27,10 +27,18 @@ void DestroyOnPlayerDamageComponent::OnNotify(const BaseComponent*, const std::s
 {
 	if (message == "UpdateHealth")
 	{
+		if (m_OnDeath)
+			m_OnDeath();
+
 		UnSubscribeFromAllPlayers();
 
 		m_pParentRef->GetScene()->Remove(m_pParentRef);
 	}
+}
+
+void DestroyOnPlayerDamageComponent::SetOnDeath(const std::function<void()>& callback)
+{
+	m_OnDeath = callback;
 }
 
 void DestroyOnPlayerDamageComponent::UnSubscribeFromAllPlayers()

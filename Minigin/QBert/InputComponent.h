@@ -29,6 +29,7 @@ private:
 	std::vector<dae::ControllerButton> m_InputActionIds;
 
 	void SetInputConfig(bool keyboardOnly = false);
+	void RemoveConfig();
 
 	//No ownership
 	dae::SceneObject* m_pParentRef;

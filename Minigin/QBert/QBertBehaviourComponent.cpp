@@ -57,8 +57,8 @@ void QBertBehaviourComponent::Damage()
 	m_pMovementCompRef->SetEnabled(false);
 	dae::SoundServiceLocator::GetSoundService()->PlaySound("../Data/Death.wav", SDL_MIX_MAXVOLUME / 2);
 	m_PrevWaitTime = m_pTimerCompRef->GetWaitTime();
-	m_pTimerCompRef->SetWaitTime(1.6f);
 	m_pTimerCompRef->Reset();
+	m_pTimerCompRef->SetWaitTime(1.6f);
 }
 
 void QBertBehaviourComponent::OnNotify(const BaseComponent*, const std::string& message)
