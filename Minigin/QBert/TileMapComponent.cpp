@@ -10,6 +10,7 @@
 #include <fstream>
 #include <rapidjson.h>
 #include <istreamwrapper.h>
+#include "SubjectComponent.h"
 #include <document.h>
 
 TileMapComponent::TileMapComponent()
@@ -26,6 +27,8 @@ void TileMapComponent::Init(dae::SceneObject& parent)
 	m_pTransformRef = parent.GetFirstComponentOfType<dae::Transform>();
 	m_pParentRef = &parent;
 
+	m_pSubjectCompRef = parent.GetFirstComponentOfType<dae::SubjectComponent>();
+
 	LoadLevelFromFile(m_LevelFolderName, m_CurrentLevel);
 }
 
@@ -37,8 +40,8 @@ void TileMapComponent::Update(dae::SceneObject& parent)
 
 	if (m_SwitchLevel)
 	{
+		m_pSubjectCompRef->Broadcast(this, "level Changed");
 		m_SwitchLevel = false;
-
 		if (!LoadLevelFromFile(m_LevelFolderName, ++m_CurrentLevel))
 		{
 			dae::Logger::GetInstance().Print("Game over!");

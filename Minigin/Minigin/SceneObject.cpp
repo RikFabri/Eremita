@@ -78,6 +78,13 @@ bool dae::SceneObject::RegisterAsObserver(ObserverInterface* pObserver)
 	return true;
 }
 
+void dae::SceneObject::UnRegisterObserver(ObserverInterface* pObserver)
+{
+	auto subjectComponent = GetFirstComponentOfType<SubjectComponent>();
+
+	if(subjectComponent)
+		subjectComponent->Unsubscribe(pObserver);
+}
 
 void dae::SceneObject::Update()
 {

@@ -12,6 +12,7 @@ void QBertBehaviourComponent::Init(dae::SceneObject& parent)
 
 	auto tileMapObj = parent.GetScene()->GetObjectsByTag("tileMap");
 	m_pTileMapRef = tileMapObj[0]->GetFirstComponentOfType<TileMapComponent>();
+	tileMapObj[0]->RegisterAsObserver(this);
 
 	m_pTransformRef = parent.GetFirstComponentOfType<dae::Transform>();
 	m_pHealthCompRef = parent.GetFirstComponentOfType<dae::HealthComponent>();
@@ -30,6 +31,14 @@ void QBertBehaviourComponent::Damage()
 	m_pHealthCompRef->Die();
 
 	m_pMovementCompRef->SetBlockIndex({ 0, 0 });
-	const auto pos = m_pTileMapRef->IndexToTilePosition({ 0, 0 });
-	m_pTransformRef->SetPosition(pos.x, pos.y, 0);
+	m_pMovementCompRef->UpdateVisualLocation();
+}
+
+void QBertBehaviourComponent::OnNotify(const BaseComponent*, const std::string& message)
+{
+	if (message == "level Changed")
+	{
+		m_pMovementCompRef->SetBlockIndex({ 0, 0 });
+		m_pMovementCompRef->UpdateVisualLocation();
+	}
 }

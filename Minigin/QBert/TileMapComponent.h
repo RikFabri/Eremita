@@ -5,6 +5,11 @@
 #include <unordered_map>
 #include <functional>
 
+namespace dae
+{
+	class SubjectComponent;
+}
+
 using int2 = std::pair<int, int>;
 
 class TileComponent;
@@ -43,6 +48,7 @@ private:
 	// No ownership
 	dae::Transform* m_pTransformRef;
 	dae::SceneObject* m_pParentRef;
+	dae::SubjectComponent* m_pSubjectCompRef;
 };
 
 std::size_t int2hash(const int2& x);

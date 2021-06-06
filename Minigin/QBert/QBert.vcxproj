@@ -186,6 +186,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="CoilyBehaviourComponent.cpp" />
     <ClCompile Include="CoilyMovementComponent.cpp" />
     <ClCompile Include="DefaultMovement.cpp" />
+    <ClCompile Include="DestroyOnLevelChange.cpp" />
     <ClCompile Include="DestroyOnPlayerDamageComponent.cpp" />
     <ClCompile Include="DiskComponent.cpp" />
     <ClCompile Include="GamemodeManager.cpp" />
@@ -204,6 +205,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="CoilyBehaviourComponent.h" />
     <ClInclude Include="CoilyMovementComponent.h" />
     <ClInclude Include="DefaultMovement.h" />
+    <ClInclude Include="DestroyOnLevelChange.h" />
     <ClInclude Include="DestroyOnPlayerDamageComponent.h" />
     <ClInclude Include="DiskComponent.h" />
     <ClInclude Include="GamemodeManager.h" />

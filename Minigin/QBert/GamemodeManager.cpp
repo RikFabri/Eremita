@@ -29,6 +29,7 @@
 #include "DefaultMovement.h"
 #include "InputManager.h"
 #include "PosessedMovementComponent.h"
+#include "DestroyOnLevelChange.h"
 
 using namespace dae;
 
@@ -92,6 +93,7 @@ void GamemodeManager::LoadAI()
 	// Map
 	const auto map = std::make_shared<SceneObject>(pComponentVec{}, glm::vec3{ 288,64,0 });
 	map->AddComponent(new TileMapComponent(), true);
+	map->AddComponent(new SubjectComponent());
 	map->SetTag("tileMap");
 	scene.Add(map);
 
@@ -143,6 +145,7 @@ void GamemodeManager::LoadAI()
 	auto dmgPlayerComp = new KillPlayerOnTouchComponent();
 	const auto coily = std::make_shared<SceneObject>(pComponentVec{ coilyTimer, eggMovement, coilyBehaviour, destroyOnReset, dmgPlayerComp }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "coily");
 	coily->AddComponent(coilyRenderer, true);
+	coily->AddComponent(new DestroyOnLevelChange());
 	scene.Add(coily);
 
 	// Slick
@@ -153,6 +156,7 @@ void GamemodeManager::LoadAI()
 	const auto slickMovement = new DefaultMovement(false, true, true);
 	const auto slick = std::make_shared<SceneObject>(pComponentVec{ slickTimer, slickMovement, slickBehaviour, destroySlickOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "slick");
 	slick->AddComponent(slickRenderer, true);
+	slick->AddComponent(new DestroyOnLevelChange());
 	scene.Add(slick);
 
 	// Sam
@@ -163,6 +167,7 @@ void GamemodeManager::LoadAI()
 	const auto samMovement = new DefaultMovement(false, true, true);
 	const auto sam = std::make_shared<SceneObject>(pComponentVec{ samTimer, samMovement, samBehaviour, destroySamOnReset }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "sam");
 	sam->AddComponent(samRenderer, true);
+	sam->AddComponent(new DestroyOnLevelChange());
 	scene.Add(sam);
 
 	// Ugg
@@ -173,6 +178,7 @@ void GamemodeManager::LoadAI()
 	const auto uggMovement = new UggMovementComponent();
 	const auto ugg = std::make_shared<SceneObject>(pComponentVec{ uggTimer, uggMovement, destroyUggOnReset, dmgPlayerComp }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "ugg");
 	ugg->AddComponent(uggRenderer, true);
+	ugg->AddComponent(new DestroyOnLevelChange());
 	scene.Add(ugg);
 
 	// Wrongway
@@ -183,6 +189,7 @@ void GamemodeManager::LoadAI()
 	dmgPlayerComp = new KillPlayerOnTouchComponent();
 	const auto wrongWay = std::make_shared<SceneObject>(pComponentVec{ wrongWayTimer, wrongWayMovement, destroywrongWayOnReset, dmgPlayerComp }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "wrongWay");
 	wrongWay->AddComponent(wrongWayRenderer, true);
+	wrongWay->AddComponent(new DestroyOnLevelChange());
 	scene.Add(wrongWay);
 
 	scene.Init();

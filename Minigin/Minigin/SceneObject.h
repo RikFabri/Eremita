@@ -35,6 +35,7 @@ namespace dae
 		void SetPosition(float x, float y, float z = 0);
 
 		bool RegisterAsObserver(ObserverInterface* pObserver);
+		void UnRegisterObserver(ObserverInterface* pObserver);
 		
 		SceneObject(const std::vector<BaseComponent*>& components = {}, const glm::vec3& position = { 0,0,0 }, const glm::vec2& scale = { 1, 1 }, const std::string & tag = "defaultTag");
 		~SceneObject();

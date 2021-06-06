@@ -1,7 +1,7 @@
 #pragma once
 #include <BaseComponent.h>
 #include <SceneObject.h>
-
+#include "ObserverInterface.h"
 
 namespace dae 
 {
@@ -13,12 +13,14 @@ using int2 = std::pair<int, int>;
 class TileMapComponent;
 class PosessedMovementComponent;
 
-class QBertBehaviourComponent final : public dae::BaseComponent
+class QBertBehaviourComponent final : public dae::BaseComponent, public dae::ObserverInterface
 {
 public:
 	virtual void Init(dae::SceneObject&) override;
-
 	virtual void Update(dae::SceneObject&) override;
+
+	virtual void OnNotify(const BaseComponent*, const std::string& message) override;
+
 
 	void Damage();
 private:
