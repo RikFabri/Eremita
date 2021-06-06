@@ -2,6 +2,7 @@
 #include "InputManager.h"
 #include <SDL.h>
 #include <XInput.h>
+#include "Logger.h"
 
 
 dae::InputManager::InputManager()
@@ -10,6 +11,7 @@ dae::InputManager::InputManager()
 	, m_PhysicalControllerConnectedAtId{ false }
 	, m_VirtualControllerRegisteredAtId{ false }
 	, m_pSubjectComponent(std::make_unique<SubjectComponent>())
+	, m_ConnectedControllers(0)
 {
 	ProcessInput();
 }
@@ -46,25 +48,18 @@ bool dae::InputManager::ProcessInput()
 		// Iterate over registered input actions and execute them when necessary
 		for (auto& inputCommand : m_InputCommandMap)
 		{
-			if (inputCommand.first.ControllerId != i)
-				continue;
-			
-			switch (inputCommand.second.eventType)
-			{
-			case EventType::pressed:
-				if (m_InputState[inputCommand.first] == false && state.Gamepad.wButtons & inputCommand.first.Button)
-					inputCommand.second.pCommand->Execute();
-				break;
-			case EventType::released:
-				if (m_InputState[inputCommand.first] == true && !(state.Gamepad.wButtons & inputCommand.first.Button))
-					inputCommand.second.pCommand->Execute();
-				break;
-			case EventType::down:
-				if (state.Gamepad.wButtons & inputCommand.first.Button)
-					inputCommand.second.pCommand->Execute();
-			}
+			CheckInputCommand(inputCommand, i, state);
+		}
+	}
 
-			m_InputState[inputCommand.first] = state.Gamepad.wButtons & inputCommand.first.Button;
+	// No controllers are connected, update all input commands once for keyboard input
+	if (m_ConnectedControllers <= 0)
+	{
+		for (auto& inputCommand : m_InputCommandMap)
+		{
+			// Passing dummy id & state
+			XINPUT_STATE state{};
+			CheckInputCommand(inputCommand, (DWORD)-1, state);
 		}
 	}
 
@@ -73,15 +68,43 @@ bool dae::InputManager::ProcessInput()
 		if (e.type == SDL_QUIT) {
 			return false;
 		}
-		if (e.type == SDL_KEYDOWN) {
-
-		}
-		if (e.type == SDL_MOUSEBUTTONDOWN) {
-
-		}
 	}
 
 	return true;
+}
+
+bool dae::InputManager::IsKeyDown(SDL_Keycode key)
+{
+	// Hastily added keyboard support
+	const Uint8* keyState = SDL_GetKeyboardState(nullptr);
+
+	return keyState[SDL_GetScancodeFromKey(key)];
+}
+
+void dae::InputManager::CheckInputCommand(std::pair<const dae::ControllerButton, dae::InputAction>& inputCommand, const DWORD& i, XINPUT_STATE& state)
+{
+	const auto useController = !inputCommand.first.KeyboardOnly;
+	if (inputCommand.first.ControllerId != i && useController && inputCommand.first.ControllerId != (DWORD)-1)
+	{
+		return;
+	}
+
+	switch (inputCommand.second.eventType)
+	{
+	case EventType::pressed:
+		if (m_InputState[inputCommand.first] == false && ((useController && state.Gamepad.wButtons & inputCommand.first.Button) ||  IsKeyDown(inputCommand.first.Key)))
+			inputCommand.second.pCommand->Execute();
+		break;
+	case EventType::released:
+		if (m_InputState[inputCommand.first] == true && !((useController && state.Gamepad.wButtons & inputCommand.first.Button) || IsKeyDown(inputCommand.first.Key)))
+			inputCommand.second.pCommand->Execute();
+		break;
+	case EventType::down:
+		if ((useController && state.Gamepad.wButtons & inputCommand.first.Button) || IsKeyDown(inputCommand.first.Key))
+			inputCommand.second.pCommand->Execute();
+	}
+
+	m_InputState[inputCommand.first] = (useController && state.Gamepad.wButtons & inputCommand.first.Button) || IsKeyDown(inputCommand.first.Key);
 }
 
 DWORD dae::InputManager::RegisterController()
@@ -116,9 +139,20 @@ void dae::InputManager::UnregisterController(DWORD id)
 	m_VirtualControllerRegisteredAtId[id] = false;
 }
 
-void dae::InputManager::AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType)
+dae::InputManager::inputActionIterator dae::InputManager::AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType)
 {
-	m_InputCommandMap.insert(std::make_pair(controllerButton, InputAction{pCommand, eventType}));
+
+	std::pair<inputActionIterator, bool> pair = m_InputCommandMap.insert(std::make_pair(controllerButton, InputAction{pCommand, eventType}));
+
+	if(!pair.second)
+		Logger::GetInstance().Print("Couldn't insert inputCommand");	
+
+	return pair.first;
+}
+
+void dae::InputManager::RemoveInputAction(const ControllerButton& btn)
+{
+	m_InputCommandMap.erase(btn);
 }
 
 void dae::InputManager::SubscribeToControllerEvents(ObserverInterface* observer)
@@ -156,15 +190,17 @@ size_t dae::InputManager::ControllerButtonHash(const ControllerButton& controlle
 
 bool dae::InputManager::CompareControllerButton(const ControllerButton& cb1, const ControllerButton& cb2)
 {
-	return cb1.Button == cb2.Button && cb1.ControllerId == cb2.ControllerId;
+	return cb1.Button == cb2.Button && cb1.ControllerId == cb2.ControllerId && cb1.Key == cb2.Key && cb1.KeyboardOnly == cb2.KeyboardOnly;
 }
 
-void dae::InputManager::ControllerConnected() const
+void dae::InputManager::ControllerConnected()
 {
+	++m_ConnectedControllers;
 	m_pSubjectComponent->Broadcast(nullptr, "Controller connected");
 }
 
-void dae::InputManager::ControllerDisconnected() const
+void dae::InputManager::ControllerDisconnected()
 {
+	--m_ConnectedControllers;
 	m_pSubjectComponent->Broadcast(nullptr, "Controller disconnected");
 }

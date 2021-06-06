@@ -278,7 +278,7 @@ void GamemodeManager::LoadCoop()
 		qBert->AddComponent(new HealthComponent());
 		qBert->AddComponent(new SubjectComponent());
 		qBert->AddComponent(new ScoreComponent());
-		qBert->AddComponent(new InputComponent());
+		qBert->AddComponent(new InputComponent(false));
 		qBert->AddComponent(new TimerComponent(0.5f));
 		qBert->AddComponent(qbertMovement);
 		qBert->AddComponent(new QBertBehaviourComponent());

@@ -6,7 +6,7 @@
 #include "Commands.h"
 #include "Singleton.h"
 #include "SubjectComponent.h"
-
+#include "SDL.h"
 
 namespace dae
 {
@@ -14,10 +14,15 @@ namespace dae
 	{
 		WORD Button = 0;
 		DWORD ControllerId = 0;
+		SDL_Keycode Key = SDLK_UNKNOWN;
+		bool KeyboardOnly = false;
 	};
 		
 	class InputManager final : public Singleton<InputManager>
 	{
+		using inputActionIterator = std::unordered_map<dae::ControllerButton, dae::InputAction,
+			std::function<size_t(const dae::ControllerButton&)>,
+			std::function<bool(const dae::ControllerButton&, const dae::ControllerButton&)>>::iterator;
 	public:
 		
 		bool ProcessInput();
@@ -26,7 +31,8 @@ namespace dae
 		DWORD RegisterController();
 		void UnregisterController(DWORD id);
 		
-		void AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType = EventType::released);
+		inputActionIterator AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType = EventType::released);
+		void RemoveInputAction(const ControllerButton& btn);
 
 		// Get notified when controllers connect/disconnect
 		void SubscribeToControllerEvents(ObserverInterface* observer);
@@ -35,24 +41,28 @@ namespace dae
 
 		void Reset();
 	private:
+
 		friend class Singleton;
 		InputManager();
 
+		int m_ConnectedControllers;
 
 		// This array keeps track of which controllers are in use
 		bool m_VirtualControllerRegisteredAtId[XUSER_MAX_COUNT];
 		// This array keeps track of the physically connected controllers
 		bool m_PhysicalControllerConnectedAtId[XUSER_MAX_COUNT];
 
-		void ControllerConnected() const;
-		void ControllerDisconnected() const;
+		void ControllerConnected();
+		void ControllerDisconnected();
 		
 		static size_t ControllerButtonHash(const ControllerButton& controllerButton);
 		static bool CompareControllerButton(const ControllerButton& cb1, const ControllerButton& cb2);
 
+		bool IsKeyDown(SDL_Keycode key);
+		void CheckInputCommand(std::pair<const dae::ControllerButton, dae::InputAction>& inputCommand, const DWORD& i, XINPUT_STATE& state);
 
-		std::unordered_map<ControllerButton, InputAction, std::function<size_t(const ControllerButton&)>, std::function<bool(const ControllerButton&, const ControllerButton&)>> m_InputCommandMap;
-		std::unordered_map<ControllerButton, bool, std::function<size_t(const ControllerButton&)>, std::function<bool(const ControllerButton&, const ControllerButton&)>> m_InputState;
+		std::unordered_map<const ControllerButton, InputAction, std::function<size_t(const ControllerButton&)>, std::function<bool(const ControllerButton&, const ControllerButton&)>> m_InputCommandMap;
+		std::unordered_map<const ControllerButton, bool, std::function<size_t(const ControllerButton&)>, std::function<bool(const ControllerButton&, const ControllerButton&)>> m_InputState;
 
 		std::unique_ptr<SubjectComponent> m_pSubjectComponent;
 	};

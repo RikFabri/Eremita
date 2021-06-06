@@ -27,11 +27,12 @@
 
 using namespace dae;
 
-InputComponent::InputComponent()
+InputComponent::InputComponent(bool useWASD)
 	: m_ControllerId(0)
 	, m_RegisteredCallback(false)
 	, m_pParentRef(nullptr)
 	, m_pMovementCompRef(nullptr)
+	, m_UseWASD(useWASD)
 {
 }
 
@@ -51,37 +52,90 @@ void InputComponent::Init(SceneObject& parent)
 		if (m_RegisteredCallback)
 			return;
 
+		// Sets input config for keyboard usage, not tied to controllerId
+		SetInputConfig(true);
+
 		InputManager::GetInstance().SubscribeToControllerEvents(this);
 		m_RegisteredCallback = true;
 		return;
 	}
 
-	m_pMovementCompRef = parent.GetFirstComponentOfType<PosessedMovementComponent>();
+	// Resets input config with correct controller id
+	SetInputConfig(false);
+}
+
+void InputComponent::SetInputConfig(bool keyboardOnly)
+{
+	m_pMovementCompRef = m_pParentRef->GetFirstComponentOfType<PosessedMovementComponent>();
 	m_pMovementCompRef->SetEnabled(true);
-	
-	InputManager::GetInstance().AddInputAction(
-	{XINPUT_GAMEPAD_DPAD_LEFT, m_ControllerId}, new ExecuteFunction([this]()
+
+	for (const auto& btn : m_InputActionIds)
 	{
-			m_pMovementCompRef->Move(-1, -1);
-	}));
-	
-	InputManager::GetInstance().AddInputAction(
-	{XINPUT_GAMEPAD_DPAD_UP, m_ControllerId}, new ExecuteFunction([this]()
+		InputManager::GetInstance().RemoveInputAction(btn);
+	}
+	m_InputActionIds.clear();
+
+	if (!keyboardOnly)
 	{
-			m_pMovementCompRef->Move(0, -1);
-	}));
-	
-	InputManager::GetInstance().AddInputAction(
-	{XINPUT_GAMEPAD_DPAD_RIGHT, m_ControllerId}, new ExecuteFunction([this]()
-	{
-			m_pMovementCompRef->Move(1, 1);
-	}));
-	
-	InputManager::GetInstance().AddInputAction(
-	{XINPUT_GAMEPAD_DPAD_DOWN, m_ControllerId}, new ExecuteFunction([this]()
-	{
-			m_pMovementCompRef->Move(0, 1);
-	}));
+		auto Id = InputManager::GetInstance().AddInputAction(
+			{ XINPUT_GAMEPAD_DPAD_LEFT, m_ControllerId, m_UseWASD ? SDLK_a : SDLK_LEFT, keyboardOnly }, new ExecuteFunction([this]()
+				{
+					m_pMovementCompRef->Move(-1, -1);
+				}))->first;
+		m_InputActionIds.push_back(Id);
+
+		Id = InputManager::GetInstance().AddInputAction(
+			{ XINPUT_GAMEPAD_DPAD_UP, m_ControllerId, m_UseWASD ? SDLK_w : SDLK_UP, keyboardOnly }, new ExecuteFunction([this]()
+				{
+					m_pMovementCompRef->Move(0, -1);
+				}))->first;
+		m_InputActionIds.push_back(Id);
+
+		Id = InputManager::GetInstance().AddInputAction(
+			{ XINPUT_GAMEPAD_DPAD_RIGHT, m_ControllerId, m_UseWASD ? SDLK_d : SDLK_RIGHT, keyboardOnly }, new ExecuteFunction([this]()
+				{
+					m_pMovementCompRef->Move(1, 1);
+				}))->first;
+		m_InputActionIds.push_back(Id);
+
+		Id = InputManager::GetInstance().AddInputAction(
+			{ XINPUT_GAMEPAD_DPAD_DOWN, m_ControllerId, m_UseWASD ? SDLK_s : SDLK_DOWN, keyboardOnly }, new ExecuteFunction([this]()
+				{
+					m_pMovementCompRef->Move(0, 1);
+				}))->first;
+		m_InputActionIds.push_back(Id);
+	}
+
+	// Add keyboard-only input, combining controller/keyboard inputs works but needs to be carefully managed with events and I'm running out of time
+	// Using (WORD)-1 everywhere since that id is used for keyboard input and is guaranteed to be working
+	keyboardOnly = true;
+	auto Id = InputManager::GetInstance().AddInputAction(
+		{ XINPUT_GAMEPAD_DPAD_LEFT, (WORD)-1, m_UseWASD ? SDLK_a : SDLK_LEFT, keyboardOnly }, new ExecuteFunction([this]()
+			{
+				m_pMovementCompRef->Move(-1, -1);
+			}))->first;
+	m_InputActionIds.push_back(Id);
+
+	Id = InputManager::GetInstance().AddInputAction(
+		{ XINPUT_GAMEPAD_DPAD_UP, (WORD)-1, m_UseWASD ? SDLK_w : SDLK_UP, keyboardOnly }, new ExecuteFunction([this]()
+			{
+				m_pMovementCompRef->Move(0, -1);
+			}))->first;
+	m_InputActionIds.push_back(Id);
+
+	Id = InputManager::GetInstance().AddInputAction(
+		{ XINPUT_GAMEPAD_DPAD_RIGHT, (WORD)-1, m_UseWASD ? SDLK_d : SDLK_RIGHT, keyboardOnly }, new ExecuteFunction([this]()
+			{
+				m_pMovementCompRef->Move(1, 1);
+			}))->first;
+	m_InputActionIds.push_back(Id);
+
+	Id = InputManager::GetInstance().AddInputAction(
+		{ XINPUT_GAMEPAD_DPAD_DOWN, (WORD)-1, m_UseWASD ? SDLK_s : SDLK_DOWN, keyboardOnly }, new ExecuteFunction([this]()
+			{
+				m_pMovementCompRef->Move(0, 1);
+			}))->first;
+	m_InputActionIds.push_back(Id);
 }
 
 void InputComponent::OnNotify(const BaseComponent*, const std::string& message)

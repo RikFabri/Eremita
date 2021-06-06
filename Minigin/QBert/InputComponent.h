@@ -3,10 +3,12 @@
 #include <string>
 #include <Windows.h>
 #include "ObserverInterface.h"
+#include <vector>
 
 namespace dae {
 	class ScoreComponent;
 	class HealthComponent;
+	struct ControllerButton;
 }
 
 class PosessedMovementComponent;
@@ -14,7 +16,7 @@ class PosessedMovementComponent;
 class InputComponent final : public dae::BaseComponent, public dae::ObserverInterface
 {
 public:
-	InputComponent();
+	InputComponent(bool useWASD = true);
 	~InputComponent();
 		
 	void Init(dae::SceneObject& parent) override;
@@ -22,6 +24,11 @@ public:
 private:
 	DWORD m_ControllerId;
 	bool m_RegisteredCallback;
+	bool m_UseWASD;
+
+	std::vector<dae::ControllerButton> m_InputActionIds;
+
+	void SetInputConfig(bool keyboardOnly = false);
 
 	//No ownership
 	dae::SceneObject* m_pParentRef;

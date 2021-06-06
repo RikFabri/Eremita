@@ -48,7 +48,7 @@ void CoilyBehaviourComponent::HatchEgg(dae::SceneObject& parent)
 
 		parent.RemoveComponent(defaultMovement);
 
-		auto inputComp = new InputComponent();
+		auto inputComp = new InputComponent(false);
 		inputComp->Init(parent);
 		parent.AddComponentAfterUpdate(inputComp);
 	}
