@@ -1,0 +1,17 @@
+{
+	"TriangleSize":7,
+	"ResetOnJump":false,
+	"RequiredJumps":1,
+	
+	"Disks":
+	[
+		{
+			"xIdx":4,
+			"yIdx":3
+		},
+		{
+			"xIdx":-1,
+			"yIdx":3
+		}
+	]
+}

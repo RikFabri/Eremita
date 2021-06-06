@@ -25,6 +25,8 @@ public:
 	bool IsBlockIndexDisk(const int2& blockIndex) const;
 	glm::vec2 IndexToTilePosition(const int2& blockIndex, bool absolute = true) const;
 private:
+	void LoadLevelFromFile(const std::string& path, dae::SceneObject& parent);
+	
 	int m_RequiredNrOfTilesToComplete;
 	int m_CompletedTiles;
 

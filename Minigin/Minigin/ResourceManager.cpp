@@ -45,3 +45,9 @@ std::shared_ptr<dae::Font> dae::ResourceManager::LoadFont(const std::string& fil
 {
 	return std::make_shared<Font>(m_DataPath + file, size);
 }
+
+const std::string& dae::ResourceManager::GetDataPath() const
+{
+	return m_DataPath;
+}
+

@@ -3,9 +3,14 @@
 #include "RenderComponent.h"
 #include "TileComponent.h"
 #include "QBertBehaviourComponent.h"
+#include "ResourceManager.h"
+#include "Logger.h"
 #include <Scene.h>
 #include <Logger.h>
-
+#include <fstream>
+#include <rapidjson.h>
+#include <istreamwrapper.h>
+#include <document.h>
 
 TileMapComponent::TileMapComponent()
 	: m_Disks(14, int2hash, compareInt2)
@@ -18,52 +23,12 @@ void TileMapComponent::Init(dae::SceneObject& parent)
 	m_pTransformRef = parent.GetFirstComponentOfType<dae::Transform>();
 
 
-	// Create all tiles for the level
-	const int maxNrOfTiles = 7;
-	
-	m_Tiles.reserve(maxNrOfTiles);
-
-	for(int i = 0; i < maxNrOfTiles; ++i)
-	{
-		m_Tiles.push_back(std::vector<std::unique_ptr<TileComponent>>());
-		for (int j = 0; j <= i; ++j)
-		{
-			m_Tiles[i].push_back(std::make_unique<TileComponent>(IndexToTilePosition({j, i}, false)));
-			++m_RequiredNrOfTilesToComplete;
-		}
-	}
+	LoadLevelFromFile("Level1.json", parent);
 
 	// Initialize all tiles under the parent gameObject of the tileMap
 	for (auto& tileArray : m_Tiles)
 		for(auto& tile : tileArray)
 			tile->Init(parent);
-
-
-	// Testing the disks
-	{
-		const auto idx = int2({ 4, 3 });
-		const auto diskPos = IndexToTilePosition(idx);
-		const auto disk = std::make_shared<dae::SceneObject>(std::vector<dae::BaseComponent*>{}, glm::vec3{ diskPos.x, diskPos.y, 0 }, glm::vec2{ 2, 2 });
-		disk->AddComponent(new DiskComponent());
-		const auto renderComp = new dae::RenderComponent("Disk.png", { 16, 16 });
-		disk->AddComponent(renderComp, true);
-
-		parent.GetScene()->AddAfterInitialize(disk);
-
-		m_Disks[idx] = disk;
-	}
-	{
-		const auto idx = int2({ -1, 3 });
-		const auto diskPos = IndexToTilePosition(idx);
-		const auto disk = std::make_shared<dae::SceneObject>(std::vector<dae::BaseComponent*>{}, glm::vec3{ diskPos.x, diskPos.y, 0 }, glm::vec2{ 2, 2 });
-		disk->AddComponent(new DiskComponent());
-		const auto renderComp = new dae::RenderComponent("Disk.png", { 16, 16 });
-		disk->AddComponent(renderComp, true);
-
-		parent.GetScene()->AddAfterInitialize(disk);
-
-		m_Disks[idx] = disk;
-	}
 }
 
 void TileMapComponent::Update(dae::SceneObject& parent)
@@ -158,6 +123,73 @@ glm::vec2 TileMapComponent::IndexToTilePosition(const int2& blockIndex, bool abs
 	//dae::Logger::GetInstance().Print(R"(----------------------------------------------------------)");
 
 	return result;
+}
+
+void TileMapComponent::LoadLevelFromFile(const std::string& path, dae::SceneObject& parent)
+{
+	using namespace rapidjson;
+
+	const auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + path;
+
+	std::ifstream file{ fullPath };
+
+	if (!file)
+		return;
+
+	IStreamWrapper istream{ file };
+
+	Document doc;
+	doc.ParseStream(istream);
+
+	try {
+		// -------------------- Read tiles ----------------------- //
+		const auto requiredJumps = doc["RequiredJumps"].GetInt();
+		const auto triangleSize = doc["TriangleSize"].GetInt();
+		const auto resetOnJump = doc["ResetOnJump"].GetBool();
+
+		m_Tiles.reserve(triangleSize);
+		int nrOfTiles = 0;
+		for (int i = 0; i < triangleSize; ++i)
+		{
+			m_Tiles.push_back(std::vector<std::unique_ptr<TileComponent>>());
+			for (int j = 0; j <= i; ++j)
+			{
+				m_Tiles[i].push_back(
+					std::make_unique<TileComponent>(IndexToTilePosition({ j, i }, false), requiredJumps, resetOnJump)
+				);
+			}
+			nrOfTiles += (int)m_Tiles.size();
+		}
+
+		m_RequiredNrOfTilesToComplete = nrOfTiles;
+		// ------------------------------------------------------- //
+
+		// -------------------- Add disks ----------------------- //
+		Value& diskArray = doc["Disks"];
+
+		for (auto& value : diskArray.GetArray())
+		{
+			const auto xIdx = value["xIdx"].GetInt();
+			const auto yIdx = value["yIdx"].GetInt();
+
+			const auto idx = int2({ xIdx, yIdx });
+			const auto diskPos = IndexToTilePosition(idx);
+			const auto disk = std::make_shared<dae::SceneObject>(std::vector<dae::BaseComponent*>{}, glm::vec3{ diskPos.x, diskPos.y, 0 }, glm::vec2{ 2, 2 });
+			disk->AddComponent(new DiskComponent());
+			const auto renderComp = new dae::RenderComponent("Disk.png", { 16, 16 });
+			disk->AddComponent(renderComp, true);
+
+			parent.GetScene()->AddAfterInitialize(disk);
+			m_Disks[idx] = disk;
+		}
+		// ------------------------------------------------------- //
+
+	}
+	catch (...)
+	{
+		dae::Logger::GetInstance().Print("Something went wrong reading in level");
+		dae::Logger::GetInstance().SaveLog("Log.txt");
+	}
 }
 
 
