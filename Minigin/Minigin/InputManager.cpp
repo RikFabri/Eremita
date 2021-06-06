@@ -153,13 +153,8 @@ void dae::InputManager::UnregisterController(DWORD id)
 
 dae::InputManager::inputActionIterator dae::InputManager::AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType)
 {
-
-	std::pair<inputActionIterator, bool> pair = m_InputCommandMap.insert(std::make_pair(controllerButton, InputAction{pCommand, eventType}));
-
-	if(!pair.second)
-		Logger::GetInstance().Print("Couldn't insert inputCommand");	
-
-	return pair.first;
+	m_InputCommandMap[controllerButton] = InputAction{ pCommand, eventType };
+	return m_InputCommandMap.find(controllerButton);
 }
 
 void dae::InputManager::RemoveInputAction(const ControllerButton& btn)

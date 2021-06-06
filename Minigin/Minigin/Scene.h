@@ -27,7 +27,8 @@ namespace dae
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 
-		std::vector<std::shared_ptr<SceneObject>> GetObjectsByTag(const std::string& tag);
+		std::vector<std::shared_ptr<SceneObject>> GetObjectsByTag(const std::string& tag) const;
+		size_t GetNrOfObjectsByTag(const std::string& tag) const;
 		const std::string& GetName() const;
 	private: 
 		explicit Scene(const std::string& name);

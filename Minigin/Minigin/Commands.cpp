@@ -9,3 +9,7 @@ void dae::ExecuteFunction::Execute()
 {
 	m_Callback();
 }
+
+void dae::DoNothing::Execute()
+{
+}

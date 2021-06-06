@@ -18,6 +18,7 @@ namespace dae
 
 		// Sets the scene or returns false if it doesn't exist
 		bool SetActiveScene(const std::string& name);
+		std::weak_ptr<Scene> GetActiveScene() const;
 		// Removes a scene by name or returns false if it doesn't exist, the active scene is kept alive until a new active is set
 		bool RemoveSceneByName(const std::string& name);
 		void SetScenePaused(bool paused);

@@ -63,6 +63,11 @@ bool dae::SceneManager::SetActiveScene(const std::string& name)
 	return false;
 }
 
+std::weak_ptr<dae::Scene> dae::SceneManager::GetActiveScene() const
+{
+	return m_ActiveScene;
+}
+
 void dae::SceneManager::SetScenePaused(bool paused)
 {
 	m_ScenePaused = paused;

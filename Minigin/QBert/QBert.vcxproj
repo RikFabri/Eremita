@@ -189,6 +189,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="DestroyOnLevelChange.cpp" />
     <ClCompile Include="DestroyOnPlayerDamageComponent.cpp" />
     <ClCompile Include="DiskComponent.cpp" />
+    <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="GamemodeManager.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="KillPlayerOnTouchComponent.cpp" />
@@ -208,6 +209,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="DestroyOnLevelChange.h" />
     <ClInclude Include="DestroyOnPlayerDamageComponent.h" />
     <ClInclude Include="DiskComponent.h" />
+    <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="GamemodeManager.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="KillPlayerOnTouchComponent.h" />

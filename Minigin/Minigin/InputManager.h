@@ -31,6 +31,7 @@ namespace dae
 		DWORD RegisterController();
 		void UnregisterController(DWORD id);
 		
+		// Adds an input action, or overwrites an existing one
 		inputActionIterator AddInputAction(const ControllerButton& controllerButton, Command* pCommand, EventType eventType = EventType::released);
 		void RemoveInputAction(const ControllerButton& btn);
 

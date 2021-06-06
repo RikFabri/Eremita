@@ -6,12 +6,12 @@
 
 using namespace dae;
 
-std::vector<std::shared_ptr<SceneObject>> Scene::GetObjectsByTag(const std::string& tag)
+std::vector<std::shared_ptr<SceneObject>> Scene::GetObjectsByTag(const std::string& tag) const
 {
 	std::vector<std::shared_ptr<SceneObject>> objects;
 
 	std::copy_if(m_Objects.begin(), m_Objects.end(), std::back_inserter(objects), 
-		[&tag](std::shared_ptr<SceneObject>& sceneObject)
+		[&tag](const std::shared_ptr<SceneObject>& sceneObject)
 		{
 			return sceneObject->GetTag() == tag;
 		});
@@ -28,6 +28,14 @@ std::vector<std::shared_ptr<SceneObject>> Scene::GetObjectsByTag(const std::stri
 
 
 	return objects;
+}
+
+size_t dae::Scene::GetNrOfObjectsByTag(const std::string& tag) const
+{
+	return std::count_if(m_Objects.begin(), m_Objects.end(), [&tag](const std::shared_ptr<SceneObject>& sceneObject)
+		{
+			return sceneObject->GetTag() == tag;
+		});
 }
 
 const std::string& dae::Scene::GetName() const

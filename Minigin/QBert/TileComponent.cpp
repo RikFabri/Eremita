@@ -60,9 +60,11 @@ TileComponent::TileState TileComponent::RevertTile()
 {
 	if (m_CurrentJumps >= 1)
 	{
-		m_CurrentJumps = 0;
+		--m_CurrentJumps;
 		m_TileTex = ResourceManager::GetInstance().LoadTexture("Tile1_" + std::to_string(m_CurrentJumps) + ".png");
-		return TileState::eUncompleted;
+
+		if(m_CurrentJumps == m_RequiredJumps - 1)
+			return TileState::eUncompleted;
 	}
 
 	return TileState::eProgress;

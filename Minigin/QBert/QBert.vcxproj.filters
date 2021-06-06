@@ -18,6 +18,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Components\Spawning">
+      <UniqueIdentifier>{6626194e-144e-46e4-9f4a-ddff06f029a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="QBert.cpp">
@@ -71,6 +74,9 @@
     <ClCompile Include="DestroyOnLevelChange.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="EnemySpawner.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TileMapComponent.h">
@@ -121,5 +127,6 @@
     <ClInclude Include="DestroyOnLevelChange.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="EnemySpawner.h" />
   </ItemGroup>
 </Project>
