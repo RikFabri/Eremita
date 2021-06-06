@@ -14,6 +14,9 @@
 
 TileMapComponent::TileMapComponent()
 	: m_Disks(14, int2hash, compareInt2)
+	, m_LevelFolderName("Levels.json")
+	, m_CurrentLevel(0)
+	, m_SwitchLevel(false)
 {
 }
 
@@ -21,14 +24,9 @@ void TileMapComponent::Init(dae::SceneObject& parent)
 {
 	// Initialize this object
 	m_pTransformRef = parent.GetFirstComponentOfType<dae::Transform>();
+	m_pParentRef = &parent;
 
-
-	LoadLevelFromFile("Level1.json", parent);
-
-	// Initialize all tiles under the parent gameObject of the tileMap
-	for (auto& tileArray : m_Tiles)
-		for(auto& tile : tileArray)
-			tile->Init(parent);
+	LoadLevelFromFile(m_LevelFolderName, m_CurrentLevel);
 }
 
 void TileMapComponent::Update(dae::SceneObject& parent)
@@ -36,13 +34,23 @@ void TileMapComponent::Update(dae::SceneObject& parent)
 	for (auto& tileArray : m_Tiles)
 		for (auto& tile : tileArray)
 			tile->Update(parent);
+
+	if (m_SwitchLevel)
+	{
+		m_SwitchLevel = false;
+
+		if (!LoadLevelFromFile(m_LevelFolderName, ++m_CurrentLevel))
+		{
+			dae::Logger::GetInstance().Print("Game over!");
+		}
+	}
 }
 
 void TileMapComponent::HoppedOnTile(const int2& blockIndex, bool forceReverse)
 {
 	auto tileChange = TileComponent::TileState::eProgress;
 
-	if(!forceReverse)
+	if (!forceReverse)
 		tileChange = m_Tiles[blockIndex.second][blockIndex.first]->HopOnTile();
 	else
 		tileChange = m_Tiles[blockIndex.second][blockIndex.first]->RevertTile();
@@ -60,7 +68,10 @@ void TileMapComponent::HoppedOnTile(const int2& blockIndex, bool forceReverse)
 	}
 
 	if (m_CompletedTiles >= m_RequiredNrOfTilesToComplete)
+	{
 		dae::Logger::GetInstance().Print("Level complete");
+		m_SwitchLevel = true;
+	}
 }
 
 void TileMapComponent::HoppedOnDisk(const int2& blockIndex, dae::SceneObject* qBert)
@@ -125,7 +136,7 @@ glm::vec2 TileMapComponent::IndexToTilePosition(const int2& blockIndex, bool abs
 	return result;
 }
 
-void TileMapComponent::LoadLevelFromFile(const std::string& path, dae::SceneObject& parent)
+bool TileMapComponent::LoadLevelFromFile(const std::string& path, int level)
 {
 	using namespace rapidjson;
 
@@ -134,18 +145,27 @@ void TileMapComponent::LoadLevelFromFile(const std::string& path, dae::SceneObje
 	std::ifstream file{ fullPath };
 
 	if (!file)
-		return;
+		return false;
+
+	DestroyLevel();
 
 	IStreamWrapper istream{ file };
 
 	Document doc;
 	doc.ParseStream(istream);
 
+	const auto NrOfLevels = doc["NrOfLevels"].GetInt();
+
+	if (level >= NrOfLevels)
+		return false;
+
+	Value& jsonLevel = doc["Levels"].GetArray()[level];
+
 	try {
 		// -------------------- Read tiles ----------------------- //
-		const auto requiredJumps = doc["RequiredJumps"].GetInt();
-		const auto triangleSize = doc["TriangleSize"].GetInt();
-		const auto resetOnJump = doc["ResetOnJump"].GetBool();
+		const auto requiredJumps = jsonLevel["RequiredJumps"].GetInt();
+		const auto triangleSize = jsonLevel["TriangleSize"].GetInt();
+		const auto resetOnJump = jsonLevel["ResetOnJump"].GetBool();
 
 		m_Tiles.reserve(triangleSize);
 		int nrOfTiles = 0;
@@ -162,10 +182,16 @@ void TileMapComponent::LoadLevelFromFile(const std::string& path, dae::SceneObje
 		}
 
 		m_RequiredNrOfTilesToComplete = nrOfTiles;
+
+		// Initialize all tiles under the parent gameObject of the tileMap (we don't pass ownership though)
+		for (auto& tileArray : m_Tiles)
+			for (auto& tile : tileArray)
+				tile->Init(*m_pParentRef);
+
 		// ------------------------------------------------------- //
 
 		// -------------------- Add disks ----------------------- //
-		Value& diskArray = doc["Disks"];
+		Value& diskArray = jsonLevel["Disks"];
 
 		for (auto& value : diskArray.GetArray())
 		{
@@ -179,7 +205,7 @@ void TileMapComponent::LoadLevelFromFile(const std::string& path, dae::SceneObje
 			const auto renderComp = new dae::RenderComponent("Disk.png", { 16, 16 });
 			disk->AddComponent(renderComp, true);
 
-			parent.GetScene()->AddAfterInitialize(disk);
+			m_pParentRef->GetScene()->AddAfterInitialize(disk);
 			m_Disks[idx] = disk;
 		}
 		// ------------------------------------------------------- //
@@ -190,6 +216,22 @@ void TileMapComponent::LoadLevelFromFile(const std::string& path, dae::SceneObje
 		dae::Logger::GetInstance().Print("Something went wrong reading in level");
 		dae::Logger::GetInstance().SaveLog("Log.txt");
 	}
+
+	return true;
+}
+
+void TileMapComponent::DestroyLevel()
+{
+	for (auto& disk : m_Disks)
+	{
+		if(!disk.second.expired())
+			m_pParentRef->GetScene()->Remove(disk.second.lock());
+	}
+
+	m_Tiles.clear();
+	m_Disks.clear();
+	m_CompletedTiles = 0;
+	m_SwitchLevel = false;
 }
 
 

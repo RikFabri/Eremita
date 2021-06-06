@@ -25,10 +25,16 @@ public:
 	bool IsBlockIndexDisk(const int2& blockIndex) const;
 	glm::vec2 IndexToTilePosition(const int2& blockIndex, bool absolute = true) const;
 private:
-	void LoadLevelFromFile(const std::string& path, dae::SceneObject& parent);
+	// Load in a level, returns false if the level doesn't exist
+	bool LoadLevelFromFile(const std::string& path, int level);
+	void DestroyLevel();
 	
+	const std::string m_LevelFolderName;
+
 	int m_RequiredNrOfTilesToComplete;
 	int m_CompletedTiles;
+	int m_CurrentLevel;
+	bool m_SwitchLevel;
 
 	std::vector<std::vector<std::unique_ptr<TileComponent>>> m_Tiles;
 	std::unordered_map<int2, std::weak_ptr<dae::SceneObject>, 
@@ -36,6 +42,7 @@ private:
 
 	// No ownership
 	dae::Transform* m_pTransformRef;
+	dae::SceneObject* m_pParentRef;
 };
 
 std::size_t int2hash(const int2& x);

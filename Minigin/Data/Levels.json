@@ -1,0 +1,57 @@
+{
+	"NrOfLevels":3,
+	"Levels":
+	[
+		{
+			"TriangleSize":2,
+			"ResetOnJump":false,
+			"RequiredJumps":1,
+			
+			"Disks":
+			[
+				{
+					"xIdx":4,
+					"yIdx":3
+				},
+				{
+					"xIdx":-1,
+					"yIdx":3
+				}
+			]
+		},
+		{
+			"TriangleSize":7,
+			"ResetOnJump":false,
+			"RequiredJumps":2,
+			
+			"Disks":
+			[
+				{
+					"xIdx":4,
+					"yIdx":3
+				},
+				{
+					"xIdx":-1,
+					"yIdx":3
+				}
+			]
+		},
+		{
+			"TriangleSize":7,
+			"ResetOnJump":true,
+			"RequiredJumps":1,
+			
+			"Disks":
+			[
+				{
+					"xIdx":4,
+					"yIdx":3
+				},
+				{
+					"xIdx":-1,
+					"yIdx":3
+				}
+			]
+		}
+	]
+}
