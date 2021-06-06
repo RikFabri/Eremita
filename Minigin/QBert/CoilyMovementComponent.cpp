@@ -1,9 +1,11 @@
 #include "CoilyMovementComponent.h"
 #include "PosessedMovementComponent.h"
+#include "SoundServiceLocator.h"
 #include "TileMapComponent.h"
 #include "TimerComponent.h"
 #include "SceneObject.h"
 #include "Scene.h"
+#include "SDL.h"
 #include <utility>
 
 void CoilyMovementComponent::Init(dae::SceneObject& parent)
@@ -63,6 +65,10 @@ void CoilyMovementComponent::Update(dae::SceneObject& parent)
 	const auto isIndexValid = m_pTileMapRef->IsBlockIndexValid(nextIndex);
 	if (isIndexValid)
 	{
+		//Play sound
+		auto* const service = dae::SoundServiceLocator::GetSoundService();
+		service->PlaySound("../Data/CoilyJmp.wav", SDL_MIX_MAXVOLUME / 2);
+
 		m_Index = nextIndex;
 		const auto newPos = m_pTileMapRef->IndexToTilePosition(nextIndex);
 		parent.SetPosition(newPos.x, newPos.y);

@@ -14,7 +14,7 @@ public:
 	EnemySpawner(bool isCoilyPlayer = false);
 
 	virtual void Init(dae::SceneObject& parent) override;
-	virtual void Update(dae::SceneObject& parent) override;
+	virtual void Update(dae::SceneObject&) override;
 
 private:
 	bool m_CoilyIsPlayer;

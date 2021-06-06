@@ -12,6 +12,8 @@
 #include <istreamwrapper.h>
 #include "SubjectComponent.h"
 #include <document.h>
+#include "SoundServiceLocator.h"
+#include "SDL.h"
 
 TileMapComponent::TileMapComponent()
 	: m_Disks(14, int2hash, compareInt2)
@@ -40,6 +42,7 @@ void TileMapComponent::Update(dae::SceneObject& parent)
 
 	if (m_SwitchLevel)
 	{
+		dae::SoundServiceLocator::GetSoundService()->PlaySound("../Data/LevelComplete.wav", SDL_MIX_MAXVOLUME / 2);
 		m_pSubjectCompRef->Broadcast(this, "level Changed");
 		m_SwitchLevel = false;
 		if (!LoadLevelFromFile(m_LevelFolderName, ++m_CurrentLevel))
@@ -89,6 +92,7 @@ void TileMapComponent::HoppedOnDisk(const int2& blockIndex, dae::SceneObject* qB
 		diskPtr->SetPosition(diskPos.x, diskPos.y);
 		qBert->SetPosition(diskPos.x, diskPos.y);
 		HoppedOnTile({ 0, 0 });
+		dae::SoundServiceLocator::GetSoundService()->PlaySound("../Data/Disk.wav", SDL_MIX_MAXVOLUME / 2);
 	}
 
 	m_Disks.erase(diskIt);

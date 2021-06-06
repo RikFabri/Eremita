@@ -3,7 +3,7 @@
 	"Levels":
 	[
 		{
-			"TriangleSize":5,
+			"TriangleSize":7,
 			"ResetOnJump":false,
 			"RequiredJumps":1,
 			

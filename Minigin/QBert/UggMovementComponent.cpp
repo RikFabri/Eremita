@@ -1,9 +1,11 @@
 #include "UggMovementComponent.h"
+#include "SoundServiceLocator.h"
 #include "TileMapComponent.h"
 #include "TimerComponent.h"
 #include "SceneObject.h"
 #include "Logger.h"
 #include "Scene.h"
+#include "SDL.h"
 
 void UggMovementComponent::Init(dae::SceneObject& parent)
 {
@@ -30,6 +32,8 @@ void UggMovementComponent::Update(dae::SceneObject& parent)
 
 	const auto nextIndex = int2{ m_Index.first + movement.first, m_Index.second + movement.second };
 	const auto isNextLocationValid = m_pTileMapRef->IsBlockIndexValid({ nextIndex.first, nextIndex.second - 1 });
+
+	dae::SoundServiceLocator::GetSoundService()->PlaySound("../Data/UggJmp.wav", SDL_MIX_MAXVOLUME / 2);
 
 	if (isNextLocationValid)
 	{

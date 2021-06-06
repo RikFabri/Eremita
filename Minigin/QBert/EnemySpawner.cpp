@@ -29,9 +29,8 @@ void EnemySpawner::Init(SceneObject& parent)
 	m_pSceneRef = SceneManager::GetInstance().GetActiveScene();
 }
 
-void EnemySpawner::Update(dae::SceneObject& parent)
+void EnemySpawner::Update(dae::SceneObject& )
 {
-	parent;
 	if (!m_pTimerCompRef->TimerCompleted())
 		return;
 
@@ -40,13 +39,11 @@ void EnemySpawner::Update(dae::SceneObject& parent)
 	if (m_pSceneRef.expired())
 		return;
 
-	if (m_CoilyIsPlayer)
+	// Always respawn coily if he's being controlled by a player
+	if (m_CoilyIsPlayer && m_pCoilyRef.expired())
 	{
-		if (m_pCoilyRef.expired())
-		{
-			SpawnCoily(m_CoilyIsPlayer);
-			return;
-		}
+		SpawnCoily(m_CoilyIsPlayer);
+		return;
 	}
 
 	int Nr = std::rand() % 3;

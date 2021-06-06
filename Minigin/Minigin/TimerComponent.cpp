@@ -22,7 +22,17 @@ void dae::TimerComponent::Reset()
 	m_PassedTime = 0;
 }
 
+void dae::TimerComponent::SetWaitTime(float time)
+{
+	m_WaitTime = time;
+}
+
 bool dae::TimerComponent::TimerCompleted() const
 {
 	return m_TimerFinished;
+}
+
+float dae::TimerComponent::GetWaitTime() const
+{
+	return m_WaitTime;
 }

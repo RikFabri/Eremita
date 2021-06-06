@@ -1,10 +1,12 @@
 #include "DefaultMovement.h"
+#include "SoundServiceLocator.h"
 #include "TileMapComponent.h"
 #include "TimerComponent.h"
 #include "SceneObject.h"
 #include "Scene.h"
 #include <utility>
 #include <random>
+#include "SDL.h"
 
 DefaultMovement::DefaultMovement(bool moveUp, bool interactWithTiles, bool reverseTiles)
 	: m_MoveUp(moveUp)
@@ -27,6 +29,9 @@ void DefaultMovement::Update(dae::SceneObject& parent)
 		return;
 
 	m_pTimerCompRef->Reset();
+
+	auto* const service = dae::SoundServiceLocator::GetSoundService();
+	service->PlaySound("../Data/BallJmp.wav", SDL_MIX_MAXVOLUME / 2);
 
 	// Semi-random movement
 	auto movement = int2(std::rand() & 0b01 ? 1 : 0, 1);

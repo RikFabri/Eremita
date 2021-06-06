@@ -1,8 +1,10 @@
 #include "PosessedMovementComponent.h"
+#include "SoundServiceLocator.h"
 #include "TileMapComponent.h"
 #include "TimerComponent.h"
 #include "Transform.h"
 #include "Scene.h"
+#include "SDL.h"
 
 PosessedMovementComponent::PosessedMovementComponent(bool canInteractWBlocks, bool canUseDisks, bool canJumpOff, bool isEnabled)
 	: m_CanJumpOff(canJumpOff)
@@ -45,6 +47,12 @@ void PosessedMovementComponent::Move(int x, int y)
 	}
 
 	m_pTimerCompRef->Reset();
+
+	// Play sound
+	// Quick solution to not knowing which sound to play, I know, not very clean...
+	const std::string soundFileName = m_CanJumpOff ? "QbertJmp.wav" : "CoilyJmp.wav";
+	auto* const service = dae::SoundServiceLocator::GetSoundService();
+	service->PlaySound("../Data/" + soundFileName, SDL_MIX_MAXVOLUME / 2);
 
 	m_Index.first += x;
 	m_Index.second += y;

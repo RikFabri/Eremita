@@ -18,6 +18,7 @@ namespace dae
 		virtual void Execute() = 0;
 	};
 
+#pragma region Commands
 	// ---- Concrete Commands ----
 	class ExecuteFunction final : public Command
 	{
@@ -36,6 +37,8 @@ namespace dae
 	public:
 		virtual void Execute() override;
 	};
+	// ---------------------------
+#pragma endregion
 
 	struct InputAction
 	{

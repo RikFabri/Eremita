@@ -24,6 +24,8 @@ public:
 
 	void Damage();
 private:
+	float m_PrevWaitTime;
+	bool m_Alive;
 
 	// No ownership
 	PosessedMovementComponent* m_pMovementCompRef;

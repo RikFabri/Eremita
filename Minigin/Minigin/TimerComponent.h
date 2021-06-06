@@ -11,7 +11,9 @@ namespace dae
 		virtual void Update(SceneObject&) override;
 
 		void Reset();
+		void SetWaitTime(float time);
 		bool TimerCompleted() const;
+		float GetWaitTime() const;
 	private:
 		float m_WaitTime;
 		float m_PassedTime;
