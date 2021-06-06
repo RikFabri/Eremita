@@ -28,7 +28,9 @@ public:
 	void SetBlockIndex(const int2& idx);
 	void UpdateVisualLocation();
 	void SetEnabled(bool enabled);
-	bool UsedDisk() const;
+	bool IsOnDisk() const;
+	void SetOnDisk(bool isOnDisk);
+	void SetPreviousPos(const glm::vec3& pos);
 	const glm::vec3& GetPreviousPos() const;
 	void SetJumpedOffCallback(const std::function<void()>& func);
 private:
@@ -39,7 +41,7 @@ private:
 
 	std::function<void()> m_JumpedOff;
 	int2 m_Index;
-	bool m_UsedDisk;
+	bool m_OnDisk;
 	glm::vec3 m_PrevPos;
 
 	// No ownership

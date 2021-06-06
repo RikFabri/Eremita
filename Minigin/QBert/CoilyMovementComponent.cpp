@@ -40,7 +40,7 @@ void CoilyMovementComponent::Update(dae::SceneObject& parent)
 	if (qbertPos == pos)
 	{
 		// If he used a disk, die instead
-		if (m_pQBertMovementCompRef->UsedDisk())
+		if (m_pQBertMovementCompRef->IsOnDisk())
 		{
 			parent.GetScene()->Remove(&parent);
 		}

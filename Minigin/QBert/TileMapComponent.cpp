@@ -13,6 +13,7 @@
 #include "SubjectComponent.h"
 #include "ScoreComponent.h"
 #include <document.h>
+#include "PosessedMovementComponent.h"
 #include "SoundServiceLocator.h"
 #include "SDL.h"
 
@@ -98,15 +99,14 @@ bool TileMapComponent::HoppedOnTile(const int2& blockIndex, bool forceReverse)
 void TileMapComponent::HoppedOnDisk(const int2& blockIndex, dae::SceneObject* qBert)
 {
 	const auto diskIt = m_Disks.find(blockIndex);
-	const auto diskPos = IndexToTilePosition({ -1, -2 });
+	const auto diskPos = IndexToTilePosition({ 0, 0 }) - glm::vec2{ 0, 30 };
 
 	if (!diskIt->second.expired())
 	{
 		const auto diskPtr = diskIt->second.lock();
-		qBert->GetScene()->Remove(diskPtr);
-		diskPtr->SetPosition(diskPos.x, diskPos.y);
-		qBert->SetPosition(diskPos.x, diskPos.y);
-		HoppedOnTile({ 0, 0 });
+		diskPtr->GetFirstComponentOfType<DiskComponent>()->MoveToSpawn(qBert, diskPos);
+		qBert->GetFirstComponentOfType<PosessedMovementComponent>()->SetEnabled(false);
+
 		dae::SoundServiceLocator::GetSoundService()->PlaySound("../Data/Disk.wav", SDL_MIX_MAXVOLUME / 2);
 	}
 

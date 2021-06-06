@@ -21,6 +21,7 @@ namespace dae
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
 
 		SDL_Renderer* GetSDLRenderer() const { return m_Renderer; }
+		std::pair<int, int> GetWindowDimensions() const;
 	private:
 		void RenderImGUI();
 		

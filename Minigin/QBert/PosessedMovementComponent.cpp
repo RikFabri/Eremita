@@ -31,12 +31,6 @@ void PosessedMovementComponent::Update(dae::SceneObject&)
 {
 	if (!m_Enabled)
 		return;
-
-	if (m_UsedDisk)
-	{
-		m_UsedDisk = false;
-		m_PrevPos = m_pTransformRef->GetPosition();
-	}
 }
 
 void PosessedMovementComponent::Move(int x, int y)
@@ -61,7 +55,6 @@ void PosessedMovementComponent::Move(int x, int y)
 	m_Index.second += y;
 
 	m_PrevPos = m_pTransformRef->GetPosition();
-	m_UsedDisk = false;
 	auto isDisk = false;
 	auto isValid = m_pTileMapRef->IsBlockIndexValid(m_Index);
 
@@ -83,7 +76,7 @@ void PosessedMovementComponent::Move(int x, int y)
 		{
 			m_pTileMapRef->HoppedOnDisk(m_Index, m_pParent);
 			m_Index = { 0, 0 };
-			m_UsedDisk = true;
+			m_OnDisk = true;
 		}
 	}
 	else
@@ -100,12 +93,6 @@ void PosessedMovementComponent::Move(int x, int y)
 
 	const auto pos = m_pTileMapRef->IndexToTilePosition(m_Index);
 	m_pTransformRef->SetPosition(pos.x, pos.y, 0);
-
-	if (m_UsedDisk)
-	{
-		m_PrevPos.x = pos.x;
-		m_PrevPos.y = pos.y;
-	}
 }
 
 void PosessedMovementComponent::SetBlockIndex(const int2& idx)
@@ -124,9 +111,19 @@ void PosessedMovementComponent::SetEnabled(bool enabled)
 	m_Enabled = enabled;
 }
 
-bool PosessedMovementComponent::UsedDisk() const
+bool PosessedMovementComponent::IsOnDisk() const
 {
-	return m_UsedDisk;
+	return m_OnDisk;
+}
+
+void PosessedMovementComponent::SetOnDisk(bool isOnDisk)
+{
+	m_OnDisk = isOnDisk;
+}
+
+void PosessedMovementComponent::SetPreviousPos(const glm::vec3& pos)
+{
+	m_PrevPos = pos;
 }
 
 const glm::vec3& PosessedMovementComponent::GetPreviousPos() const

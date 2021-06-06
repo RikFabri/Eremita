@@ -95,3 +95,11 @@ void dae::Renderer::RenderImGUI()
 	WidgetRenderer::GetInstance().Render();
 	Logger::GetInstance().Render();
 }
+
+std::pair<int, int> dae::Renderer::GetWindowDimensions() const
+{
+	int w, h;
+	SDL_GetWindowSize(m_pWindow, &w, &h);
+
+	return { w, h };
+}
