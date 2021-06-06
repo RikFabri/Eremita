@@ -68,7 +68,7 @@ void EnemySpawner::SpawnCoily(bool posessed)
 
 	const auto coilyRenderer = new RenderComponent("Coily_egg.png", { 16, -16 });
 	const auto coilyBehaviour = new CoilyBehaviourComponent(posessed);
-	const auto coilyTimer = new TimerComponent(posessed ? 0.25f : 1);
+	const auto coilyTimer = new TimerComponent(posessed ? 0.35f : 1);
 	const auto destroyOnReset = new DestroyOnPlayerDamageComponent();
 	const auto eggMovement = new DefaultMovement();
 	const auto dmgPlayerComp = new KillPlayerOnTouchComponent();

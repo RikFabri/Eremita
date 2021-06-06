@@ -79,6 +79,7 @@ namespace dae
 		// You're getting a component that doesn't exist, this forces a breakpoint (in debug) for your convenience
 		Logger::GetInstance().Print(std::string("Couldn't find component ") + typeid(ComponentType).name());
 		Logger::GetInstance().SaveLog("Log.txt");
+		// Feel free to comment out breakpoint
 		__debugbreak();
 #endif // _DEBUG
 

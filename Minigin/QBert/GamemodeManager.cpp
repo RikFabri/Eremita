@@ -132,7 +132,7 @@ void GamemodeManager::LoadAI()
 	qBert->AddComponent(new SubjectComponent());
 	qBert->AddComponent(new ScoreComponent());
 	qBert->AddComponent(new InputComponent());
-	qBert->AddComponent(new TimerComponent(0.25f));
+	qBert->AddComponent(new TimerComponent(0.35f));
 	qBert->AddComponent(qbertMovement);
 	qBert->AddComponent(new QBertBehaviourComponent());
 	scene.Add(qBert);
@@ -224,7 +224,7 @@ void GamemodeManager::LoadCoop()
 		qBert->AddComponent(new SubjectComponent());
 		qBert->AddComponent(new ScoreComponent());
 		qBert->AddComponent(new InputComponent());
-		qBert->AddComponent(new TimerComponent(0.5f));
+		qBert->AddComponent(new TimerComponent(0.35f));
 		qBert->AddComponent(qbertMovement);
 		qBert->AddComponent(new QBertBehaviourComponent());
 		scene.Add(qBert);
@@ -238,7 +238,7 @@ void GamemodeManager::LoadCoop()
 		qBert->AddComponent(new SubjectComponent());
 		qBert->AddComponent(new ScoreComponent());
 		qBert->AddComponent(new InputComponent(false));
-		qBert->AddComponent(new TimerComponent(0.5f));
+		qBert->AddComponent(new TimerComponent(0.35f));
 		qBert->AddComponent(qbertMovement);
 		qBert->AddComponent(new QBertBehaviourComponent());
 		scene.Add(qBert);
@@ -317,22 +317,10 @@ void GamemodeManager::LoadVersus()
 	qBert->AddComponent(new SubjectComponent());
 	qBert->AddComponent(new ScoreComponent());
 	qBert->AddComponent(new InputComponent());
-	qBert->AddComponent(new TimerComponent(0.5f));
+	qBert->AddComponent(new TimerComponent(0.35f));
 	qBert->AddComponent(qbertMovement);
 	qBert->AddComponent(new QBertBehaviourComponent());
 	scene.Add(qBert);
-
-	//// Coily
-	//const auto coilyRenderer = new RenderComponent("Coily_egg.png", { 16, -16 });
-	//const auto coilyBehaviour = new CoilyBehaviourComponent(true);
-	//const auto coilyTimer = new TimerComponent(0.5f);
-	//const auto destroyOnReset = new DestroyOnPlayerDamageComponent();
-	//const auto eggMovement = new DefaultMovement();
-	//const auto possessedMovement = new PosessedMovementComponent(false, false, false, false);
-	//auto dmgPlayerComp = new KillPlayerOnTouchComponent();
-	//const auto coily = std::make_shared<SceneObject>(pComponentVec{ possessedMovement, coilyTimer, eggMovement, coilyBehaviour, destroyOnReset, dmgPlayerComp }, glm::vec3{ -100, -100, 0 }, glm::vec2{ 2, 2 }, "coily");
-	//coily->AddComponent(coilyRenderer, true);
-	//scene.Add(coily);
 
 	// Enemy spawner
 	const auto spawner = std::make_shared<SceneObject>();
