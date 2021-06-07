@@ -3,6 +3,7 @@
 #include "QBertBehaviourComponent.h"
 #include "SoundServiceLocator.h"
 #include "TileMapComponent.h"
+#include "ScoreComponent.h"
 #include "TimerComponent.h"
 #include "SceneObject.h"
 #include "Scene.h"
@@ -35,13 +36,17 @@ void CoilyMovementComponent::Update(dae::SceneObject& parent)
 	if (m_QBertRef.expired())
 		return;
 
+	const auto qbert = m_QBertRef.lock();
+
 	if (m_ShouldDie)
 	{
+		auto scoreComp = qbert->GetFirstComponentOfType<dae::ScoreComponent>();
+		if (scoreComp)
+			scoreComp->IncreaseScore(500);
 		parent.GetScene()->Remove(&parent);
 		return;
 	}
 
-	const auto qbert = m_QBertRef.lock();
 	auto qbertPos = m_pQBertMovementCompRef->GetPreviousPos();
 	auto pos = parent.GetTransform()->GetPosition();
 
