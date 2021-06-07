@@ -46,7 +46,8 @@ void EnemySpawner::Update(dae::SceneObject& )
 		return;
 	}
 
-	int Nr = std::rand() % 3;
+	const int Nr = std::rand() % 3;
+	
 	switch (Nr)
 	{
 	case 0:

@@ -1,5 +1,6 @@
 #pragma once
 #include <BaseComponent.h>
+#include <Transform.h>
 #include <utility>
 #include <memory>
 
@@ -19,6 +20,7 @@ public:
 
 	void SetIndex(const int2& idx);
 private:
+	bool m_ShouldDie;
 	int2 m_Index;
 
 	// No ownership

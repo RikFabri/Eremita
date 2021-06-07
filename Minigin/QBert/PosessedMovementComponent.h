@@ -32,6 +32,7 @@ public:
 	void SetOnDisk(bool isOnDisk);
 	void SetPreviousPos(const glm::vec3& pos);
 	const glm::vec3& GetPreviousPos() const;
+	const int2& GetBlockIndex() const;
 	void SetJumpedOffCallback(const std::function<void()>& func);
 private:
 	bool m_Enabled;

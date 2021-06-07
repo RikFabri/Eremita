@@ -1,5 +1,6 @@
 #include "CoilyMovementComponent.h"
 #include "PosessedMovementComponent.h"
+#include "QBertBehaviourComponent.h"
 #include "SoundServiceLocator.h"
 #include "TileMapComponent.h"
 #include "TimerComponent.h"
@@ -10,6 +11,8 @@
 
 void CoilyMovementComponent::Init(dae::SceneObject& parent)
 {
+	m_ShouldDie = false;
+
 	const auto players = parent.GetScene()->GetObjectsByTag("player");
 	m_QBertRef = players[std::rand() % players.size()];
 
@@ -32,18 +35,29 @@ void CoilyMovementComponent::Update(dae::SceneObject& parent)
 	if (m_QBertRef.expired())
 		return;
 
+	if (m_ShouldDie)
+	{
+		parent.GetScene()->Remove(&parent);
+		return;
+	}
+
 	const auto qbert = m_QBertRef.lock();
 	auto qbertPos = m_pQBertMovementCompRef->GetPreviousPos();
-	const auto pos = parent.GetTransform()->GetPosition();
+	auto pos = parent.GetTransform()->GetPosition();
 
-	// Move towards qbert's previous position, or towards him if you're already there
+	if (m_pQBertMovementCompRef->IsOnDisk() && !m_ShouldDie)
+	{
+		// If qbert is on a disk and you were close, you should jump off
+		if (qbertPos == pos)
+		{
+			m_ShouldDie = true;
+		}
+		else
+			return; // otherwise, stop moving
+	}
+
 	if (qbertPos == pos)
 	{
-		// If he used a disk, die instead
-		if (m_pQBertMovementCompRef->IsOnDisk())
-		{
-			parent.GetScene()->Remove(&parent);
-		}
 		qbertPos = qbert->GetTransform()->GetPosition();
 	}
 

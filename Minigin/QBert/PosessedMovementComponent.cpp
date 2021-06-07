@@ -54,7 +54,6 @@ void PosessedMovementComponent::Move(int x, int y)
 	m_Index.first += x;
 	m_Index.second += y;
 
-	m_PrevPos = m_pTransformRef->GetPosition();
 	auto isDisk = false;
 	auto isValid = m_pTileMapRef->IsBlockIndexValid(m_Index);
 
@@ -65,6 +64,7 @@ void PosessedMovementComponent::Move(int x, int y)
 	{
 		if (!isDisk)
 		{
+			m_PrevPos = m_pTransformRef->GetPosition();
 			if (m_InteractWithBlocks)
 			{
 				const auto causedColourChange = m_pTileMapRef->HoppedOnTile(m_Index);
@@ -129,6 +129,11 @@ void PosessedMovementComponent::SetPreviousPos(const glm::vec3& pos)
 const glm::vec3& PosessedMovementComponent::GetPreviousPos() const
 {
 	return m_PrevPos;
+}
+
+const int2& PosessedMovementComponent::GetBlockIndex() const
+{
+	return m_Index;
 }
 
 void PosessedMovementComponent::SetJumpedOffCallback(const std::function<void()>& func)

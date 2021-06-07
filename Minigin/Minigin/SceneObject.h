@@ -80,7 +80,7 @@ namespace dae
 		Logger::GetInstance().Print(std::string("Couldn't find component ") + typeid(ComponentType).name());
 		Logger::GetInstance().SaveLog("Log.txt");
 		// Feel free to comment out breakpoint
-		__debugbreak();
+		//__debugbreak();
 #endif // _DEBUG
 
 		return nullptr;

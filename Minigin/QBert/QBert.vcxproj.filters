@@ -75,7 +75,7 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="EnemySpawner.cpp">
-      <Filter>Game</Filter>
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +127,8 @@
     <ClInclude Include="DestroyOnLevelChange.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="EnemySpawner.h" />
+    <ClInclude Include="EnemySpawner.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

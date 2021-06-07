@@ -22,7 +22,7 @@ std::vector<std::shared_ptr<SceneObject>> Scene::GetObjectsByTag(const std::stri
 		// No objects with your tag could be found. This will work, but breaks here for convenience
 		Logger::GetInstance().Print("Couldn't find any " + tag);
 		Logger::GetInstance().SaveLog("Log.txt");
-		__debugbreak();
+		//__debugbreak();
 	}
 #endif // DEBUG
 
