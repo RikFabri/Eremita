@@ -140,6 +140,7 @@ void GamemodeManager::LoadAI()
 	qBert->AddComponent(new TimerComponent(0.35f));
 	qBert->AddComponent(qbertMovement);
 	qBert->AddComponent(new QBertBehaviourComponent());
+	qBert->RegisterAsObserver(this);
 	scene.Add(qBert);
 
 	// Enemy spawner
@@ -233,6 +234,7 @@ void GamemodeManager::LoadCoop()
 		qBert->AddComponent(new TimerComponent(0.35f));
 		qBert->AddComponent(qbertMovement);
 		qBert->AddComponent(new QBertBehaviourComponent());
+		qBert->RegisterAsObserver(this);
 		scene.Add(qBert);
 	}
 	{	// Qbert 2
@@ -247,6 +249,7 @@ void GamemodeManager::LoadCoop()
 		qBert->AddComponent(new TimerComponent(0.35f));
 		qBert->AddComponent(qbertMovement);
 		qBert->AddComponent(new QBertBehaviourComponent());
+		qBert->RegisterAsObserver(this);
 		scene.Add(qBert);
 	}
 
@@ -327,6 +330,7 @@ void GamemodeManager::LoadVersus()
 	qBert->AddComponent(new TimerComponent(0.35f));
 	qBert->AddComponent(qbertMovement);
 	qBert->AddComponent(new QBertBehaviourComponent());
+	qBert->RegisterAsObserver(this);
 	scene.Add(qBert);
 
 	// Enemy spawner
@@ -397,10 +401,17 @@ void GamemodeManager::LoadGameOver()
 	scene.Init();
 }
 
-void GamemodeManager::OnNotify(const BaseComponent*, const std::string& message)
+void GamemodeManager::OnNotify(const BaseComponent* comp, const std::string& message)
 {
 	if (message == "game over")
 	{
 		m_GameOver = true;
+	}
+
+	if (message == "UpdateHealth")
+	{
+		auto* hcomp = (HealthComponent*)comp;
+		if (hcomp->GetLives() <= 0)
+			m_GameOver = true;
 	}
 }
