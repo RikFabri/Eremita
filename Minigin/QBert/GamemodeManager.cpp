@@ -37,11 +37,15 @@ using namespace dae;
 GamemodeManager::GamemodeManager()
 	: m_CurrentGamemode(Gamemode::eNone)
 	, m_IsOpen(true)
+	, m_GameOver(false)
 {
 }
 
 void GamemodeManager::Render()
 {
+	if (m_GameOver)
+		LoadGameOver();
+
 	//if (!m_IsOpen)
 	//	return;
 
@@ -96,6 +100,7 @@ void GamemodeManager::LoadAI()
 	map->AddComponent(new TileMapComponent(), true);
 	map->AddComponent(new SubjectComponent());
 	map->SetTag("tileMap");
+	map->RegisterAsObserver(this);
 	scene.Add(map);
 
 	// FPS display
@@ -173,6 +178,7 @@ void GamemodeManager::LoadCoop()
 	map->AddComponent(new TileMapComponent(), true);
 	map->AddComponent(new SubjectComponent());
 	map->SetTag("tileMap");
+	map->RegisterAsObserver(this);
 	scene.Add(map);
 
 	// FPS display
@@ -281,6 +287,7 @@ void GamemodeManager::LoadVersus()
 	map->AddComponent(new TileMapComponent(), true);
 	map->AddComponent(new SubjectComponent());
 	map->SetTag("tileMap");
+	map->RegisterAsObserver(this);
 	scene.Add(map);
 
 	// FPS display
@@ -357,4 +364,43 @@ void GamemodeManager::StopPlaying()
 
 	SceneManager::GetInstance().CreateScene(sceneName);
 
+}
+
+void GamemodeManager::LoadGameOver()
+{
+	StopPlaying();
+	m_GameOver = false;
+
+	m_CurrentGamemode = Gamemode::eGameOver;
+
+	// -------------- LOAD LEVEL ----------------
+	using pComponentVec = std::vector<BaseComponent*>;
+	const auto sceneName = "Versus";
+
+	// If scene already exists, set it and return
+	if (SceneManager::GetInstance().SetActiveScene(sceneName))
+		return;
+
+	auto& scene = SceneManager::GetInstance().CreateScene(sceneName);
+
+	const auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 40);
+
+	// FPS display
+	auto* const pRenderComponent = new RenderComponent();
+	auto* const pTextComponent = new TextComponent("Game over!", font, SDL_Color{ 255,255,255 });
+
+	const auto fpsObject = std::make_shared<SceneObject>(pComponentVec{ pTextComponent }, glm::vec3{60, 200, 0});
+	fpsObject->AddComponent(pRenderComponent, true);
+
+	scene.Add(fpsObject);
+
+	scene.Init();
+}
+
+void GamemodeManager::OnNotify(const BaseComponent*, const std::string& message)
+{
+	if (message == "game over")
+	{
+		m_GameOver = true;
+	}
 }

@@ -56,6 +56,7 @@ void TileMapComponent::Update(dae::SceneObject& parent)
 		if (!LoadLevelFromFile(m_LevelFolderName, ++m_CurrentLevel))
 		{
 			dae::Logger::GetInstance().Print("Game over!");
+			m_pSubjectCompRef->Broadcast(this, "game over");
 		}
 	}
 }
